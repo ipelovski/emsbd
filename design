@@ -1,0 +1,48 @@
+roles
+    principal
+    teacher
+    student
+    parent
+data
+    school year
+        beginYear
+        endYear
+    persons
+        name
+        address
+        role
+    student
+        grade
+        marks
+        absences
+        notes
+    grades
+        name
+        school year
+    term
+        name
+        school year
+        begin
+        end
+    subjects
+        name
+        school year
+    teacher
+        form-master of grade
+        subjects
+        grades
+    marks
+        created
+        updated
+        subject
+        term
+        score
+        by
+    absences
+        date
+        class
+    notes
+        created
+        updated
+        text
+        by
