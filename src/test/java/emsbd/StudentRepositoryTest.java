@@ -70,9 +70,6 @@ public class StudentRepositoryTest {
             Utils.createStudent("Гошко", "Иванов", lastName, grade));
         studentRepository.save(
             Utils.createStudent("Тошко", "Георгиев", "Караиванов", grade));
-        List<Student> allStudens = StreamSupport
-            .stream(studentRepository.findAll().spliterator(), false)
-            .collect(Collectors.toList());
         List<Student> students = studentRepository.findByLastName(lastName);
         Assert.assertEquals(1, students.size());
         Assert.assertEquals(lastName, students.get(0).getUser().getPersonalInfo().getLastName());
@@ -88,7 +85,7 @@ public class StudentRepositoryTest {
         Assert.assertEquals(1, studentRepository.count());
         Student persistedStudent = studentRepository.findAll().iterator().next();
         Assert.assertEquals(1, persistedStudent.getMarks().size());
-        Assert.assertEquals(599, persistedStudent.getMarks().get(0).getScore(), 0);
+        Assert.assertEquals(599, persistedStudent.getMarks().get(0).getRawScore(), 0);
     }
 
 

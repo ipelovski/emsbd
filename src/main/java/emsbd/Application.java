@@ -16,7 +16,7 @@ public class Application {
     @Component
     private static class Setup {
         @Autowired
-        private PersonalInfoRepository personalInfoRepository;
+        private UserRepository userRepository;
         @Autowired
         private SchoolYearRepository schoolYearRepository;
         @Autowired
@@ -32,6 +32,7 @@ public class Application {
         public void setup() {
             User admin = new User("admin");
             admin.setRole(User.Role.admin);
+            userRepository.save(admin);
             EmsbdAuditAware.setCurrentUser(admin);
             SchoolYear schoolYear = new SchoolYear(2020, 2021);
             schoolYearRepository.save(schoolYear);
@@ -42,8 +43,12 @@ public class Application {
             Grade grade = new Grade(schoolYear, "3 а");
             gradeRepository.save(grade);
             Student student = new Student(
-                new User(),
+                new User("гошко"),
                 grade);
+            student.getUser().getPersonalInfo()
+                .setFirstName("Гошко")
+                .setMiddleName("Георгиев")
+                .setLastName("Гошев");
             student.getMarks().add(new Mark(student, subject, 599));
             studentRepository.save(student);
         }

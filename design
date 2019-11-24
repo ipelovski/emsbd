@@ -29,14 +29,16 @@ data
         school year
     teacher
         form-master of grade
-        subjects
-        grades
+        classes
+    class
+        subject
+        grade
     marks
         created
         updated
-        subject
+        class
         term
-        score
+        rawScore
         by
     absences
         date
@@ -46,3 +48,22 @@ data
         updated
         text
         by
+        class
+actions
+    student info: marks, notes, absences of a single student
+    anonymous
+        register
+    principal
+        approve registered
+    teacher
+        view the student info of all students
+        view, add, and update student info of students in teacher's classes
+    student
+        view student's own student info
+screens
+    login
+    home, specific for each role
+    marks given to a student during a specific term (current marks)
+        same for notes and absences
+    classes of a teacher
+    marks given to students from a single grade for a specific subject (seen by a teacher)

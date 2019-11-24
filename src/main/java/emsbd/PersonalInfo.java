@@ -1,38 +1,21 @@
 package emsbd;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
+import javax.persistence.Embeddable;
+import javax.validation.constraints.Size;
 
-@Entity
+@Embeddable
 public class PersonalInfo {
-    @Id
-    private Long id;
+    @Size(max = 50)
     private String firstName;
+    @Size(max = 50)
     private String middleName;
+    @Size(max = 50)
     private String lastName;
+    @Size(max = 200)
     private String address;
-    @OneToOne
-    @JoinColumn(name = "id")
-    @MapsId
-    private User user;
 
-    protected PersonalInfo() {
+    public PersonalInfo() {
 
-    }
-
-    public PersonalInfo(User user) {
-        this.user = user;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public User getUser() {
-        return user;
     }
 
     public String getFirstName() {

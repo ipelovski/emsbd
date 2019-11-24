@@ -67,6 +67,6 @@ public class MarkControllerTest {
             subject.getName(),
             grade.getName());
         Assert.assertEquals(1, marks.size());
-        Assert.assertEquals(599, marks.get(0).getScore());
+        Assert.assertEquals(599, marks.get(0).getRawScore());
     }
 }

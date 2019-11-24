@@ -35,16 +35,16 @@ public class Mark {
     private Subject subject;
     @Min(200)
     @Max(600)
-    private short score;
+    private short rawScore;
 
     protected Mark() {
 
     }
 
-    public Mark(Student student, Subject subject, int score) {
+    public Mark(Student student, Subject subject, int rawScore) {
         this.student = student;
         this.subject = subject;
-        setScore(score);
+        setRawScore(rawScore);
     }
 
     public Long getId() {
@@ -75,11 +75,19 @@ public class Mark {
         return subject;
     }
 
-    public int getScore() {
-        return score;
+    public int getRawScore() {
+        return rawScore;
     }
 
-    public void setScore(int score) {
-        this.score = (short) score;
+    public void setRawScore(int rawScore) {
+        this.rawScore = (short) rawScore;
+    }
+
+    public double getScore() {
+        return rawScore / 100.0;
+    }
+
+    public void setScore(double score) {
+        this.rawScore = (short) (score * 100);
     }
 }

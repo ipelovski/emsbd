@@ -3,13 +3,12 @@ package emsbd;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import java.time.Instant;
 
 @Entity
@@ -25,8 +24,7 @@ public class User {
     private Instant createdOn;
     @LastModifiedDate
     private Instant updatedOn;
-    @OneToOne(mappedBy = "user",
-        cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    @Embedded
     private PersonalInfo personalInfo;
     private Role role;
 
@@ -36,7 +34,7 @@ public class User {
 
     public User(String userName) {
         this.userName = userName;
-        this.personalInfo = new PersonalInfo(this);
+        this.personalInfo = new PersonalInfo();
     }
 
     public Long getId() {
