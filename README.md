@@ -1,2 +1,2 @@
-# emsbd
-Electronic manic supersonic bionic diary
+# emsbj
+Electronic manic supersonic bionic journal
