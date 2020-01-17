@@ -127,7 +127,7 @@ public class User implements UserDetails {
     }
 
     public enum Role {
-        none, admin, principal, teacher, student, parent;
+        user, admin, principal, teacher, student, parent;
         private final String name;
 
         Role() {

@@ -21,6 +21,7 @@
                 <span th:text="${error} + ', code: ' + ${error.code}"></span>
             </span>
         </p>
+        <p th:if="${#fields.hasErrors('error')}" th:errors="*{error}"></p>
         <button type="submit">Sign up</button>
     </form>
 </body>
