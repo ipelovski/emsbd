@@ -10,13 +10,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Optional;
 
 @Controller
 public class UserController {
@@ -50,18 +50,24 @@ public class UserController {
             return "sign-up";
         }
         try {
-            User user = new User();
             String username = signUpForm.getUsername();
-            String password = passwordEncoder.encode(signUpForm.getPassword());
+            String password = signUpForm.getPassword();
+            Optional<User> existingUser = userRepository.findByUsername(username);
+            if (existingUser.isPresent()) {
+                bindingResult.rejectValue(
+                    "username", "unique", "This username is already used. Try another one.");
+                return "sign-up";
+            }
+            User user = new User();
+            String encodedPassword = passwordEncoder.encode(password);
             user.setUsername(username);
-            user.setPassword(password);
+            user.setPassword(encodedPassword);
             user.setRole(User.Role.user);
             userRepository.save(user);
             Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(username, password));
-//            Authentication authentication = new UsernamePasswordAuthenticationToken(user, password, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            return "home";
+            return "redirect:/home";
         } catch(Exception e) {
             e.printStackTrace();
             signUpForm.setError(e.getMessage());
@@ -74,16 +80,20 @@ public class UserController {
         message = "Your password and confirmation password should match.")
     public static class SignUpForm {
         @NotNull
-        @Size(min = 5, max = 20)
+        @Size(min = 5, max = 20,
+            message = "The username should be at " +
+                "${min > validatedValue.length() ? formatter.format('least %d', min)" +
+                ": formatter.format('most %d', max)}" +
+                " characters.")
         private String username;
         @NotNull
-        @Size(min = 7, max = 50)
+        @Size(min = 7, max = 50,
+            message = "The password should be at " +
+            "${min > validatedValue.length() ? formatter.format('least %d', min)" +
+            ": formatter.format('most %d', max)}" +
+            " characters.")
         private String password;
         @NotNull
-        @Size(min = 7, max = 50,
-            message = "${min > validatedValue.length() ?" +
-                "'The password should be at least 7 characters.'" +
-                ":'The password should be at most 50 characters.'}")
         private String confirmPassword;
         private String error;
 
