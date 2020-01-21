@@ -1,9 +1,12 @@
 package emsbj.user;
 
+import emsbj.admin.SecuredController;
 import org.hibernate.validator.constraints.ScriptAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,7 +22,7 @@ import javax.validation.constraints.Size;
 import java.util.Optional;
 
 @Controller
-public class UserController {
+public class UserController implements SecuredController {
 
     @Autowired
     private UserRepository userRepository;
@@ -27,6 +30,13 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Override
+    public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {
+        registry
+            .antMatchers("/sign-up")
+            .permitAll();
+    }
 
     @GetMapping("/sign-in")
     public String signIn(Model model, String error, String logout) {

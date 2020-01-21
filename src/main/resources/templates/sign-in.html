@@ -5,6 +5,9 @@
     <title>Sign in</title>
 </head>
 <body>
+    <p>
+        If not registered then <a href="/sign-up">sign up</a>.
+    </p>
     <form action="/sign-in" method="post">
         <p th:if="${error != null}" th:text="${error}"></p>
         <p th:if="${logout != null}" th:text="${logout}"></p>
