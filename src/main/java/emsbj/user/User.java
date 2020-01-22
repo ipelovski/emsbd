@@ -17,6 +17,9 @@ import javax.persistence.Transient;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 public class User implements UserDetails {
@@ -127,8 +130,15 @@ public class User implements UserDetails {
     }
 
     public enum Role {
-        user, admin, principal, teacher, student, parent;
+        anonymous, user, admin, principal, teacher, student, parent;
         private final String name;
+        private static final Map<String, Role> valuesMap = new HashMap<>();
+
+        static {
+            for (Role role : EnumSet.allOf(Role.class)) {
+                valuesMap.put(role.name, role);
+            }
+        }
 
         Role() {
             this.name = "ROLE_" + name().toUpperCase();
@@ -136,6 +146,11 @@ public class User implements UserDetails {
 
         public String getName() {
             return name;
+        }
+
+        public static Role from(String name) {
+            return valuesMap.computeIfAbsent(name,
+                roleName -> { throw new IllegalArgumentException("There is no value for " + roleName); });
         }
     }
 }

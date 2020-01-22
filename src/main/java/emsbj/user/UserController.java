@@ -1,6 +1,6 @@
 package emsbj.user;
 
-import emsbj.admin.SecuredController;
+import emsbj.SecuredController;
 import org.hibernate.validator.constraints.ScriptAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -1,38 +1,35 @@
 package emsbj;
 
-import emsbj.admin.SecuredController;
+import emsbj.user.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Locale;
+
 @Controller
-@RequestMapping("/")
+@RequestMapping("/{locale}/")
 public class HomeController implements SecuredController {
-    private static final GrantedAuthority anonymous = new SimpleGrantedAuthority("ROLE_ANONYMOUS");
+    @Autowired
+    private MessageSource messageSource;
+    @Autowired
+    private UserService userService;
 
     @Override
     public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {
         registry
-            .antMatchers("/", "/home")
+            .antMatchers("/", "/home/**", "/{locale}/")
             .permitAll();
     }
 
     @GetMapping({"", "home"})
-    public String index(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        model.addAttribute("isAnonymous",
-            authentication.getAuthorities().contains(anonymous));
-        if (authentication.getPrincipal() instanceof UserDetails) {
-            model.addAttribute("user", authentication.getPrincipal());
-        }
+    public String index(Model model, Locale locale) {
+        userService.setUser(model, locale);
         return "home.html";
     }
 }

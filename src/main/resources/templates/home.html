@@ -1,18 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
 </head>
 <body>
-    <p th:if="${isAnonymous}">
-        <a href="/sign-in">Sign in</a>
-        or
-        <a href="/sign-up">Sign up</a>
-    </p>
-    <p th:if="${!isAnonymous}">
-        <span th:text="'Hello, ' + ${user.username} + '!'"></span>
-        <a href="/sign-out">Sign out</a>
+    <p th:replace="~{fragments/header::header(${user})}">
     </p>
 </body>
 </html>

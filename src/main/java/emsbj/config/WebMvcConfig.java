@@ -1,16 +1,18 @@
 package emsbj.config;
 
-import org.springframework.core.Ordered;
+import emsbj.UrlLocaleInterceptor;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+@Configuration
 @EnableWebMvc
 public class WebMvcConfig implements WebMvcConfigurer {
     @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/home").setViewName("home");
-        registry.addViewController("/login").setViewName("login");
-        registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+    public void addInterceptors(InterceptorRegistry registry) {
+        UrlLocaleInterceptor urlLocaleInterceptor = new UrlLocaleInterceptor();
+        registry.addInterceptor(urlLocaleInterceptor)
+            .addPathPatterns(urlLocaleInterceptor.getPathPatterns());
     }
 }
