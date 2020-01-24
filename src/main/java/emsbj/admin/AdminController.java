@@ -1,6 +1,6 @@
 package emsbj.admin;
 
-import emsbj.SecuredController;
+import emsbj.controller.SecuredController;
 import emsbj.user.User;
 import emsbj.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package emsbj.config;
 
-import emsbj.SecuredController;
+import emsbj.controller.SecuredController;
 import emsbj.user.JournalUserDetailsService;
 import emsbj.user.User;
 import org.springframework.beans.factory.annotation.Autowired;

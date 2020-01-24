@@ -32,14 +32,18 @@ public class UserService {
     }
 
     public void setUser(Model model, Locale locale) {
+        model.addAttribute("user", getUser(locale));
+    }
+
+    public UserViewModel getUser(Locale locale) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isAnonymous = authenticationTrustResolver.isAnonymous(authentication);
         if (isAnonymous) {
-            model.addAttribute("user", getAnonymous(locale));
+            return getAnonymous(locale);
         }
         else if (authentication.getPrincipal() instanceof UserDetails) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            model.addAttribute("user", new UserViewModel(userDetails));
+            return new UserViewModel(userDetails);
         } else {
             throw new IllegalStateException("Unknown principal type "
                 + authentication.getPrincipal().getClass().getCanonicalName());

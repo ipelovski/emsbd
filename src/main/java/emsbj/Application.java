@@ -25,6 +25,7 @@ public class Application {
     public static final String[] supportedLocalesArray = { "en", "bg" };
     public static final Collection<String> supportedLocales = Arrays.asList(supportedLocalesArray);
     public static final Locale defaultLocale = Locale.forLanguageTag("en");
+    public static final String localePathParam = "/{locale:en|bg}/";
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -73,7 +74,7 @@ public class Application {
             User admin = new User("admin");
             admin.setRole(User.Role.admin);
             userRepository.save(admin);
-            EmsbdAuditAware.setCurrentUser(admin);
+            JournalAuditAware.setCurrentUser(admin);
             SchoolYear schoolYear = new SchoolYear(2020, 2021);
             schoolYearRepository.save(schoolYear);
             Term term = new Term(schoolYear, "I");

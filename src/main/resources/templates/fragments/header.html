@@ -8,12 +8,12 @@
     <div th:fragment="header (user)">
         <span th:text="#{greetingMessage(${user.username})}"></span>
         <span th:if="${user.isAnonymous()}">
-            <a href="/sign-in" th:text="${#strings.capitalize('__#{signIn}__')}">Sign in</a>
+            <a href="/sign-in" th:text="${x.c('signIn')}">Sign in</a>
             <span th:text="#{or}">or</span>
-            <a href="/sign-up" th:text="${#strings.capitalize('__#{signUp}__')}">Sign up</a>
+            <a href="/sign-up" th:text="${x.c('signUp')}">Sign up</a>
         </span>
         <span th:if="${!user.isAnonymous()}">
-            <a href="/sign-out" th:text="${#strings.capitalize('__#{signOut}__')}">Sign out</a>
+            <a href="/sign-out" th:text="${x.c('signOut')}">Sign out</a>
         </span>
     </div>
 </body>

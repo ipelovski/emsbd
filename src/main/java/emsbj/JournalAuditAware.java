@@ -5,7 +5,7 @@ import org.springframework.data.domain.AuditorAware;
 
 import java.util.Optional;
 
-public class EmsbdAuditAware implements AuditorAware<User> {
+public class JournalAuditAware implements AuditorAware<User> {
     private static User currentUser;
 
     public static User getCurrentUser() {
@@ -13,7 +13,7 @@ public class EmsbdAuditAware implements AuditorAware<User> {
     }
 
     public static void setCurrentUser(User currentUser) {
-        EmsbdAuditAware.currentUser = currentUser;
+        JournalAuditAware.currentUser = currentUser;
     }
 
     @Override
