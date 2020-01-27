@@ -42,7 +42,7 @@ public class StudentRepositoryTest {
         gradeRepository.save(grade);
         term = new Term(schoolYear, "I");
         termRepository.save(term);
-        subject = new Subject(term, "Биология");
+        subject = new Subject("Биология");
         subjectRepository.save(subject);
     }
 

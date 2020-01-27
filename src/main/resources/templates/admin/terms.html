@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Terms</title>
+</head>
+<body>
+    <p>
+        <a th:href="@{/admin}">Back to administration home</a>
+    </p>
+    <form th:action="@{'/admin/terms/add?school-year=' + ${schoolYear.id}}" method="post">
+        <input type="submit" value="Add two terms">
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>School year</th>
+                <th>Name</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="term : ${terms}">
+                <td th:text="${term.schoolYear.name()}"></td>
+                <td th:text="${term.name}"></td>
+                <td>
+                    <a th:href="@{${x.au().term(term)}}">Details</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

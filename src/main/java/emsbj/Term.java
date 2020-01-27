@@ -5,18 +5,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import java.time.Instant;
+import java.time.LocalDate;
 
 @Entity
-public class Term {
+public class Term implements JournalPersistable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @ManyToOne
     private SchoolYear schoolYear;
     private String name;
-    private Instant begin;
-    private Instant end;
+    private LocalDate begin;
+    private LocalDate end;
 
     protected Term() {
 
@@ -39,19 +39,23 @@ public class Term {
         return name;
     }
 
-    public Instant getBegin() {
+    public LocalDate getBegin() {
         return begin;
     }
 
-    public void setBegin(Instant begin) {
+    public void setBegin(LocalDate begin) {
         this.begin = begin;
     }
 
-    public Instant getEnd() {
+    public LocalDate getEnd() {
         return end;
     }
 
-    public void setEnd(Instant end) {
+    public void setEnd(LocalDate end) {
         this.end = end;
+    }
+
+    public String name() {
+        return schoolYear.name() + " " + name;
     }
 }

@@ -40,14 +40,17 @@ public class SubjectRepositoryTest {
 
     @Test
     public void insertSubject() {
-        subjectRepository.save(new Subject(term, "Биология"));
+        Subject subject = new Subject("Биология");
+        Assert.assertTrue(subject.isNew());
+        subjectRepository.save(subject);
+        Assert.assertFalse(subject.isNew());
         Assert.assertEquals(1, subjectRepository.count());
     }
 
     @Test
     public void findSubjectByTermAndName() {
         String subjectName = "Биология";
-        subjectRepository.save(new Subject(term, subjectName));
+        subjectRepository.save(new Subject(subjectName));
         Optional<Subject> optionalSubject = subjectRepository
             .findByTermAndName(term, subjectName);
         Assert.assertTrue(optionalSubject.isPresent());

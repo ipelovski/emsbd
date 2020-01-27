@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>School Years</title>
+</head>
+<body>
+    <p>
+        <a th:href="@{/admin}">Back to administration home</a>
+    </p>
+    <form th:action="@{/admin/school-years/add}" method="post">
+        <input type="submit" value="Add school year">
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Details</th>
+                <th>Terms</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="schoolYear : ${schoolYears}">
+                <td th:text="${schoolYear.name()}"></td>
+                <td>
+                    <a th:href="@{'/admin/school-years/' + ${schoolYear.id}}">Details</a>
+                </td>
+                <td>
+                    <a th:href="@{'/admin/terms?school-year=' + ${schoolYear.id}}">Terms</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

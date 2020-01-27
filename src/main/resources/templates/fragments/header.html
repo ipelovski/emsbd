@@ -5,14 +5,14 @@
     <title>Header</title>
 </head>
 <body>
-    <div th:fragment="header (user)">
-        <span th:text="#{greetingMessage(${user.username})}"></span>
-        <span th:if="${user.isAnonymous()}">
+    <div th:fragment="header (activeUser)">
+        <span th:text="#{greetingMessage(${activeUser.username})}"></span>
+        <span th:if="${activeUser.isAnonymous()}">
             <a href="/sign-in" th:text="${x.c('signIn')}">Sign in</a>
             <span th:text="#{or}">or</span>
             <a href="/sign-up" th:text="${x.c('signUp')}">Sign up</a>
         </span>
-        <span th:if="${!user.isAnonymous()}">
+        <span th:if="${!activeUser.isAnonymous()}">
             <a href="/sign-out" th:text="${x.c('signOut')}">Sign out</a>
         </span>
     </div>

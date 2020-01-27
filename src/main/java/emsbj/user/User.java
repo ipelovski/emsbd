@@ -46,6 +46,7 @@ public class User implements UserDetails {
 
     public User(String userName) {
         this.username = userName;
+        this.role = Role.user;
         this.personalInfo = new PersonalInfo();
     }
 

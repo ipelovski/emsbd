@@ -6,7 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class SchoolYear {
+public class SchoolYear implements JournalPersistable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -32,5 +32,9 @@ public class SchoolYear {
 
     public int getEndYear() {
         return endYear;
+    }
+
+    public String name() {
+        return beginYear + " / " + endYear;
     }
 }

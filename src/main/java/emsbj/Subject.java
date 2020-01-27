@@ -12,25 +12,22 @@ import javax.persistence.ManyToOne;
 import java.time.Instant;
 
 @Entity
-public class Subject {
+public class Subject implements JournalPersistable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    @ManyToOne
-    private Term term;
     @CreatedBy
     @ManyToOne
     private User createdBy;
     @CreatedDate
     private Instant createdOn;
 
-    protected Subject() {
+    public Subject() {
 
     }
 
-    public Subject(Term term, String name) {
-        this.term = term;
+    public Subject(String name) {
         this.name = name;
     }
 

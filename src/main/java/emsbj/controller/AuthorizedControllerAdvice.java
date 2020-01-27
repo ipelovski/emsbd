@@ -1,20 +1,20 @@
 package emsbj.controller;
 
 import emsbj.user.UserService;
-import emsbj.user.UserViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.Locale;
 
-@ControllerAdvice(assignableTypes = {HasUserController.class})
-public class HasUserControllerAdvice {
+@ControllerAdvice(assignableTypes = {AuthorizedController.class})
+public class AuthorizedControllerAdvice {
     @Autowired
     private UserService userService;
 
-    @ModelAttribute(name = "user")
-    public UserViewModel addUser(Locale locale) {
-        return userService.getUser(locale);
+    @ModelAttribute
+    public void addActiveUser(Model model, Locale locale) {
+        userService.setActiveUser(model, locale);
     }
 }

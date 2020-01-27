@@ -2,15 +2,15 @@ package emsbj.user;
 
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class UserViewModel {
+public class ActiveUser {
     private String username;
     private User.Role role;
 
-    public UserViewModel() {
+    public ActiveUser() {
 
     }
 
-    public UserViewModel(UserDetails userDetails) {
+    public ActiveUser(UserDetails userDetails) {
         this.username = userDetails.getUsername();
         this.role = User.Role.from(userDetails.getAuthorities().iterator().next().getAuthority());
     }

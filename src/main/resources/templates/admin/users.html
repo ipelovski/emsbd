@@ -5,17 +5,27 @@
     <title>Users</title>
 </head>
 <body>
+    <p>
+        <a th:href="@{/admin}">Back to administration home</a>
+    </p>
+    <form th:action="@{/admin/users/add}" method="post">
+        <input type="submit" value="Add user">
+    </form>
     <table>
         <thead>
             <tr>
                 <th>Username</th>
                 <th>Role</th>
+                <th>Details</th>
             </tr>
         </thead>
         <tbody>
             <tr th:each="user : ${users}">
                 <td th:text="${user.username}"></td>
                 <td th:text="${user.role}"></td>
+                <td>
+                    <a th:href="@{'/admin/users/' + ${user.id}}">Details</a>
+                </td>
             </tr>
         </tbody>
     </table>

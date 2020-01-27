@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${user != null ? 'Details about ' + user.username : 'No User Found!'}">Details</title>
+</head>
+<body>
+    <p>
+        <a th:href="@{/admin/users}">Back to users</a>
+    </p>
+    <p th:if="${user == null}">
+        No user found!
+    </p>
+    <form th:if="${user != null}" th:object="${user}" th:action="@{${#httpServletRequest.requestURI}}" method="post">
+        <fieldset>
+            <legend th:text="Details"></legend>
+            <label for="id">Id:</label>
+            <span type="text" id="id" th:text="*{id}"></span>
+            <label for="username">Username:</label>
+            <span type="text" id="username" th:text="*{username}"></span>
+            <label for="role">Role:</label>
+            <select id="role" th:field="*{role}">
+                <option value="user">Unspecified</option>
+                <option value="student">Student</option>
+                <option value="teacher">Teacher</option>
+                <option value="admin">Admin</option>
+            </select>
+            <label for="email">Email:</label>
+            <input type="text" id="email" th:field="*{email}">
+            <input type="submit" value="Update">
+        </fieldset>
+    </form>
+</body>
+</html>

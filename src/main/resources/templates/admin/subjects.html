@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Subjects</title>
+</head>
+<body>
+    <p>
+        <a th:href="@{/admin}">Back to administration home</a>
+    </p>
+    <p>
+        <a th:href="@{${x.au().newSubject()}}">Add new</a>
+    </p>
+    <table>
+        <thead>
+            <tr>
+                <th>Term</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="subject : ${subjects}">
+                <td th:text="${subject.term.name()}"></td>
+                <td th:text="${subject.name}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

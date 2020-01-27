@@ -17,7 +17,8 @@ import java.util.Map;
 
 @Service
 public class UserService {
-    private final Map<Locale, UserViewModel> anonymousMap = new HashMap<>();
+    private static final String modelAttributeName = "activeUser";
+    private final Map<Locale, ActiveUser> anonymousMap = new HashMap<>();
     private AuthenticationTrustResolver authenticationTrustResolver;
     private MessageSource messageSource;
 
@@ -31,11 +32,11 @@ public class UserService {
         }
     }
 
-    public void setUser(Model model, Locale locale) {
-        model.addAttribute("user", getUser(locale));
+    public void setActiveUser(Model model, Locale locale) {
+        model.addAttribute(modelAttributeName, getActiveUser(locale));
     }
 
-    public UserViewModel getUser(Locale locale) {
+    private ActiveUser getActiveUser(Locale locale) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isAnonymous = authenticationTrustResolver.isAnonymous(authentication);
         if (isAnonymous) {
@@ -43,21 +44,21 @@ public class UserService {
         }
         else if (authentication.getPrincipal() instanceof UserDetails) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            return new UserViewModel(userDetails);
+            return new ActiveUser(userDetails);
         } else {
             throw new IllegalStateException("Unknown principal type "
                 + authentication.getPrincipal().getClass().getCanonicalName());
         }
     }
 
-    private UserViewModel createAnonymous(Locale locale) {
+    private ActiveUser createAnonymous(Locale locale) {
         String username = messageSource.getMessage("guestName", null, locale);
         User anonymousUser = new User(username);
         anonymousUser.setRole(User.Role.anonymous);
-        return new UserViewModel(anonymousUser);
+        return new ActiveUser(anonymousUser);
     }
 
-    private UserViewModel getAnonymous(Locale locale) {
+    private ActiveUser getAnonymous(Locale locale) {
         if (anonymousMap.containsKey(locale)) {
             return anonymousMap.get(locale);
         } else {

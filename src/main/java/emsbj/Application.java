@@ -79,7 +79,7 @@ public class Application {
             schoolYearRepository.save(schoolYear);
             Term term = new Term(schoolYear, "I");
             termRepository.save(term);
-            Subject subject = new Subject(term, "Биология");
+            Subject subject = new Subject("Биология");
             subjectRepository.save(subject);
             Grade grade = new Grade(schoolYear, "3 а");
             gradeRepository.save(grade);

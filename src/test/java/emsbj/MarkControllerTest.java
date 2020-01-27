@@ -42,7 +42,7 @@ public class MarkControllerTest {
         schoolYearRepository.save(schoolYear);
         term = new Term(schoolYear, "I");
         termRepository.save(term);
-        subject = new Subject(term, "Биология");
+        subject = new Subject("Биология");
         subjectRepository.save(subject);
         grade = new Grade(schoolYear, "3 а");
         gradeRepository.save(grade);

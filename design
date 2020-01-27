@@ -26,13 +26,19 @@ data
         end
     subjects
         name
-        school year
     teacher
         form-master of grade
         classes
     class
+        teacher
         subject
         grade
+        term
+    class session
+        class
+        teacher
+        date and time
+    weekly schedule
     marks
         created
         updated
