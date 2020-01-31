@@ -10,9 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin/subjects")
@@ -23,19 +20,10 @@ public class AdminSubjectController {
     private SubjectRepository subjectRepository;
 
     @GetMapping
-    public String list(@RequestParam("term") Long termId, Model model) {
-        Optional<Term> optionalTerm = termRepository.findById(termId);
-        if (optionalTerm.isPresent()) {
-            Term term = optionalTerm.get();
-            Iterable<Subject> subjects = subjectRepository.findByTerm(term);
-            model.addAttribute("subjects", subjects);
-            model.addAttribute("term", term);
-            return "/admin/subjects.html";
-        } else {
-            Iterable<Subject> subjects = subjectRepository.findAll();
-            model.addAttribute("subjects", subjects);
-            return "/admin/subjects.html";
-        }
+    public String list(Model model) {
+        Iterable<Subject> subjects = subjectRepository.findAll();
+        model.addAttribute("subjects", subjects);
+        return "/admin/subjects.html";
     }
 
     @GetMapping("/add")

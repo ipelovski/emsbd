@@ -37,16 +37,18 @@ public class User implements UserDetails {
     @Embedded
     private PersonalInfo personalInfo;
     private Role role;
+    private boolean active;
     @Transient
     private Collection<SimpleGrantedAuthority> grantedAuthorities;
 
     protected User() {
-
+        this.active = true;
     }
 
     public User(String userName) {
         this.username = userName;
         this.role = Role.user;
+        this.active = true;
         this.personalInfo = new PersonalInfo();
     }
 
@@ -101,6 +103,14 @@ public class User implements UserDetails {
         grantedAuthorities = null;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (grantedAuthorities == null) {
@@ -127,7 +137,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return active;
     }
 
     public enum Role {

@@ -12,49 +12,55 @@ data
         address
         role
     student
-        grade
+        school class
         marks
         absences
         notes
-    grades
+    grade name
         name
+    grade
+        grade name
         school year
     term
         name
         school year
         begin
         end
-    subjects
+    subject name
         name
+    subject
+        subject name
+        grade name
     teacher
-        form-master of grade
-        classes
-    class
-        teacher
-        subject
+        form-master of school class
+        assigned to teach lessons to classes for a term
+        skills
+    school class
+        name
+        form-master
         grade
-        term
-    class session
-        class
-        teacher
+    lesson
+        school class
+        active teacher
+        subject
         date and time
+        term
     weekly schedule
     marks
         created
         updated
-        class
+        subject
         term
         rawScore
         by
     absences
-        date
-        class
+        lessons
     notes
         created
         updated
         text
         by
-        class
+        lesson
 actions
     student info: marks, notes, absences of a single student
     anonymous

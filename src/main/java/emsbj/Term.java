@@ -1,10 +1,16 @@
 package emsbj;
 
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
+
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
@@ -12,8 +18,12 @@ public class Term implements JournalPersistable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @LazyToOne(LazyToOneOption.NO_PROXY)
+    @NotNull
+    @JoinColumn(name = "fk_schoolYear", nullable = false)
     private SchoolYear schoolYear;
+    @NotNull
     private String name;
     private LocalDate begin;
     private LocalDate end;
@@ -27,6 +37,7 @@ public class Term implements JournalPersistable {
         this.name = name;
     }
 
+    @Override
     public Long getId() {
         return id;
     }

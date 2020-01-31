@@ -27,6 +27,9 @@
                 </td>
                 <td>
                     <a th:href="@{'/admin/terms?school-year=' + ${schoolYear.id}}">Terms</a>
+                    <a th:each="term : ${schoolYear.terms}"
+                       th:href="@{${x.au().term(term)}}"
+                       th:text="'Term ' + ${term.name}"></a>
                 </td>
             </tr>
         </tbody>

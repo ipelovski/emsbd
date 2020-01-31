@@ -11,15 +11,13 @@ public class SchoolClass implements JournalPersistable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @ManyToOne
-    private Term term;
-    @ManyToOne
-    private Subject subject;
+    private String Name;
     @ManyToOne
     private Grade grade;
     @ManyToOne
-    private Teacher teacher;
+    private TeacherAssignment formMaster;
 
+    @Override
     public Long getId() {
         return id;
     }

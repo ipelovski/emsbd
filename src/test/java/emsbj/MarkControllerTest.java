@@ -42,10 +42,11 @@ public class MarkControllerTest {
         schoolYearRepository.save(schoolYear);
         term = new Term(schoolYear, "I");
         termRepository.save(term);
-        subject = new Subject("Биология");
-        subjectRepository.save(subject);
-        grade = new Grade(schoolYear, "3 а");
+        GradeName gradeName = new GradeName("3");
+        grade = new Grade(schoolYear, gradeName);
         gradeRepository.save(grade);
+        subject = new Subject(new SubjectName("Биология"), gradeName);
+        subjectRepository.save(subject);
         Student student = Utils.createStudent(
             "Гошко", "Иванов", "Петков", grade);
         student.getMarks().add(new Mark(student, subject, 599));
@@ -67,8 +68,8 @@ public class MarkControllerTest {
         List<Mark> marks = markController.getMarksPerSubjectAndGrade(
             schoolYear.getBeginYear(),
             term.getName(),
-            subject.getName(),
-            grade.getName());
+            subject.getName().getValue(),
+            grade.getName().getValue());
         Assert.assertEquals(1, marks.size());
         Assert.assertEquals(599, marks.get(0).getRawScore());
     }

@@ -2,7 +2,6 @@ package emsbj.config;
 
 import emsbj.controller.SecuredController;
 import emsbj.user.JournalUserDetailsService;
-import emsbj.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -62,16 +61,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureAuthenticationManager(AuthenticationManagerBuilder authenticationMgr, PasswordEncoder passwordEncoder) throws Exception {
-        User admin = new User("admin");
-        admin.setPassword(passwordEncoder.encode("admin"));
-        admin.setRole(User.Role.admin);
         authenticationMgr
             .userDetailsService(userDetailsService)
-            .passwordEncoder(passwordEncoder)
-            .and()
-            .inMemoryAuthentication()
-            .withUser(admin)
-            .withUser("user1").password(passwordEncoder.encode("password1")).authorities(User.Role.user.name().toUpperCase());
+            .passwordEncoder(passwordEncoder);
     }
 
     @Autowired

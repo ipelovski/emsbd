@@ -4,6 +4,7 @@ import emsbj.user.User;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,7 +17,11 @@ public class Subject implements JournalPersistable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String name;
+    @ManyToOne(
+        cascade = { CascadeType.PERSIST })
+    private SubjectName name;
+    @ManyToOne
+    private GradeName grade;
     @CreatedBy
     @ManyToOne
     private User createdBy;
@@ -27,20 +32,34 @@ public class Subject implements JournalPersistable {
 
     }
 
-    public Subject(String name) {
+    public Subject(SubjectName name) {
         this.name = name;
     }
 
+    public Subject(SubjectName name, GradeName grade) {
+        this.name = name;
+        this.grade = grade;
+    }
+
+    @Override
     public Long getId() {
         return id;
     }
 
-    public String getName() {
+    public SubjectName getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(SubjectName name) {
         this.name = name;
+    }
+
+    public GradeName getGrade() {
+        return grade;
+    }
+
+    public void setGrade(GradeName grade) {
+        this.grade = grade;
     }
 
     public User getCreatedBy() {

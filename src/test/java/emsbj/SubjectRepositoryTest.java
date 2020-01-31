@@ -19,6 +19,8 @@ public class SubjectRepositoryTest {
     @Autowired
     private TermRepository termRepository;
     @Autowired
+    private GradeRepository gradeRepository;
+    @Autowired
     private SubjectRepository subjectRepository;
     private SchoolYear schoolYear;
     private Term term;
@@ -35,12 +37,13 @@ public class SubjectRepositoryTest {
     public void cleanup() {
         subjectRepository.deleteAll();
         termRepository.deleteAll();
+        gradeRepository.deleteAll();
         schoolYearRepository.deleteAll();
     }
 
     @Test
     public void insertSubject() {
-        Subject subject = new Subject("Биология");
+        Subject subject = new Subject(new SubjectName("Биология"));
         Assert.assertTrue(subject.isNew());
         subjectRepository.save(subject);
         Assert.assertFalse(subject.isNew());
@@ -48,12 +51,14 @@ public class SubjectRepositoryTest {
     }
 
     @Test
-    public void findSubjectByTermAndName() {
-        String subjectName = "Биология";
-        subjectRepository.save(new Subject(subjectName));
+    public void findSubjectByNameAndGrade() {
+        GradeName gradeName = new GradeName("5");
+        gradeRepository.save(new Grade(schoolYear, gradeName));
+        SubjectName subjectName = new SubjectName("Биология");
+        subjectRepository.save(new Subject(subjectName, gradeName));
         Optional<Subject> optionalSubject = subjectRepository
-            .findByTermAndName(term, subjectName);
+            .findByNameAndGrade(subjectName.getValue(), gradeName.getValue());
         Assert.assertTrue(optionalSubject.isPresent());
-        Assert.assertEquals(subjectName, optionalSubject.get().getName());
+        Assert.assertEquals(subjectName.getValue(), optionalSubject.get().getName().getValue());
     }
 }

@@ -2,6 +2,7 @@ package emsbj.admin;
 
 import emsbj.SchoolYear;
 import emsbj.SchoolYearRepository;
+import emsbj.controller.LocalizedController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 
 @Controller
 @RequestMapping("/admin/school-years")
-public class AdminSchoolYearController {
+public class AdminSchoolYearController implements LocalizedController {
     @Autowired
     private SchoolYearRepository schoolYearRepository;
     @Autowired
@@ -22,7 +23,7 @@ public class AdminSchoolYearController {
 
     @GetMapping
     public String list(Model model) {
-        Iterable<SchoolYear> schoolYears = schoolYearRepository.findAll();
+        Iterable<SchoolYear> schoolYears = schoolYearRepository.findAllWithAll();
         model.addAttribute("schoolYears", schoolYears);
         return "/admin/school-years.html";
     }

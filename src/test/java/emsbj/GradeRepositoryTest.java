@@ -34,17 +34,17 @@ public class GradeRepositoryTest {
 
     @Test
     public void insertGrade() {
-        gradeRepository.save(new Grade(schoolYear, "3 а"));
+        gradeRepository.save(new Grade(schoolYear, new GradeName("3")));
         Assert.assertEquals(1, gradeRepository.count());
     }
 
     @Test
     public void findGrade() {
-        String gradeName = "3 а";
+        GradeName gradeName = new GradeName("3");
         gradeRepository.save(new Grade(schoolYear, gradeName));
         Optional<Grade> optionalGrade = gradeRepository
-            .findBySchoolYearAndName(schoolYear, gradeName);
+            .findByNameAndSchoolYear(gradeName.getValue(), schoolYear);
         Assert.assertTrue(optionalGrade.isPresent());
-        Assert.assertEquals(gradeName, optionalGrade.get().getName());
+        Assert.assertEquals(gradeName.getValue(), optionalGrade.get().getName().getValue());
     }
 }
