@@ -1,29 +1,22 @@
 package emsbj;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
 @Entity
 public class Grade implements JournalPersistable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @ManyToOne(
-        cascade = { CascadeType.PERSIST })
-    private GradeName name;
-    @ManyToOne
-    private SchoolYear schoolYear;
+    private String name;
 
-    public Grade() {
+    protected Grade() {
 
     }
 
-    public Grade(SchoolYear schoolYear, GradeName name) {
-        this.schoolYear = schoolYear;
+    public Grade(String name) {
         this.name = name;
     }
 
@@ -32,11 +25,11 @@ public class Grade implements JournalPersistable {
         return id;
     }
 
-    public GradeName getName() {
+    public String getName() {
         return name;
     }
 
-    public SchoolYear getSchoolYear() {
-        return schoolYear;
+    public void setName(String name) {
+        this.name = name;
     }
 }

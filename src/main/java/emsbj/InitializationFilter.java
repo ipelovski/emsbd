@@ -65,12 +65,12 @@ public class InitializationFilter implements Filter {
 
         Map<Integer, Grade> grades = new HashMap<>(4);
         for (Integer i = 9; i <= 12; i++) {
-            Grade grade = new Grade(schoolYear, new GradeName(i.toString()));
+            Grade grade = new Grade(i.toString());
             gradeRepository.save(grade);
             grades.put(i, grade);
         }
 
-        Subject subject = new Subject(new SubjectName("Биология"), grades.get(9).getName());
+        Subject subject = new Subject(new SubjectName("Биология"), grades.get(9));
         subjectRepository.save(subject);
 
         Student student = new Student(

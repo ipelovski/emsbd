@@ -1,5 +1,6 @@
 package emsbj;
 
+import emsbj.admin.AdminGradeController;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -8,6 +9,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Optional;
 
@@ -34,17 +38,17 @@ public class GradeRepositoryTest {
 
     @Test
     public void insertGrade() {
-        gradeRepository.save(new Grade(schoolYear, new GradeName("3")));
+        gradeRepository.save(new Grade("3"));
         Assert.assertEquals(1, gradeRepository.count());
     }
 
     @Test
     public void findGrade() {
-        GradeName gradeName = new GradeName("3");
-        gradeRepository.save(new Grade(schoolYear, gradeName));
+        String gradeName = "3";
+        gradeRepository.save(new Grade(gradeName));
         Optional<Grade> optionalGrade = gradeRepository
-            .findByNameAndSchoolYear(gradeName.getValue(), schoolYear);
+            .findByName(gradeName);
         Assert.assertTrue(optionalGrade.isPresent());
-        Assert.assertEquals(gradeName.getValue(), optionalGrade.get().getName().getValue());
+        Assert.assertEquals(gradeName, optionalGrade.get().getName());
     }
 }

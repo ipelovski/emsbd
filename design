@@ -1,3 +1,4 @@
+Model
 roles
     principal
     teacher
@@ -16,11 +17,8 @@ data
         marks
         absences
         notes
-    grade name
-        name
     grade
-        grade name
-        school year
+        name
     term
         name
         school year
@@ -30,7 +28,7 @@ data
         name
     subject
         subject name
-        grade name
+        grade
     teacher
         form-master of school class
         assigned to teach lessons to classes for a term
@@ -39,6 +37,7 @@ data
         name
         form-master
         grade
+        school year
     lesson
         school class
         active teacher
@@ -79,3 +78,7 @@ screens
         same for notes and absences
     classes of a teacher
     marks given to students from a single grade for a specific subject (seen by a teacher)
+    administration
+        grades with add grade
+        subjects
+            add subject

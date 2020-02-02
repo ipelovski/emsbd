@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Grades</title>
+</head>
+<body>
+    <form th:action="@{${x.au().addGrade()}}" th:object="${emptyGrade}" method="post">
+        <input type="text" th:field="*{name}">
+        <input type="submit" value="Add">
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="grade : ${grades}">
+                <td th:text="${grade.name}"></td>
+                <td>
+                    <form>
+                        <input type="submit" value="Delete">
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

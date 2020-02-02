@@ -52,12 +52,12 @@ public class SubjectRepositoryTest {
 
     @Test
     public void findSubjectByNameAndGrade() {
-        GradeName gradeName = new GradeName("5");
-        gradeRepository.save(new Grade(schoolYear, gradeName));
+        Grade grade = new Grade("5");
+        gradeRepository.save(grade);
         SubjectName subjectName = new SubjectName("Биология");
-        subjectRepository.save(new Subject(subjectName, gradeName));
+        subjectRepository.save(new Subject(subjectName, grade));
         Optional<Subject> optionalSubject = subjectRepository
-            .findByNameAndGrade(subjectName.getValue(), gradeName.getValue());
+            .findByNameAndGrade(subjectName.getValue(), grade.getName());
         Assert.assertTrue(optionalSubject.isPresent());
         Assert.assertEquals(subjectName.getValue(), optionalSubject.get().getName().getValue());
     }

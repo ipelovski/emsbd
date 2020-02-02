@@ -21,7 +21,7 @@ public class Subject implements JournalPersistable {
         cascade = { CascadeType.PERSIST })
     private SubjectName name;
     @ManyToOne
-    private GradeName grade;
+    private Grade grade;
     @CreatedBy
     @ManyToOne
     private User createdBy;
@@ -36,7 +36,7 @@ public class Subject implements JournalPersistable {
         this.name = name;
     }
 
-    public Subject(SubjectName name, GradeName grade) {
+    public Subject(SubjectName name, Grade grade) {
         this.name = name;
         this.grade = grade;
     }
@@ -54,11 +54,11 @@ public class Subject implements JournalPersistable {
         this.name = name;
     }
 
-    public GradeName getGrade() {
+    public Grade getGrade() {
         return grade;
     }
 
-    public void setGrade(GradeName grade) {
+    public void setGrade(Grade grade) {
         this.grade = grade;
     }
 

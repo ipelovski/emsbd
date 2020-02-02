@@ -1,6 +1,10 @@
 package emsbj;
 
+import emsbj.admin.AdminGradeController;
 import org.springframework.context.MessageSource;
+import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 import org.thymeleaf.util.StringUtils;
 
 import java.util.Locale;
@@ -41,6 +45,9 @@ public class Extensions {
             new EntitiesUrlBuilder<>("/terms");
         private static final EntitiesUrlBuilder<Subject> subjectsUrlBuilder =
             new EntitiesUrlBuilder<>("/subjects");
+        private static final EntitiesUrlBuilder<Grade> gradesUrlBuilder =
+            new EntitiesUrlBuilder<>("/grades");
+        private static final String addUrl = "/add";
 
         public String schoolYears() {
             return schoolYearsUrlBuilder.build();
@@ -54,13 +61,24 @@ public class Extensions {
             return termsUrlBuilder.entity(term).build();
         }
 
-        public String newSubject(Term term) {
+        public String addSubject(Term term) {
             assert !term.isNew();
-            return subjectsUrlBuilder.build() + "/add?term=" + term.getId();
+            return subjectsUrlBuilder.build() + addUrl + "?term=" + term.getId();
         }
 
-        public String newSubject() {
-            return subjectsUrlBuilder.build() + "/add";
+        public String addSubject() {
+            return subjectsUrlBuilder.build() + addUrl;
+        }
+
+        public String addGrade() {
+            return gradesUrlBuilder.build() + addUrl;
+        }
+
+        public String grades() {
+            UriComponentsBuilder uriComponentsBuilder =
+                MvcUriComponentsBuilder.fromMethodName(
+                    AdminGradeController.class, "list", Model.class);
+            return uriComponentsBuilder.build().toUriString();
         }
 
         private static class EntitiesUrlBuilder<T extends JournalPersistable> {

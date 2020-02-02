@@ -42,10 +42,9 @@ public class MarkControllerTest {
         schoolYearRepository.save(schoolYear);
         term = new Term(schoolYear, "I");
         termRepository.save(term);
-        GradeName gradeName = new GradeName("3");
-        grade = new Grade(schoolYear, gradeName);
+        grade = new Grade("3");
         gradeRepository.save(grade);
-        subject = new Subject(new SubjectName("Биология"), gradeName);
+        subject = new Subject(new SubjectName("Биология"), grade);
         subjectRepository.save(subject);
         Student student = Utils.createStudent(
             "Гошко", "Иванов", "Петков", grade);
@@ -56,8 +55,8 @@ public class MarkControllerTest {
     @After
     public void cleanup() {
         studentRepository.deleteAll();
-        gradeRepository.deleteAll();
         subjectRepository.deleteAll();
+        gradeRepository.deleteAll();
         termRepository.deleteAll();
         schoolYearRepository.deleteAll();
         userRepository.deleteAll();
@@ -69,7 +68,7 @@ public class MarkControllerTest {
             schoolYear.getBeginYear(),
             term.getName(),
             subject.getName().getValue(),
-            grade.getName().getValue());
+            grade.getName());
         Assert.assertEquals(1, marks.size());
         Assert.assertEquals(599, marks.get(0).getRawScore());
     }

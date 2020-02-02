@@ -38,19 +38,19 @@ public class StudentRepositoryTest {
     public void setup() {
         schoolYear = new SchoolYear(2020, 2021);
         schoolYearRepository.save(schoolYear);
-        grade = new Grade(schoolYear, new GradeName("3"));
+        grade = new Grade("3");
         gradeRepository.save(grade);
         term = new Term(schoolYear, "I");
         termRepository.save(term);
-        subject = new Subject(new SubjectName("Биология"));
+        subject = new Subject(new SubjectName("Биология"), grade);
         subjectRepository.save(subject);
     }
 
     @After
     public void cleanup() {
         studentRepository.deleteAll();
-        gradeRepository.deleteAll();
         subjectRepository.deleteAll();
+        gradeRepository.deleteAll();
         termRepository.deleteAll();
         schoolYearRepository.deleteAll();
         userRepository.deleteAll();

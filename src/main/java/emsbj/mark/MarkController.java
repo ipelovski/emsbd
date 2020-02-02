@@ -50,7 +50,7 @@ public class MarkController {
             .findByNameAndGrade(subjectName, gradeName)
             .orElseThrow(() -> new IllegalArgumentException("subject name"));
         Grade grade = gradeRepository
-            .findByNameAndSchoolYear(gradeName, schoolYear)
+            .findByName(gradeName)
             .orElseThrow(() -> new IllegalArgumentException("grade name"));
         List<Mark> marks = markRepository.findBySubjectAndStudentGrade(subject, grade);
         return marks;

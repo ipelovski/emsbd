@@ -9,19 +9,19 @@
         <a th:href="@{/admin}">Back to administration home</a>
     </p>
     <p>
-        <a th:href="@{${x.au().newSubject()}}">Add new</a>
+        <a th:href="@{${x.au().addSubject()}}">Add new</a>
     </p>
     <table>
         <thead>
             <tr>
-                <th>Term</th>
                 <th>Name</th>
+                <th>Grade</th>
             </tr>
         </thead>
         <tbody>
             <tr th:each="subject : ${subjects}">
-                <td th:text="${subject.term.name()}"></td>
-                <td th:text="${subject.name}"></td>
+                <td th:text="${subject.name.value}"></td>
+                <td th:text="${subject.grade.value}"></td>
             </tr>
         </tbody>
     </table>

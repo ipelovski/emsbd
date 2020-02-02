@@ -5,19 +5,19 @@
     <title th:text="${subject.isNew() ? 'Adding Subject' : 'Editing Subject'}"></title>
 </head>
 <body>
-    <form th:action="@{${x.au().newSubject()}}" method="post">
+    <form th:action="@{${x.au().addSubject()}}" method="post">
         <fieldset th:object="${subject}">
             <legend th:text="${subject.isNew() ? 'Add' : 'Edit'}"></legend>
-            <p th:if="${!subject.isNew()'}">
+            <p th:if="${!subject.isNew()}">
                 <label th:text="Id"></label>
                 <span th:text="*{id}"></span>
             </p>
             <label for="name" th:text="Name"></label>
             <input type="text" id="name" th:field="*{name}">
-            <label for="term" th:text="Name"></label>
-            <select id="term" th:field="*{term}">
-                <option th:each="term : ${availableTerms}"
-                        th:value="${term.id}" th:text="${term.name()}"></option>
+            <label for="gradeNameId" th:text="Grade"></label>
+            <select id="gradeNameId" th:field="*{gradeNameId}">
+                <option th:each="grade : ${grades}"
+                        th:value="${grade.name.id}" th:text="${grade.name.value}"></option>
             </select>
         </fieldset>
         <input type="submit" value="Save">
