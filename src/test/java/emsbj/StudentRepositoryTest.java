@@ -38,7 +38,7 @@ public class StudentRepositoryTest {
     public void setup() {
         schoolYear = new SchoolYear(2020, 2021);
         schoolYearRepository.save(schoolYear);
-        grade = new Grade("3");
+        grade = new Grade(3);
         gradeRepository.save(grade);
         term = new Term(schoolYear, "I");
         termRepository.save(term);

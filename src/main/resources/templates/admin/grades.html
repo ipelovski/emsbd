@@ -6,7 +6,10 @@
 </head>
 <body>
     <form th:action="@{${x.au().addGrade()}}" th:object="${emptyGrade}" method="post">
-        <input type="text" th:field="*{name}">
+        <label for="ordinal">Ordinal</label>
+        <input type="number" id="ordinal" th:field="*{ordinal}">
+        <label for="name">Name</label>
+        <input type="text" id="name" th:field="*{name}">
         <input type="submit" value="Add">
     </form>
     <table>
@@ -18,7 +21,10 @@
         </thead>
         <tbody>
             <tr th:each="grade : ${grades}">
-                <td th:text="${grade.name}"></td>
+                <td>
+                    <span th:text="${grade.ordinal}"></span>
+                    <span th:if="${grade.name != null}" th:text="| ${grade.name}|"></span>
+                </td>
                 <td>
                     <form>
                         <input type="submit" value="Delete">

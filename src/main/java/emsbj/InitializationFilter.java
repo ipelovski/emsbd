@@ -65,7 +65,7 @@ public class InitializationFilter implements Filter {
 
         Map<Integer, Grade> grades = new HashMap<>(4);
         for (Integer i = 9; i <= 12; i++) {
-            Grade grade = new Grade(i.toString());
+            Grade grade = new Grade(i);
             gradeRepository.save(grade);
             grades.put(i, grade);
         }
