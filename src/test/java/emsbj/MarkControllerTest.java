@@ -24,6 +24,8 @@ public class MarkControllerTest {
     @Autowired
     private SubjectRepository subjectRepository;
     @Autowired
+    private SubjectService subjectService;
+    @Autowired
     private GradeRepository gradeRepository;
     @Autowired
     private StudentRepository studentRepository;
@@ -44,8 +46,7 @@ public class MarkControllerTest {
         termRepository.save(term);
         grade = new Grade(3);
         gradeRepository.save(grade);
-        subject = new Subject(new SubjectName("Биология"), grade);
-        subjectRepository.save(subject);
+        subject = subjectService.create("Биология", grade);
         Student student = Utils.createStudent(
             "Гошко", "Иванов", "Петков", grade);
         student.getMarks().add(new Mark(student, subject, 599));
@@ -68,7 +69,6 @@ public class MarkControllerTest {
             schoolYear.getBeginYear(),
             term.getName(),
             subject.getName().getValue(),
-            grade.getOrdinal(),
             grade.getName());
         Assert.assertEquals(1, marks.size());
         Assert.assertEquals(599, marks.get(0).getRawScore());

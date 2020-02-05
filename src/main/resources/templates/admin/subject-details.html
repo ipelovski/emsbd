@@ -14,10 +14,10 @@
             </p>
             <label for="name" th:text="Name"></label>
             <input type="text" id="name" th:field="*{name}">
-            <label for="gradeNameId" th:text="Grade"></label>
-            <select id="gradeNameId" th:field="*{gradeNameId}">
+            <label for="gradeId" th:text="Grade"></label>
+            <select id="gradeId" th:field="*{gradeId}">
                 <option th:each="grade : ${grades}"
-                        th:value="${grade.name.id}" th:text="${grade.name.value}"></option>
+                        th:value="${grade.id}" th:text="${grade.name}"></option>
             </select>
         </fieldset>
         <input type="submit" value="Save">

@@ -1,6 +1,7 @@
 package emsbj;
 
 import emsbj.user.User;
+import org.junit.Assert;
 
 public class Utils {
     public static Student createStudent(String firstName, String middleName, String lastName, Grade grade) {
@@ -12,5 +13,17 @@ public class Utils {
             .setMiddleName(middleName)
             .setLastName(lastName);
         return student;
+    }
+
+    public static void assertFails(Class<?> exceptionClass, Runnable task) {
+        try {
+            task.run();
+            Assert.fail();
+        } catch(Exception e) {
+            Assert.assertTrue(
+                "Expected exception of type " + exceptionClass.getCanonicalName()
+                + " but caught one of type " + e.getClass().getCanonicalName(),
+                exceptionClass.isInstance(e));
+        }
     }
 }

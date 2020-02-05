@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
@@ -22,6 +23,8 @@ public class SubjectRepositoryTest {
     private GradeRepository gradeRepository;
     @Autowired
     private SubjectRepository subjectRepository;
+    @Autowired
+    private SubjectNameRepository subjectNameRepository;
     private SchoolYear schoolYear;
     private Term term;
 
@@ -43,7 +46,11 @@ public class SubjectRepositoryTest {
 
     @Test
     public void insertSubject() {
-        Subject subject = new Subject(new SubjectName("Биология"));
+        Grade grade = new Grade(5);
+        gradeRepository.save(grade);
+        SubjectName subjectName = new SubjectName("Биология");
+        subjectName = subjectNameRepository.save(subjectName);
+        Subject subject = new Subject(subjectName, grade);
         Assert.assertTrue(subject.isNew());
         subjectRepository.save(subject);
         Assert.assertFalse(subject.isNew());
@@ -51,10 +58,40 @@ public class SubjectRepositoryTest {
     }
 
     @Test
+    public void insertSubjectsSameNameDifferentGrades() {
+        Grade grade1 = new Grade(1);
+        gradeRepository.save(grade1);
+        Grade grade2 = new Grade(2);
+        gradeRepository.save(grade2);
+        SubjectName subjectName = new SubjectName("Биология");
+        subjectName = subjectNameRepository.save(subjectName);
+        Subject subject1 = new Subject(subjectName, grade1);
+        subject1 = subjectRepository.save(subject1);
+        Subject subject2 = new Subject(subjectName, grade2);
+        subject2 = subjectRepository.save(subject2);
+        Assert.assertEquals(subject1.getName().getId(), subject2.getName().getId());
+        Assert.assertNotEquals(subject1.getGrade().getId(), subject2.getGrade().getId());
+    }
+
+    @Test
+    public void insertSubjectsSameNameAndSameGrade() {
+        Grade grade = new Grade(5);
+        gradeRepository.save(grade);
+        SubjectName subjectName = new SubjectName("Биология");
+        subjectName = subjectNameRepository.save(subjectName);
+        Subject subject1 = new Subject(subjectName, grade);
+        subjectRepository.save(subject1);
+        Subject subject2 = new Subject(subjectName, grade);
+        Utils.assertFails(DataIntegrityViolationException.class,
+            () -> subjectRepository.save(subject2));
+    }
+
+    @Test
     public void findSubjectByNameAndGrade() {
         Grade grade = new Grade(5);
         gradeRepository.save(grade);
         SubjectName subjectName = new SubjectName("Биология");
+        subjectName = subjectNameRepository.save(subjectName);
         subjectRepository.save(new Subject(subjectName, grade));
         Optional<Subject> optionalSubject = subjectRepository
             .findByNameAndGrade(subjectName.getValue(), grade);

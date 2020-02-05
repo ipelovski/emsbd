@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
@@ -39,12 +40,19 @@ public class GradeRepositoryTest {
     }
 
     @Test
+    public void insertGradesWithSameName() {
+        gradeRepository.save(new Grade(3));
+        Utils.assertFails(DataIntegrityViolationException.class,
+            () -> gradeRepository.save(new Grade(3)));
+    }
+
+    @Test
     public void findGrade() {
-        Integer gradeOrdinal = 3;
-        gradeRepository.save(new Grade(gradeOrdinal));
+        String name = "3";
+        gradeRepository.save(new Grade(name));
         Optional<Grade> optionalGrade = gradeRepository
-            .findByOrdinalAndName(gradeOrdinal, null);
+            .findByName(name);
         Assert.assertTrue(optionalGrade.isPresent());
-        Assert.assertEquals(gradeOrdinal, optionalGrade.get().getOrdinal());
+        Assert.assertEquals(name, optionalGrade.get().getName());
     }
 }

@@ -1,31 +1,30 @@
 package emsbj;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"ordinal", "name"})})
 public class Grade implements JournalPersistable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Column(unique = true)
     private Integer ordinal;
+    @Column(unique = true)
     private String name;
 
     protected Grade() {
 
     }
 
-    public Grade(Integer ordinal) {
-        this.ordinal = ordinal;
+    public Grade(Integer name) {
+        this.name = name.toString();
     }
 
-    public Grade(Integer ordinal, String name) {
-        this.ordinal = ordinal;
+    public Grade(String name) {
         this.name = name;
     }
 

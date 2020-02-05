@@ -21,16 +21,16 @@ public class AdminGradeController implements LocalizedController {
 
     @GetMapping
     public String list(Model model) {
-        Iterable<Grade> gradeNames = gradeRepository.findByOrderByOrdinalAsc();
-        model.addAttribute("grades", gradeNames);
-        model.addAttribute("emptyGrade", new Grade(null));
+        Iterable<Grade> grades = gradeRepository.findByOrderByOrdinalAsc();
+        model.addAttribute("grades", grades);
+        model.addAttribute("emptyGrade", new Grade((String)null));
         return "/admin/grades.html";
     }
 
     @PostMapping("/add")
     public String addGrade(Grade grade, Model model, Locale locale) {
-        Optional<Grade> optionalGrade = gradeRepository.findByOrdinalAndName(
-            grade.getOrdinal(), grade.getName());
+        Optional<Grade> optionalGrade = gradeRepository.findByName(
+            grade.getName());
         if (optionalGrade.isPresent()) {
             model.addAttribute("error", "");
         } else {

@@ -1,6 +1,10 @@
 package emsbj.admin;
 
-import emsbj.*;
+import emsbj.Grade;
+import emsbj.GradeRepository;
+import emsbj.Subject;
+import emsbj.SubjectRepository;
+import emsbj.SubjectService;
 import emsbj.controller.LocalizedController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +20,8 @@ import java.util.Optional;
 public class AdminSubjectController implements LocalizedController {
     @Autowired
     private SubjectRepository subjectRepository;
+    @Autowired
+    private SubjectService subjectService;
     @Autowired
     private GradeRepository gradeRepository;
 
@@ -38,13 +44,11 @@ public class AdminSubjectController implements LocalizedController {
     public String add(SubjectForm subjectForm, Model model) {
         Optional<Grade> optionalGrade = gradeRepository.findById(subjectForm.gradeId);
         if (optionalGrade.isPresent()) {
-            Subject subject = new Subject(
-                new SubjectName(subjectForm.name),
-                optionalGrade.get());
-            subjectRepository.save(subject);
+            subjectService.create(subjectForm.name, optionalGrade.get());
             return "redirect:/admin/subjects.html";
         } else {
-            return "/admin/subject-details.html";
+            model.addAttribute("error", "");
+            return "/admin/subjects.html";
         }
     }
 

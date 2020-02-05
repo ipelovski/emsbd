@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Weekly Slots</title>
+</head>
+<body>
+    <p>
+        <a th:href="@{/admin}">Back to administration home</a>
+    </p>
+    <table>
+        <thead>
+            <tr>
+                <th>Shift</th>
+                <th>Day</th>
+                <th>Ordinal</th>
+                <th>Begins</th>
+                <th>Ends</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="weeklySlot : ${weeklySlots}">
+                <td th:text="${weeklySlot.shift}"></td>
+                <td th:text="${weeklySlot.day}"></td>
+                <td th:text="${weeklySlot.ordinal}"></td>
+                <td th:text="${weeklySlot.begin}"></td>
+                <td th:text="${weeklySlot.end}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

@@ -21,7 +21,7 @@
         <tbody>
             <tr th:each="subject : ${subjects}">
                 <td th:text="${subject.name.value}"></td>
-                <td th:text="${subject.grade.value}"></td>
+                <td th:text="${subject.grade.name}"></td>
             </tr>
         </tbody>
     </table>

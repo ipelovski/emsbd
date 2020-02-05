@@ -28,6 +28,8 @@ public class StudentRepositoryTest {
     @Autowired
     private SubjectRepository subjectRepository;
     @Autowired
+    private SubjectService subjectService;
+    @Autowired
     private StudentRepository studentRepository;
     private SchoolYear schoolYear;
     private Term term;
@@ -42,7 +44,7 @@ public class StudentRepositoryTest {
         gradeRepository.save(grade);
         term = new Term(schoolYear, "I");
         termRepository.save(term);
-        subject = new Subject(new SubjectName("Биология"), grade);
+        subject = subjectService.create("Биология", grade);
         subjectRepository.save(subject);
     }
 

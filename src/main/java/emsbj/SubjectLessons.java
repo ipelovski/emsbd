@@ -9,12 +9,12 @@ import javax.persistence.ManyToOne;
 import java.util.List;
 
 @Entity
-public class TeacherAssignment implements JournalPersistable {
+public class SubjectLessons implements JournalPersistable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @ManyToOne
-    private Teacher teacher;
+    @ManyToMany
+    private List<Teacher> teachers;
     @ManyToOne
     private SchoolClass schoolClass;
     @ManyToOne
@@ -24,7 +24,7 @@ public class TeacherAssignment implements JournalPersistable {
     @ManyToMany
     private List<WeeklySlot> weeklySlots;
 
-    public TeacherAssignment() {
+    public SubjectLessons() {
 
     }
 
@@ -33,11 +33,11 @@ public class TeacherAssignment implements JournalPersistable {
         return id;
     }
 
-    public Teacher getTeacher() {
-        return teacher;
+    public List<Teacher> getTeachers() {
+        return teachers;
     }
 
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
+    public void setTeachers(List<Teacher> teachers) {
+        this.teachers = teachers;
     }
 }

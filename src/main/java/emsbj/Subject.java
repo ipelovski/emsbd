@@ -10,17 +10,23 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Entity
+@Table(uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"name_id", "grade_id"})
+})
 public class Subject implements JournalPersistable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @ManyToOne(
-        cascade = { CascadeType.PERSIST })
+    @ManyToOne(optional = false)
     private SubjectName name;
     @ManyToOne
+    @NotNull
     private Grade grade;
     @CreatedBy
     @ManyToOne
@@ -28,12 +34,8 @@ public class Subject implements JournalPersistable {
     @CreatedDate
     private Instant createdOn;
 
-    public Subject() {
+    protected Subject() {
 
-    }
-
-    public Subject(SubjectName name) {
-        this.name = name;
     }
 
     public Subject(SubjectName name, Grade grade) {

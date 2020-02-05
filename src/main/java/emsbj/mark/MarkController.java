@@ -33,13 +33,12 @@ public class MarkController {
 
     @RequestMapping(method = RequestMethod.GET,
         produces = "application/json",
-        value = "/year/{year}/term/{term}/subject/{subject}/grade/{gradeOrdinal:\\d+}-{gradeName}")
+        value = "/year/{year}/term/{term}/subject/{subject}/grade/{gradeName}")
     @ResponseBody
     public List<Mark> getMarksPerSubjectAndGrade(
             int year,
             @PathParam("term") String termName,
             @PathParam("subject") String subjectName,
-            @PathParam("gradeOrdinal") Integer gradeOrdinal,
             @PathParam("gradeName") String gradeName) {
         SchoolYear schoolYear = schoolYearRepository
             .findByBeginYear(year)
@@ -48,7 +47,7 @@ public class MarkController {
             .findBySchoolYearAndName(schoolYear, termName)
             .orElseThrow(() -> new IllegalArgumentException("term name"));
         Grade grade = gradeRepository
-            .findByOrdinalAndName(gradeOrdinal, gradeName)
+            .findByName(gradeName)
             .orElseThrow(() -> new IllegalArgumentException("grade name"));
         Subject subject = subjectRepository
             .findByNameAndGrade(subjectName, grade)

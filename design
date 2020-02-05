@@ -38,13 +38,20 @@ data
         form-master
         grade
         school year
+        room
     lesson
         school class
         active teacher
         subject
         date and time
+        weekly slot
+        room
         term
     weekly schedule
+    weekly slot
+    room
+        floor
+        name
     marks
         created
         updated
@@ -82,3 +89,4 @@ screens
         grades with add grade
         subjects
             add subject
+        check for duplicate lessons in a single room at given time
