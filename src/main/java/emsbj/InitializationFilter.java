@@ -140,6 +140,7 @@ public class InitializationFilter implements Filter {
             .setMiddleName("Игнатиев")
             .setLastName("Големанов");
         teacherUser.setPassword(passwordEncoder.encode("ЧуШк0п3К"));
+        teacherUser.setRole(User.Role.teacher);
         userRepository.save(teacherUser);
         Teacher teacher = new Teacher();
         teacher.setUser(teacherUser);

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title th:text="${user != null ? 'Details about ' + user.username : 'No User Found!'}">Details</title>
+    <link th:href="@{/css/basscss.min.css}" rel="stylesheet">
 </head>
 <body>
     <p>
@@ -11,33 +12,67 @@
     <p th:if="${user == null}">
         No user found!
     </p>
-    <form th:if="${user != null}" th:object="${user}" th:action="@{${#httpServletRequest.requestURI}}" method="post">
-        <fieldset>
+    <form th:if="${user != null}" th:object="${user}"
+          th:action="@{${#httpServletRequest.requestURI}}"
+          method="post" class="sm-flex mx-auto">
+        <fieldset class="">
             <legend th:text="Details"></legend>
-            <label for="id">Id:</label>
-            <span type="text" id="id" th:text="*{id}"></span>
-            <label for="username">Username:</label>
-            <span type="text" id="username" th:text="*{username}"></span>
-            <label for="role">Role:</label>
-            <select id="role" th:field="*{role}">
-                <option value="user">Unspecified</option>
-                <option value="student">Student</option>
-                <option value="teacher">Teacher</option>
-                <option value="admin">Admin</option>
-            </select>
-            <label for="email">Email:</label>
-            <input type="text" id="email" th:field="*{email}">
-            <label for="firstName">First name:</label>
-            <input type="text" id="firstName" th:field="*{personalInfo.firstName}">
-            <label for="middleName">Middle name:</label>
-            <input type="text" id="middleName" th:field="*{personalInfo.middleName}">
-            <label for="lastName">Last name:</label>
-            <input type="text" id="lastName" th:field="*{personalInfo.lastName}">
-            <label for="bornAt">Born at:</label>
-            <input type="text" id="bornAt" th:field="*{personalInfo.bornAt}">
-            <label for="address">Address:</label>
-            <input type="text" id="address" th:field="*{personalInfo.address}">
-            <input type="submit" value="Update">
+            <div class="col col-4">
+                <label class="label" for="username">Username:</label>
+            </div>
+            <div class="col col-8">
+                <input class="input" type="text" id="username" th:field="*{username}">
+            </div>
+            <div class="col col-4">
+                <label class="label" for="role">Role:</label>
+            </div>
+            <div class="col col-8">
+                <select class="select" id="role" th:field="*{role}">
+                    <option value="user">Unspecified</option>
+                    <option value="student">Student</option>
+                    <option value="teacher">Teacher</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            <div class="col col-4">
+                <label class="label" for="email">Email:</label>
+            </div>
+            <div class="col col-8">
+                <input class="input" type="text" id="email" th:field="*{email}">
+            </div>
+            <div class="col col-4">
+                <label class="label" for="firstName">First name:</label>
+            </div>
+            <div class="col col-8">
+                <input class="input" type="text" id="firstName" th:field="*{personalInfo.firstName}">
+            </div>
+            <div class="col col-4">
+                <label class="label" for="middleName">Middle name:</label>
+            </div>
+            <div class="col col-8">
+                <input class="input" type="text" id="middleName" th:field="*{personalInfo.middleName}">
+            </div>
+            <div class="col col-4">
+                <label class="label" for="lastName">Last name:</label>
+            </div>
+            <div class="col col-8">
+                <input class="input" type="text" id="lastName" th:field="*{personalInfo.lastName}">
+            </div>
+            <div class="col col-4">
+                <label class="label" for="bornAt">Born at:</label>
+            </div>
+            <div class="col col-8">
+                <input class="input" type="text" id="bornAt" th:field="*{personalInfo.bornAt}">
+            </div>
+            <div class="col col-4">
+                <label class="label" for="address">Address:</label>
+            </div>
+            <div class="col col-8">
+                <input class="input" type="text" id="address" th:field="*{personalInfo.address}">
+            </div>
+            <div class="col col-12">
+                <input class="input" type="submit" value="Update">
+            </div>
         </fieldset>
     </form>
 </body>
