@@ -48,7 +48,7 @@ public class Application {
     @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("classpath:i18n/labels");
+        messageSource.setBasename("classpath:/WEB-INF/i18n/words");
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }
