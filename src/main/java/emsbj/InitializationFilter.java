@@ -16,7 +16,6 @@ import javax.servlet.ServletResponse;
 import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -40,6 +39,8 @@ public class InitializationFilter implements Filter {
     private SubjectService subjectService;
     @Autowired
     private GradeRepository gradeRepository;
+    @Autowired
+    private TeacherRepository teacherRepository;
     @Autowired
     private StudentRepository studentRepository;
     @Autowired
@@ -68,6 +69,7 @@ public class InitializationFilter implements Filter {
         createGrades();
         createSubjects();
         createWeeklySlots();
+        createTeachers();
         createStudents();
         initialized = true;
     }
@@ -131,10 +133,24 @@ public class InitializationFilter implements Filter {
         }
     }
 
+    private void createTeachers() {
+        User teacherUser = new User("с.големанов");
+        teacherUser.getPersonalInfo()
+            .setFirstName("Станислав")
+            .setMiddleName("Игнатиев")
+            .setLastName("Големанов");
+        teacherUser.setPassword(passwordEncoder.encode("ЧуШк0п3К"));
+        userRepository.save(teacherUser);
+        Teacher teacher = new Teacher();
+        teacher.setUser(teacherUser);
+        teacher.getSkills().add(subjects.get(0));
+        teacherRepository.save(teacher);
+    }
+
     private void createStudents() {
         Student student = new Student(
-            new User("гошко"),
-            grades.get(9));
+            new User("гошко")
+        );
         student.getUser().getPersonalInfo()
             .setFirstName("Гошко")
             .setMiddleName("Георгиев")

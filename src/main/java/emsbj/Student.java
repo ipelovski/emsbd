@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Student {
+public class Student implements JournalPersistable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -23,7 +23,7 @@ public class Student {
         cascade = { CascadeType.PERSIST })
     private User user;
     @ManyToOne
-    private Grade grade;
+    private SchoolClass schoolClass;
     @OneToMany(
         fetch = FetchType.LAZY,
         cascade = { CascadeType.PERSIST, CascadeType.REMOVE },
@@ -34,26 +34,37 @@ public class Student {
 
     }
 
-    public Student(User user, Grade grade) {
+    public Student(User user) {
         this.user = user;
-        this.grade = grade;
         this.marks = new ArrayList<>();
+    }
+
+    @Override
+    public Long getId() {
+        return id;
     }
 
     public User getUser() {
         return user;
     }
 
-    public Grade getGrade() {
-        return grade;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public SchoolClass getSchoolClass() {
+        return schoolClass;
+    }
+
+    public void setSchoolClass(SchoolClass schoolClass) {
+        this.schoolClass = schoolClass;
     }
 
     public List<Mark> getMarks() {
         return marks;
     }
 
-    @Override
-    public String toString() {
-        return super.toString() + " " + grade;
+    public void setMarks(List<Mark> marks) {
+        this.marks = marks;
     }
 }

@@ -11,4 +11,5 @@ public interface SchoolYearRepository extends CrudRepository<SchoolYear, Long> {
     @EntityGraph("SchoolYear.all")
     @Query("select s from SchoolYear as s")
     Iterable<SchoolYear> findAllWithAll();
+    Iterable<SchoolYear> findByBeginYearGreaterThanEqual(Integer beginYear);
 }

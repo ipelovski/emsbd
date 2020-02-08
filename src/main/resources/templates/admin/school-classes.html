@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Classes</title>
+</head>
+<body>
+    <p>
+        <a th:href="@{/admin}">Back to administration home</a>
+    </p>
+    <a th:href="@{${x.au().addSchoolClass()}}" th:text="'Add class'"></a>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Beginning school year</th>
+                <th>Grade</th>
+                <th>Form-master</th>
+                <th>Room</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="schoolClass : ${schoolClasses}">
+                <td th:text="${schoolClass.name}"></td>
+                <td th:text="${schoolClass.beginningSchoolYear.beginYear}"></td>
+                <td>
+                    <span th:if="${schoolClass.currentGrade != null}"
+                          th:text="${schoolClass.currentGrade.name}"></span>
+                </td>
+                <td>
+                    <span th:if="${schoolClass.formMaster != null}"
+                          th:text="${schoolClass.formMaster.user.personalInfo.getName()}"></span>
+                </td>
+                <td>
+                    <span th:if="${schoolClass.classRoom != null}"
+                          th:text="${schoolClass.classRoom.floor + ' ' + schoolClass.classRoom.name}"></span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

@@ -2,6 +2,7 @@ package emsbj.user;
 
 import org.springframework.security.core.userdetails.UserDetails;
 
+// view model of the current user
 public class ActiveUser {
     private String username;
     private User.Role role;

@@ -2,6 +2,8 @@ package emsbj.mark;
 
 import emsbj.Grade;
 import emsbj.GradeRepository;
+import emsbj.SchoolClass;
+import emsbj.SchoolClassRepository;
 import emsbj.SchoolYear;
 import emsbj.SchoolYearRepository;
 import emsbj.Subject;
@@ -29,30 +31,32 @@ public class MarkController {
     @Autowired
     private GradeRepository gradeRepository;
     @Autowired
+    private SchoolClassRepository schoolClassRepository;
+    @Autowired
     private MarkRepository markRepository;
 
     @RequestMapping(method = RequestMethod.GET,
         produces = "application/json",
-        value = "/year/{year}/term/{term}/subject/{subject}/grade/{gradeName}")
+        value = "/year/{year}/term/{term}/subject/{subject}/school-class/{schoolClassId}")
     @ResponseBody
     public List<Mark> getMarksPerSubjectAndGrade(
             int year,
             @PathParam("term") String termName,
             @PathParam("subject") String subjectName,
-            @PathParam("gradeName") String gradeName) {
+            @PathParam("schoolClassId") Long schoolClassId) {
         SchoolYear schoolYear = schoolYearRepository
             .findByBeginYear(year)
             .orElseThrow(() -> new IllegalArgumentException("year"));
         Term term = termRepository
             .findBySchoolYearAndName(schoolYear, termName)
             .orElseThrow(() -> new IllegalArgumentException("term name"));
-        Grade grade = gradeRepository
-            .findByName(gradeName)
-            .orElseThrow(() -> new IllegalArgumentException("grade name"));
+        SchoolClass schoolClass = schoolClassRepository
+            .findById(schoolClassId)
+            .orElseThrow(() -> new IllegalArgumentException("school class id"));
         Subject subject = subjectRepository
-            .findByNameAndGrade(subjectName, grade)
+            .findByNameAndGrade(subjectName, schoolClass.getGrade())
             .orElseThrow(() -> new IllegalArgumentException("subject name"));
-        List<Mark> marks = markRepository.findBySubjectAndStudentGrade(subject, grade);
+        List<Mark> marks = markRepository.findBySubjectAndStudentSchoolClass(subject, schoolClass);
         return marks;
     }
 }

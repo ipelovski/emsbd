@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${schoolClass.isNew() ? 'Adding Class' : 'Editing Class'}"></title>
+</head>
+<body>
+    <form th:action="@{${x.au().addSchoolClass()}}" method="post">
+        <fieldset th:object="${schoolClass}">
+            <legend th:text="${schoolClass.isNew() ? 'Add' : 'Edit'}"></legend>
+            <label for="name" th:text="'Name'"></label>
+            <input type="text" id="name" th:field="*{name}">
+            <label for="beginningSchoolYear" th:text="'Beginning school year'"></label>
+            <select id="beginningSchoolYear" th:field="*{beginningSchoolYear}">
+                <option th:each="schoolYear : ${schoolYears}"
+                        th:value="${schoolYear.id}" th:text="${schoolYear.name()}"></option>
+            </select>
+            <label for="beginningGrade" th:text="'Beginning grade'"></label>
+            <select id="beginningGrade" th:field="*{beginningGrade}">
+                <option th:each="grade : ${grades}"
+                        th:value="${grade.id}" th:text="${grade.name}"></option>
+            </select>
+            <label for="formMaster" th:text="'Form-master'"></label>
+            <select id="formMaster" th:field="*{formMaster}">
+                <option th:each="teacher : ${teachers}"
+                        th:value="${teacher.id}" th:text="${teacher.user.personalInfo.getName()}"></option>
+            </select>
+            <label for="classRoom" th:text="'Class room'"></label>
+            <select id="classRoom" th:field="*{classRoom}">
+                <option th:each="room : ${rooms}"
+                        th:value="${room.id}" th:text="${room.floor + ' ' + room.name}"></option>
+            </select>
+        </fieldset>
+        <input type="submit" value="Save">
+    </form>
+</body>
+</html>

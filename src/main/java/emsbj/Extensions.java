@@ -1,7 +1,13 @@
 package emsbj;
 
 import emsbj.admin.AdminGradeController;
+import emsbj.admin.AdminSchoolClassController;
+import emsbj.admin.AdminStudentController;
+import emsbj.admin.AdminTeacherController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -9,14 +15,13 @@ import org.thymeleaf.util.StringUtils;
 
 import java.util.Locale;
 
+@Service
 public class Extensions {
-    private final MessageSource messageSource;
-    private final Locale locale;
+    @Autowired
+    private MessageSource messageSource;
     private AdminUrls adminUrls;
 
-    public Extensions(MessageSource messageSource, Locale locale) {
-        this.messageSource = messageSource;
-        this.locale = locale;
+    protected Extensions() {
     }
 
     public String c(String label, String... args) {
@@ -24,6 +29,7 @@ public class Extensions {
     }
 
     public String capitalize(String label, String... args) {
+        Locale locale = LocaleContextHolder.getLocale();
         return StringUtils.capitalize(messageSource.getMessage(label, args, locale));
     }
 
@@ -70,14 +76,42 @@ public class Extensions {
             return subjectsUrlBuilder.build() + addUrl;
         }
 
-        public String addGrade() {
-            return gradesUrlBuilder.build() + addUrl;
-        }
-
         public String grades() {
             UriComponentsBuilder uriComponentsBuilder =
                 MvcUriComponentsBuilder.fromMethodName(
                     AdminGradeController.class, "list", Model.class);
+            return uriComponentsBuilder.build().toUriString();
+        }
+
+        public String addGrade() {
+            return gradesUrlBuilder.build() + addUrl;
+        }
+
+        public String schoolClasses() {
+            UriComponentsBuilder uriComponentsBuilder =
+                MvcUriComponentsBuilder.fromMethodName(
+                    AdminSchoolClassController.class, "list", Model.class);
+            return uriComponentsBuilder.build().toUriString();
+        }
+
+        public String addSchoolClass() {
+            UriComponentsBuilder uriComponentsBuilder =
+                MvcUriComponentsBuilder.fromMethodName(
+                    AdminSchoolClassController.class, "add", Model.class);
+            return uriComponentsBuilder.build().toUriString();
+        }
+
+        public String teachers() {
+            UriComponentsBuilder uriComponentsBuilder =
+                MvcUriComponentsBuilder.fromMethodName(
+                    AdminTeacherController.class, "list", Model.class);
+            return uriComponentsBuilder.build().toUriString();
+        }
+
+        public String students() {
+            UriComponentsBuilder uriComponentsBuilder =
+                MvcUriComponentsBuilder.fromMethodName(
+                    AdminStudentController.class, "list", Model.class);
             return uriComponentsBuilder.build().toUriString();
         }
 

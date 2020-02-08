@@ -41,8 +41,9 @@ public class User implements UserDetails {
     @Transient
     private Collection<SimpleGrantedAuthority> grantedAuthorities;
 
-    protected User() {
+    public User() {
         this.active = true;
+        this.personalInfo = new PersonalInfo();
     }
 
     public User(String userName) {

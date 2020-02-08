@@ -1,5 +1,6 @@
 package emsbj.admin;
 
+import emsbj.controller.LocalizedController;
 import emsbj.user.User;
 import emsbj.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin/users")
-public class AdminUserController {
+public class AdminUserController implements LocalizedController {
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -26,6 +27,12 @@ public class AdminUserController {
         Iterable<User> users = userRepository.findAll();
         model.addAttribute("users", users);
         return "/admin/users.html";
+    }
+
+    @GetMapping("/add")
+    public String add(Model model) {
+        model.addAttribute("user", new User());
+        return "/admin/user-details.html";
     }
 
     @PostMapping("/add")

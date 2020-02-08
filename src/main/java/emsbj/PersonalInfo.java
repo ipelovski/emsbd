@@ -2,6 +2,9 @@ package emsbj;
 
 import javax.persistence.Embeddable;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Optional;
 
 @Embeddable
 public class PersonalInfo {
@@ -13,6 +16,7 @@ public class PersonalInfo {
     private String lastName;
     @Size(max = 200)
     private String address;
+    private LocalDate bornAt;
 
     public PersonalInfo() {
 
@@ -45,6 +49,10 @@ public class PersonalInfo {
         return this;
     }
 
+    public String getName() {
+        return String.format("%s %s %s", firstName, middleName, lastName);
+    }
+
     public String getAddress() {
         return address;
     }
@@ -52,5 +60,22 @@ public class PersonalInfo {
     public PersonalInfo setAddress(String address) {
         this.address = address;
         return this;
+    }
+
+    public LocalDate getBornAt() {
+        return bornAt;
+    }
+
+    public PersonalInfo setBornAt(LocalDate bornAt) {
+        this.bornAt = bornAt;
+        return this;
+    }
+
+    public Optional<Integer> getAge() {
+        if (bornAt != null) {
+            return Optional.of(Period.between(LocalDate.now(), bornAt).getYears());
+        } else {
+            return Optional.empty();
+        }
     }
 }

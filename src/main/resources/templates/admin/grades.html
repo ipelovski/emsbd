@@ -5,6 +5,9 @@
     <title>Grades</title>
 </head>
 <body>
+    <p>
+        <a th:href="@{/admin}">Back to administration home</a>
+    </p>
     <form th:action="@{${x.au().addGrade()}}" th:object="${emptyGrade}" method="post">
         <label for="name">Name</label>
         <input type="text" id="name" th:field="*{name}">
@@ -19,7 +22,7 @@
         </thead>
         <tbody>
             <tr th:each="grade : ${grades}">
-                <td th:text="${grade.text}"></td>
+                <td th:text="${grade.name}"></td>
                 <td>
                     <form>
                         <input type="submit" value="Delete">

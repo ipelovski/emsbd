@@ -15,7 +15,16 @@
         <a th:href="@{/admin/subjects}" th:text="'View subjects'"></a>
     </p>
     <p>
-        <a th:href="@{/admin/grades}" th:text="'View available grades'"></a>
+        <a th:href="@{${x.au().grades()}}" th:text="'View available grades'"></a>
+    </p>
+    <p>
+        <a th:href="@{${x.au().schoolClasses()}}" th:text="'View available classes'"></a>
+    </p>
+    <p>
+        <a th:href="@{${x.au().teachers()}}" th:text="'View teachers'"></a>
+    </p>
+    <p>
+        <a th:href="@{${x.au().students()}}" th:text="'View students'"></a>
     </p>
     <p>
         <a th:href="@{/admin/schedule/weekly-slots}" th:text="'View weekly slots'"></a>

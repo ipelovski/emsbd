@@ -24,7 +24,7 @@ public class AdminGradeController implements LocalizedController {
         Iterable<Grade> grades = gradeRepository.findByOrderByOrdinalAsc();
         model.addAttribute("grades", grades);
         model.addAttribute("emptyGrade", new Grade((String)null));
-        return "/admin/grades.html";
+        return "admin/grades.html";
     }
 
     @PostMapping("/add")

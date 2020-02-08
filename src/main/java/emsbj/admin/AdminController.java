@@ -1,5 +1,6 @@
 package emsbj.admin;
 
+import emsbj.controller.LocalizedController;
 import emsbj.controller.SecuredController;
 import emsbj.user.User;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/admin")
-public class AdminController implements SecuredController {
+public class AdminController implements SecuredController, LocalizedController {
     @Override
     public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {
         registry

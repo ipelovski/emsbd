@@ -5,19 +5,26 @@ roles
     student
     parent
 data
+    user
+        personal info
+        role
+        active
+    personal info
+        name
+        address
     school year
         beginYear
         endYear
-    persons
-        name
-        address
-        role
     student
+        user
         school class
+        //joined
+        //left
         marks
         absences
         notes
     grade
+        ordinal
         name
     term
         name
@@ -30,14 +37,16 @@ data
         subject name
         grade
     teacher
-        form-master of school class
+        form-master of school classes
         assigned to teach lessons to classes for a term
         skills
     school class
         name
+        beginning school year
+        beginning grade
+        current school year
+        current grade
         form-master
-        grade
-        school year
         room
     lesson
         school class
