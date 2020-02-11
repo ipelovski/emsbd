@@ -1,5 +1,7 @@
 package emsbj.config;
 
+import emsbj.RedirectingAuthenticationSuccessHandler;
+import emsbj.RedirectingLoginUrlAuthenticationEntryPoint;
 import emsbj.controller.SecuredController;
 import emsbj.user.JournalUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,22 +33,36 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/resources/**");
+        web.ignoring().antMatchers("/resources/**");// TODO ??
     }
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = httpSecurity
-            .csrf().disable()
-            .formLogin()
-            .loginPage("/sign-in")
-            .permitAll()
-            .and()
-            .logout()
-            .logoutUrl("/sign-out")
-            .permitAll()
-            .and()
-            .authorizeRequests();
+        RedirectingAuthenticationSuccessHandler successHandler =
+            new RedirectingAuthenticationSuccessHandler();
+        successHandler.setTargetUrlParameter("requested");
+        ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry =
+            httpSecurity
+                .csrf()
+                    .disable()
+                .exceptionHandling()
+                    .authenticationEntryPoint(
+                        new RedirectingLoginUrlAuthenticationEntryPoint("/sign-in"))
+                    .and()
+                .authorizeRequests()
+                    .antMatchers("/sign-in*")
+                    .permitAll()
+                    .and()
+                .formLogin()
+                    .loginPage("/sign-in")
+                    .permitAll()
+                    .successHandler(successHandler)
+                    .and()
+                .logout()
+                    .logoutUrl("/sign-out")
+                    .permitAll()
+                    .and()
+                .authorizeRequests();
         for (SecuredController securedController : securedControllerMap.values()) {
             securedController.configure(registry);
         }

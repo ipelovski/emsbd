@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +20,8 @@ public class Student implements JournalPersistable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @ManyToOne(
-        cascade = { CascadeType.PERSIST })
+    @NotNull
+    @ManyToOne
     private User user;
     @ManyToOne
     private SchoolClass schoolClass;
@@ -30,13 +31,13 @@ public class Student implements JournalPersistable {
         mappedBy = "student")
     private List<Mark> marks;
 
-    protected Student() {
-
+    public Student() {
+        this.marks = new ArrayList<>();
     }
 
     public Student(User user) {
+        this();
         this.user = user;
-        this.marks = new ArrayList<>();
     }
 
     @Override

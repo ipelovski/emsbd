@@ -62,6 +62,7 @@ public class InitializationFilter implements Filter {
         User admin = new User("admin");
         admin.setRole(User.Role.admin);
         admin.setPassword(passwordEncoder.encode("admin"));
+        admin.setEmail("admin@admin.admin");
         userRepository.save(admin);
         JournalAuditAware.setCurrentUser(admin);
         createSchoolYear();
@@ -134,14 +135,7 @@ public class InitializationFilter implements Filter {
     }
 
     private void createTeachers() {
-        User teacherUser = new User("с.големанов");
-        teacherUser.getPersonalInfo()
-            .setFirstName("Станислав")
-            .setMiddleName("Игнатиев")
-            .setLastName("Големанов");
-        teacherUser.setPassword(passwordEncoder.encode("ЧуШк0п3К"));
-        teacherUser.setRole(User.Role.teacher);
-        userRepository.save(teacherUser);
+        User teacherUser = createUser(User.Role.teacher, "Станислав", "Игнатиев", "Големанов");
         Teacher teacher = new Teacher();
         teacher.setUser(teacherUser);
         teacher.getSkills().add(subjects.get(0));
@@ -149,14 +143,24 @@ public class InitializationFilter implements Filter {
     }
 
     private void createStudents() {
-        Student student = new Student(
-            new User("гошко")
-        );
-        student.getUser().getPersonalInfo()
-            .setFirstName("Гошко")
-            .setMiddleName("Георгиев")
-            .setLastName("Гошев");
+        User studentUser = createUser(User.Role.student, "Гошко", "Георгиев", "Гошев");
+        Student student = new Student();
+        student.setUser(studentUser);
         student.getMarks().add(new Mark(student, subjects.get(0), 599));
         studentRepository.save(student);
+    }
+
+    private User createUser(User.Role role, String firstName, String middleName, String lastName) {
+        String username = firstName.substring(0, 1).toLowerCase() + "." + lastName.toLowerCase();
+        User user = new User(username);
+        user.setPassword(passwordEncoder.encode(username));
+        String email = username + "@моето-училище.бг";
+        user.setEmail(email);
+        user.setRole(role);
+        user.getPersonalInfo()
+            .setFirstName(firstName)
+            .setMiddleName(middleName)
+            .setLastName(lastName);
+        return userRepository.save(user);
     }
 }

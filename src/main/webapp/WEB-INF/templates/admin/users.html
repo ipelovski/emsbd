@@ -2,15 +2,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Users</title>
+    <title th:text="${x.c('users')}"></title>
 </head>
 <body>
     <p>
         <a th:href="@{/admin}">Back to administration home</a>
     </p>
-    <form th:action="@{/admin/users/add}" method="post">
-        <input type="submit" value="Add user">
-    </form>
     <a th:href="@{/admin/users/add}" th:text="'Add user'"></a>
     <table>
         <thead>

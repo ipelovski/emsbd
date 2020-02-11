@@ -1,5 +1,6 @@
 package emsbj.user;
 
+import emsbj.JournalPersistable;
 import emsbj.PersonalInfo;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -14,6 +15,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
@@ -22,37 +25,46 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Entity
-public class User implements UserDetails {
+public class User implements UserDetails, JournalPersistable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @NotNull
+    @NotEmpty
     @Column(unique = true)
     private String username;
+    @NotNull
+    @NotEmpty
+    @Column(unique = true)
     private String email;
+    @NotNull
+    @NotEmpty
     private String password;
     @CreatedDate
     private Instant createdOn;
     @LastModifiedDate
     private Instant updatedOn;
     @Embedded
+    @NotNull
     private PersonalInfo personalInfo;
+    @NotNull
     private Role role;
     private boolean active;
     @Transient
     private Collection<SimpleGrantedAuthority> grantedAuthorities;
 
     public User() {
-        this.active = true;
-        this.personalInfo = new PersonalInfo();
-    }
-
-    public User(String userName) {
-        this.username = userName;
         this.role = Role.user;
         this.active = true;
         this.personalInfo = new PersonalInfo();
     }
 
+    public User(String userName) {
+        this();
+        this.username = userName;
+    }
+
+    @Override
     public Long getId() {
         return id;
     }
@@ -87,12 +99,24 @@ public class User implements UserDetails {
         return createdOn;
     }
 
+    public void setCreatedOn(Instant createdOn) {
+        this.createdOn = createdOn;
+    }
+
     public Instant getUpdatedOn() {
         return updatedOn;
     }
 
+    public void setUpdatedOn(Instant updatedOn) {
+        this.updatedOn = updatedOn;
+    }
+
     public PersonalInfo getPersonalInfo() {
         return personalInfo;
+    }
+
+    public void setPersonalInfo(PersonalInfo personalInfo) {
+        this.personalInfo = personalInfo;
     }
 
     public Role getRole() {

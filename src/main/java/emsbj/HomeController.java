@@ -9,17 +9,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping(Application.localePathParam)
+@RequestMapping
 public class HomeController implements SecuredController, AuthorizedController {
 
     @Override
     public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {
         registry
-            .antMatchers("/", "/home/**", Application.localePathParam)
+            .antMatchers( Application.localePathParam, Application.localePathParam + "/",
+                Application.localePathParam + "/home/**")
             .permitAll();
     }
 
-    @GetMapping({"", "home"})
+    @GetMapping
     public String index() {
         return "home.html";
     }

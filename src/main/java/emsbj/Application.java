@@ -24,7 +24,8 @@ public class Application {
     public static final String[] supportedLocalesArray = { "en", "bg" };
     public static final Collection<String> supportedLocales = Arrays.asList(supportedLocalesArray);
     public static final Locale defaultLocale = Locale.forLanguageTag("en");
-    public static final String localePathParam = "/{locale:en|bg}/";
+    public static final String defaultLocalePath = "/" + defaultLocale.toLanguageTag();
+    public static final String localePathParam = "/{locale:en|bg}";
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

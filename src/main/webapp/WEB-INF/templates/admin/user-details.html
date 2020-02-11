@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${user != null ? 'Details about ' + user.username : 'No User Found!'}">Details</title>
+    <title th:text="${user == null ? x.l('userNotFound') : !user.isNew() ? x.l('detailsAbout', user.username) : x.l('createUser')}">Details</title>
     <link th:href="@{/css/basscss.min.css}" rel="stylesheet">
 </head>
 <body>
@@ -22,6 +22,14 @@
             </div>
             <div class="col col-8">
                 <input class="input" type="text" id="username" th:field="*{username}">
+            </div>
+            <div th:if="${user.isNew()}">
+                <div class="col col-4">
+                    <label class="label" for="password">Password:</label>
+                </div>
+                <div class="col col-8">
+                    <input class="input" type="text" id="password" th:field="*{password}">
+                </div>
             </div>
             <div class="col col-4">
                 <label class="label" for="role">Role:</label>
@@ -71,7 +79,7 @@
                 <input class="input" type="text" id="address" th:field="*{personalInfo.address}">
             </div>
             <div class="col col-12">
-                <input class="input" type="submit" value="Update">
+                <input class="input" type="submit" th:value="${user.isNew() ? 'Create' : 'Update'}">
             </div>
         </fieldset>
     </form>

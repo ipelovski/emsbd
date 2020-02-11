@@ -2,12 +2,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Administration Home</title>
+    <title th:text="#{administrationHome}"></title>
     <link th:href="@{/css/basscss.min.css}" rel="stylesheet">
 </head>
 <body>
     <p>
-        <a th:href="@{/admin/users}" th:text="'View all users'"></a>
+        <a th:href="@{${x.lu('/admin/users')}}" th:text="'View all users'"></a>
     </p>
     <p>
         <a th:href="@{/admin/school-years}" th:text="'View school years'"></a>

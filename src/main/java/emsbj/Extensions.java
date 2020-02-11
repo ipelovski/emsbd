@@ -4,6 +4,7 @@ import emsbj.admin.AdminGradeController;
 import emsbj.admin.AdminSchoolClassController;
 import emsbj.admin.AdminStudentController;
 import emsbj.admin.AdminTeacherController;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -29,8 +30,31 @@ public class Extensions {
     }
 
     public String capitalize(String label, String... args) {
+        return StringUtils.capitalize(localize(label, args));
+    }
+
+    public String l(String label, String... args) {
+        return localize(label, args);
+    }
+
+    public String localize(String label, String... args) {
         Locale locale = LocaleContextHolder.getLocale();
-        return StringUtils.capitalize(messageSource.getMessage(label, args, locale));
+        return messageSource.getMessage(label, args, locale);
+    }
+
+    public String lu(String url) {
+        return localizedUrl(url);
+    }
+
+    public String localizedUrl(String url) {
+        if (Strings.isBlank(url)) {
+            throw new IllegalArgumentException("url should not be blank");
+        }
+        if (url.charAt(0) != '/') {
+            throw new IllegalArgumentException("non absolute urls are not supported");
+        }
+        Locale locale = LocaleContextHolder.getLocale();
+        return "/" + locale.toLanguageTag() + url;
     }
 
     public AdminUrls au() {
