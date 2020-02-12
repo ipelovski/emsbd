@@ -1,6 +1,5 @@
 package emsbj.mark;
 
-import emsbj.Grade;
 import emsbj.GradeRepository;
 import emsbj.SchoolClass;
 import emsbj.SchoolClassRepository;
@@ -10,6 +9,7 @@ import emsbj.Subject;
 import emsbj.SubjectRepository;
 import emsbj.Term;
 import emsbj.TermRepository;
+import emsbj.controller.LocalizedController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +21,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/marks")
-public class MarkController {
+public class MarkController implements LocalizedController {
     @Autowired
     private SchoolYearRepository schoolYearRepository;
     @Autowired

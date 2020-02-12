@@ -18,11 +18,13 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Entity
 public class User implements UserDetails, JournalPersistable {
@@ -187,6 +189,28 @@ public class User implements UserDetails, JournalPersistable {
         public static Role from(String name) {
             return valuesMap.computeIfAbsent(name,
                 roleName -> { throw new IllegalArgumentException("There is no value for " + roleName); });
+        }
+
+        public String includes(Role... includeRoles) {
+            return Arrays.stream(includeRoles)
+                .map(role -> this.getName() + " > " + role.getName())
+                .collect(Collectors.joining(" and "));
+        }
+
+        public static String createHierarchy(Map<Role, Role[]> hierarchy) {
+            return hierarchy.entrySet().stream()
+                .map(roleEntry -> roleEntry.getKey().includes(roleEntry.getValue()))
+                .collect(Collectors.joining("\n"));
+        }
+
+        public static String createHierarchy(Role[]... rules) {
+            Map<Role, Role[]> hierarchy = new HashMap<>(rules.length);
+            for (int i = 0; i < rules.length; i++) {
+                Role[] rule = rules[i];
+                assert rule.length > 1;
+                hierarchy.put(rule[0], Arrays.copyOfRange(rule, 1, rule.length));
+            }
+            return createHierarchy(hierarchy);
         }
     }
 }

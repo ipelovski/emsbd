@@ -70,6 +70,7 @@ public class InitializationFilter implements Filter {
         createGrades();
         createSubjects();
         createWeeklySlots();
+        createPrincipal();
         createTeachers();
         createStudents();
         initialized = true;
@@ -134,8 +135,12 @@ public class InitializationFilter implements Filter {
         }
     }
 
+    private void createPrincipal() {
+        createUser(User.Role.principal, "Станислав", "Игнатиев", "Големанов");
+    }
+
     private void createTeachers() {
-        User teacherUser = createUser(User.Role.teacher, "Станислав", "Игнатиев", "Големанов");
+        User teacherUser = createUser(User.Role.teacher, "Унуфри", "Методиев", "Харалампиев");
         Teacher teacher = new Teacher();
         teacher.setUser(teacherUser);
         teacher.getSkills().add(subjects.get(0));

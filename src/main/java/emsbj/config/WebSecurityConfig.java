@@ -4,10 +4,13 @@ import emsbj.RedirectingAuthenticationSuccessHandler;
 import emsbj.RedirectingLoginUrlAuthenticationEntryPoint;
 import emsbj.controller.SecuredController;
 import emsbj.user.JournalUserDetailsService;
+import emsbj.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -72,6 +75,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             new RedirectingAuthenticationSuccessHandler();
         successHandler.setTargetUrlParameter("requested");
         return successHandler;
+    }
+
+    @Bean
+    public RoleHierarchy roleHierarchy() {
+        RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+        roleHierarchy.setHierarchy(User.Role.createHierarchy(
+            new User.Role[]{User.Role.principal, User.Role.admin},
+            new User.Role[]{User.Role.admin, User.Role.teacher},
+            new User.Role[]{User.Role.teacher, User.Role.parent},
+            new User.Role[]{User.Role.parent, User.Role.student},
+            new User.Role[]{User.Role.student, User.Role.user}
+        ));
+        return roleHierarchy;
     }
 
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
