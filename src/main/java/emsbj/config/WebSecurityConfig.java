@@ -49,24 +49,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .authenticationEntryPoint(
                         new RedirectingLoginUrlAuthenticationEntryPoint("/sign-in"))
                     .and()
-                .authorizeRequests()
-                    .antMatchers("/sign-in*")
-                    .permitAll()
-                    .and()
-                .formLogin()
-                    .loginPage("/sign-in")
-                    .permitAll()
-                    .successHandler(successHandler())
-                    .and()
-                .logout()
-                    .logoutUrl("/sign-out")
-                    .permitAll()
-                    .and()
                 .authorizeRequests();
         for (SecuredController securedController : securedControllerMap.values()) {
             securedController.configure(registry);
         }
-        registry.anyRequest().authenticated();
+        registry
+            .anyRequest().authenticated()
+            .and()
+            .formLogin()
+            .loginPage("/sign-in")
+            .permitAll()
+            .successHandler(successHandler())
+            .and()
+            .logout()
+            .logoutUrl("/sign-out")
+            .permitAll();
     }
 
     @Bean

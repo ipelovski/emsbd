@@ -1,6 +1,8 @@
 package emsbj.user;
 
+import emsbj.Application;
 import emsbj.RedirectingAuthenticationSuccessHandler;
+import emsbj.controller.LocalizedController;
 import emsbj.controller.SecuredController;
 import org.hibernate.validator.constraints.ScriptAssert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,7 @@ import javax.validation.constraints.Size;
 import java.util.Optional;
 
 @Controller
-public class UserController implements SecuredController {
+public class UserController implements SecuredController, LocalizedController {
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -39,7 +41,7 @@ public class UserController implements SecuredController {
     @Override
     public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {
         registry
-            .antMatchers("/sign-up", "/sign-in-role")
+            .antMatchers(Application.localePathParam + "/sign-up", Application.localePathParam + "/sign-in*")
             .permitAll();
     }
 
