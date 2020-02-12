@@ -38,9 +38,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        RedirectingAuthenticationSuccessHandler successHandler =
-            new RedirectingAuthenticationSuccessHandler();
-        successHandler.setTargetUrlParameter("requested");
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry =
             httpSecurity
                 .csrf()
@@ -56,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                     .loginPage("/sign-in")
                     .permitAll()
-                    .successHandler(successHandler)
+                    .successHandler(successHandler())
                     .and()
                 .logout()
                     .logoutUrl("/sign-out")
@@ -67,6 +64,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             securedController.configure(registry);
         }
         registry.anyRequest().authenticated();
+    }
+
+    @Bean
+    public RedirectingAuthenticationSuccessHandler successHandler() {
+        RedirectingAuthenticationSuccessHandler successHandler =
+            new RedirectingAuthenticationSuccessHandler();
+        successHandler.setTargetUrlParameter("requested");
+        return successHandler;
     }
 
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)

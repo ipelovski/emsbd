@@ -6,9 +6,11 @@
 </head>
 <body>
     <p>
-        If not registered then <a href="/sign-up">sign up</a>.
+        If not registered then <a th:href="@{/sign-up}">sign up</a>.
     </p>
-    <form action="/sign-in" method="post">
+    <h3>Sign in</h3>
+    <h4>As a specific user</h4>
+    <form th:action="@{/sign-in(requested=${requested})}" method="post">
         <p th:if="${error != null}" th:text="${error}"></p>
         <p th:if="${logout != null}" th:text="${logout}"></p>
         <p>
@@ -19,7 +21,17 @@
             <label for="password">Password</label>
             <input type="password" id="password" name="password"/>
         </p>
-        <button type="submit">Sign in</button>
+        <input type="submit" value="Sign in">
+    </form>
+    <h4>Or as a user with role</h4>
+    <form th:action="@{/sign-in-role(requested=${requested})}" method="post">
+        <select name="role">
+            <option value="student">student</option>
+            <option value="parent">parent</option>
+            <option value="teacher">teacher</option>
+            <option value="principal">principal</option>
+        </select>
+        <input type="submit" value="Sign in">
     </form>
 </body>
 </html>

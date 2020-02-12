@@ -143,7 +143,12 @@ public class InitializationFilter implements Filter {
     }
 
     private void createStudents() {
-        User studentUser = createUser(User.Role.student, "Гошко", "Георгиев", "Гошев");
+        createStudent("Гошко", "Георгиев", "Гошев");
+        createStudent("Тошко", "Теодоров", "Тодоров");
+    }
+
+    private void createStudent(String firstName, String middleName, String lastName) {
+        User studentUser = createUser(User.Role.student, firstName, middleName, lastName);
         Student student = new Student();
         student.setUser(studentUser);
         student.getMarks().add(new Mark(student, subjects.get(0), 599));

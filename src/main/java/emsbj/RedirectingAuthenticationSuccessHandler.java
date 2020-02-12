@@ -10,6 +10,10 @@ import java.net.URI;
 public class RedirectingAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     @Override
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response) {
+        return getTargetUrl(request, response);
+    }
+
+    public String getTargetUrl(HttpServletRequest request, HttpServletResponse response) {
         String targetUrl = super.determineTargetUrl(request, response);
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(targetUrl);
         URI uri = uriComponentsBuilder.build().toUri();

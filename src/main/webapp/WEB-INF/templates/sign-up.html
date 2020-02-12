@@ -8,22 +8,29 @@
     <form action="#" th:action="@{/sign-up}" th:object="${signUpForm}" method="post">
         <p>
             <label for="username">Username</label>
-            <input type="text" id="username" name="username" th:field="*{username}"/>
+            <input type="text" id="username" th:field="*{username}"/>
             <span th:if="${#fields.hasErrors('username')}" th:each="error : ${#fields.detailedErrors('username')}">
                 <span th:text="${error.message}"></span>
             </span>
         </p>
         <p>
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" th:field="*{password}"/>
+            <input type="password" id="password" th:field="*{password}"/>
             <span th:if="${#fields.hasErrors('password')}" th:each="error : ${#fields.detailedErrors('password')}">
                 <span th:text="${error.message}"></span>
             </span>
         </p>
         <p>
             <label for="confirmPassword">Confirm password</label>
-            <input type="password" id="confirmPassword" name="confirmPassword" th:field="*{confirmPassword}"/>
+            <input type="password" id="confirmPassword" th:field="*{confirmPassword}"/>
             <span th:if="${#fields.hasErrors('confirmPassword')}" th:each="error : ${#fields.detailedErrors('confirmPassword')}">
+                <span th:text="${error.message}"></span>
+            </span>
+        </p>
+        <p>
+            <label for="email">Email</label>
+            <input type="text" id="email" th:field="*{email}"/>
+            <span th:if="${#fields.hasErrors('email')}" th:each="error : ${#fields.detailedErrors('email')}">
                 <span th:text="${error.message}"></span>
             </span>
         </p>

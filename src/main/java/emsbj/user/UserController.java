@@ -1,5 +1,6 @@
 package emsbj.user;
 
+import emsbj.RedirectingAuthenticationSuccessHandler;
 import emsbj.controller.SecuredController;
 import org.hibernate.validator.constraints.ScriptAssert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -23,30 +27,49 @@ import java.util.Optional;
 
 @Controller
 public class UserController implements SecuredController {
-
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private RedirectingAuthenticationSuccessHandler successHandler;
 
     @Override
     public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {
         registry
-            .antMatchers("/sign-up")
+            .antMatchers("/sign-up", "/sign-in-role")
             .permitAll();
     }
 
     @GetMapping("/sign-in")
-    public String signIn(Model model, String error, String logout) {
+    public String signIn(Model model, String error, String logout, String requested) {
         if (error != null) {
             model.addAttribute("error", "Username or password is incorrect.");
         }
         if (logout != null) {
             model.addAttribute("logout", "You are now logged out.");
         }
+        model.addAttribute("requested", requested);
         return "sign-in";
+    }
+
+    @PostMapping("/sign-in-role")
+    public String signInRole(HttpServletRequest request, HttpServletResponse response,
+        User.Role role, RedirectAttributes model) {
+        Optional<User> optionalUser = userRepository.findFirstByRole(role);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            Authentication authentication =
+                new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String redirectUrl = successHandler.getTargetUrl(request, response);
+            return "redirect:" + redirectUrl;
+        } else {
+            model.addFlashAttribute("error", "No user with role " + role + " found.");
+            return "redirect:/sign-in";
+        }
     }
 
     @GetMapping("/sign-up")
@@ -72,6 +95,7 @@ public class UserController implements SecuredController {
             String encodedPassword = passwordEncoder.encode(password);
             user.setUsername(username);
             user.setPassword(encodedPassword);
+            user.setEmail(signUpForm.getEmail());
             user.setRole(User.Role.user);
             userRepository.save(user);
             Authentication authentication = authenticationManager
@@ -105,6 +129,8 @@ public class UserController implements SecuredController {
         private String password;
         @NotNull
         private String confirmPassword;
+        @NotNull
+        private String email;
         private String error;
 
         public String getUsername() {
@@ -129,6 +155,14 @@ public class UserController implements SecuredController {
 
         public void setConfirmPassword(String confirmPassword) {
             this.confirmPassword = confirmPassword;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
         }
 
         public String getError() {
