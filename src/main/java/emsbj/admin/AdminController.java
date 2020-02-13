@@ -1,6 +1,6 @@
 package emsbj.admin;
 
-import emsbj.Application;
+import emsbj.config.WebMvcConfig;
 import emsbj.controller.LocalizedController;
 import emsbj.controller.SecuredController;
 import emsbj.user.User;
@@ -16,7 +16,7 @@ public class AdminController implements SecuredController, LocalizedController {
     @Override
     public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {
         registry
-            .antMatchers(Application.localePathParam + "/admin**")
+            .antMatchers(WebMvcConfig.localePathParam + "/admin**")
             .hasRole(User.Role.admin.name().toUpperCase());
     }
 

@@ -2,6 +2,7 @@ package emsbj.admin;
 
 import emsbj.SchoolYear;
 import emsbj.SchoolYearRepository;
+import emsbj.config.WebMvcConfig;
 import emsbj.controller.LocalizedController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,7 +29,7 @@ public class AdminSchoolYearController implements LocalizedController {
         return "/admin/school-years.html";
     }
 
-    @PostMapping("/add")
+    @PostMapping(WebMvcConfig.addPath)
     public String addSubmit() {
         int currentYear = LocalDateTime.now().getYear();
         SchoolYear schoolYear = new SchoolYear(currentYear, currentYear + 1);

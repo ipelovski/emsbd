@@ -6,35 +6,38 @@ import emsbj.admin.AdminStudentController;
 import emsbj.admin.AdminTeacherController;
 import emsbj.admin.AdminUserController;
 import emsbj.config.WebMvcConfig;
-import emsbj.controller.LocalizedController;
 import emsbj.user.User;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.annotation.AnnotatedElementUtils;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.AntPathMatcher;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.thymeleaf.util.StringUtils;
 
-import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 @Service
 public class Extensions {
     @Autowired
     private MessageSource messageSource;
+    @Autowired
+    private WebApplicationContext webApplicationContext;
     private AdminUrls adminUrls;
 
     protected Extensions() {
@@ -116,122 +119,117 @@ public class Extensions {
         }
 
         public String users() {
-            return getUrl(AdminUserController.class, WebMvcConfig.listPath);
+            return getUrl(AdminUserController.class, WebMvcConfig.listName);
         }
 
         public String user(User user) {
-            return getUrl(AdminUserController.class, AdminUserController.userIdPath);
+            return getUrl(AdminUserController.class, WebMvcConfig.detailsName, user.getId());
         }
 
         public String grades() {
-            return getUrl(AdminGradeController.class, WebMvcConfig.listPath);
+            return getUrl(AdminGradeController.class, WebMvcConfig.listName);
         }
 
         public String addGrade() {
-            return gradesUrlBuilder.build() + addUrl;
+            return getUrl(AdminGradeController.class, WebMvcConfig.addName);
         }
 
         public String schoolClasses() {
-            return getUrl(AdminSchoolClassController.class, WebMvcConfig.listPath);
+            return getUrl(AdminSchoolClassController.class, WebMvcConfig.listName);
         }
 
         public String addSchoolClass() {
-            return getUrl(AdminSchoolClassController.class, WebMvcConfig.addPath);
+            return getUrl(AdminSchoolClassController.class, WebMvcConfig.addName);
         }
 
         public String teachers() {
-            return getUrl(AdminTeacherController.class, WebMvcConfig.listPath);
+            return getUrl(AdminTeacherController.class, WebMvcConfig.listName);
         }
 
         public String students() {
-            return getUrl(AdminStudentController.class, WebMvcConfig.listPath);
+            return getUrl(AdminStudentController.class, WebMvcConfig.listName);
         }
 
-        public String users2() {
-            return MvcUriComponentsBuilder.fromMappingName("" + WebMvcConfig.listName)
-                .buildAndExpand("en");
-        }
-
-        public String userDetails(User user) {
-            return getUrl(AdminUserController.class, AdminUserController.userIdPath,
-                Collections.singletonMap("userId", user.getId()));
-//            return MvcUriComponentsBuilder.fromMappingName("AdminUserController#"+ WebMvcConfig.detailsName)
-//                .buildAndExpand(user.getId(), "en");
-        }
-
-        private String getUrl(Class<?> aClass, String requestMappingPath) {
-            return getUrl(aClass, requestMappingPath, new HashMap<>());
-        }
-
-        private String getUrl(Class<?> aClass, String requestMappingPath, Map<String, Object> uriVariableValues) {
-            Method method = findMethod(aClass, requestMappingPath);
-            Object[] parameterTypes = method.getParameterTypes();
-//            UriComponentsBuilder uriComponentsBuilder =
-//                MvcUriComponentsBuilder.fromMethod(aClass, method, (Object[]) method.getParameterTypes());
-//            Object[] finalUriVariablesValues;
-//            if (LocalizedController.class.isAssignableFrom(aClass)) {
-//                finalUriVariablesValues = new Object[uriVariableValues.length + 1];
-//                finalUriVariablesValues[0] = LocaleContextHolder.getLocale().toLanguageTag();
-//                System.arraycopy(uriVariableValues, 0,
-//                    finalUriVariablesValues, 1, uriVariableValues.length);
-//            } else {
-//                finalUriVariablesValues = uriVariableValues;
-//            }
-            Map<String, Object> finalUriVariableValues = new HashMap<>(1);
-            finalUriVariableValues.put("locale", LocaleContextHolder.getLocale().toLanguageTag());
-            finalUriVariableValues.putAll(uriVariableValues);
-//            uriVariableValues.put("locale", LocaleContextHolder.getLocale().toLanguageTag());
-            UriComponentsBuilder uriComponentsBuilder = fromMethodInternal(aClass, method, finalUriVariableValues);
+        private String getUrl(Class<?> controllerType, String requestMappingName, Object... methodUriVariableValues) {
+            Method method = getMethod(controllerType, requestMappingName);
+            UriComponentsBuilder uriComponentsBuilder = fromMethodInternal(controllerType, method);
+            Object[] uriVariableValues = buildUriVariableValues(controllerType, methodUriVariableValues);
             return uriComponentsBuilder.build()
-                .expand("en", uriVariableValues.getOrDefault("userId", null))
-//                .expand(finalUriVariableValues)
+                .expand(uriVariableValues)
                 .toUriString();
         }
         private Map<String, Method> methods = new HashMap<>();
-        private Method findMethod(Class<?> aClass, String requestMappingPath) {
-            String key = getKey(aClass, requestMappingPath);
-            return methods.computeIfAbsent(key, s -> {
-                Method[] methods = aClass.getDeclaredMethods();
-                for (Method method : methods) {
-                    if (methodIsMappedToPath(method, requestMappingPath)) {
-                        return method;
-                    }
-                }
-                throw new RuntimeException(String.format(
-                    "Cannot find method in %s with path %s",
-                    aClass.getSimpleName(), requestMappingPath));
-            });
+        private Method getMethod(Class<?> controllerType, String requestMappingName) {
+            String key = getKey(controllerType, requestMappingName);
+            return methods.computeIfAbsent(key, s -> findMethod(controllerType, requestMappingName));
         }
-        private boolean methodIsMappedToPath(Method method, String requestMappingPath) {
+        private Method findMethod(Class<?> controllerType, String requestMappingName) {
+            Method[] methods = controllerType.getDeclaredMethods();
+            for (Method method : methods) {
+                if (methodIsMappedToName(method, requestMappingName)) {
+                    return method;
+                }
+            }
+            throw new RuntimeException(String.format(
+                "Cannot find method in %s with name %s",
+                controllerType.getSimpleName(), requestMappingName));
+        }
+        private boolean methodIsMappedToName(Method method, String requestMappingName) {
             RequestMapping requestMapping =
                 AnnotatedElementUtils.findMergedAnnotation(method, RequestMapping.class);
             if (requestMapping != null) {
-                for (String path : requestMapping.path()) {
-                    if (path.equals(requestMappingPath)) {
-                        return true;
-                    }
+                if (requestMapping.name().length() > 0) {
+                    return requestMapping.name().equals(requestMappingName);
+                } else {
+                    return method.getName().equals(requestMappingName);
                 }
+            } else {
+                return false;
             }
-            return false;
         }
-        private String getKey(Class<?> aClass, String requestMappingPath) {
-            return aClass.getSimpleName() + "::" + requestMappingPath;
+        private String getKey(Class<?> aClass, String requestMappingName) {
+            return aClass.getSimpleName() + "::" + requestMappingName;
         }
         private UriComponentsBuilder fromMethodInternal(
-            Class<?> controllerType, Method method, Map<String, Object> uriVars) {
+            Class<?> controllerType, Method method) {
+
             UriComponentsBuilder builder = ServletUriComponentsBuilder.fromCurrentServletMapping();
-            String prefix = WebMvcConfig.localePathParam;//getPathPrefix(controllerType);
+            String prefix = getPathPrefix(controllerType);
             builder.path(prefix);
-//            String typePath = getClassMapping(controllerType);
-            RequestMapping mapping = AnnotatedElementUtils.findMergedAnnotation(controllerType, RequestMapping.class);
-            String typePath = mapping.path()[0];
-            RequestMapping requestMapping = AnnotatedElementUtils.findMergedAnnotation(method, RequestMapping.class);
-            String methodPath = requestMapping.path()[0];
-//            String methodPath = getMethodMapping(method);
+            String typePath = getRequestMappingPath(controllerType);
+            String methodPath = getRequestMappingPath(method);
             String path = new AntPathMatcher().combine(typePath, methodPath);
             builder.path(path);
-//            return applyContributors(builder, method, args);
-            return builder;//.uriVariables(uriVars);
+            return builder;
+        }
+        private String getPathPrefix(Class<?> controllerType) {
+            for (Map.Entry<String, Predicate<Class<?>>> entry : WebMvcConfig.pathPrefixes.entrySet()) {
+                if (entry.getValue().test(controllerType)) {
+                    return entry.getKey();
+                }
+            }
+            return "";
+        }
+        private String getRequestMappingPath(AnnotatedElement annotatedElement) {
+            RequestMapping requestMapping = AnnotatedElementUtils.
+                findMergedAnnotation(annotatedElement, RequestMapping.class);
+            if (requestMapping != null && requestMapping.path().length > 0) {
+                return requestMapping.path()[0];
+            } else {
+                return "";
+            }
+        }
+        private Object[] buildUriVariableValues(Class<?> controllerType, Object... methodUriVariableValues) {
+            List<Object> uriVariableValues = new ArrayList<>(
+                methodUriVariableValues.length + WebMvcConfig.pathPrefixValueSuppliers.size());
+            for (Map.Entry<Predicate<Class<?>>, Supplier<Optional<?>>> entry :
+                WebMvcConfig.pathPrefixValueSuppliers.entrySet()) {
+                if (entry.getKey().test(controllerType)) {
+                    entry.getValue().get().ifPresent(uriVariableValues::add);
+                }
+            }
+            Collections.addAll(uriVariableValues, methodUriVariableValues);
+            return uriVariableValues.toArray();
         }
 
         private static class EntitiesUrlBuilder<T extends JournalPersistable> {

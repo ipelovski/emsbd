@@ -22,7 +22,7 @@
                 <td th:text="${user.username}"></td>
                 <td th:text="${user.role}"></td>
                 <td>
-                    <a th:href="@{'/admin/users/' + ${user.id}}">Details</a>
+                    <a th:href="@{${x.au().user(user)}}">Details</a>
                 </td>
             </tr>
         </tbody>

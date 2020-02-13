@@ -23,12 +23,10 @@ public class UrlBuildingTest {
         mockMvc.perform(
             MockMvcRequestBuilders.get("")
             .with(mockHttpServletRequest -> {
-                String url = extensions.au().users2();
+                String url = extensions.au().users();
                 Assert.assertTrue(url != null && url.length() > 0);
                 return mockHttpServletRequest;
             })
         ).andReturn();
-//        String url = extensions.au().users2();
-//        Assert.assertTrue(url != null && url.length() > 0);
     }
 }

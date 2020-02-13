@@ -1,6 +1,5 @@
 package emsbj.config;
 
-import emsbj.Application;
 import emsbj.UrlLocaleInterceptor;
 import emsbj.admin.AdminGradeController;
 import emsbj.controller.LocalizedController;
@@ -8,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -22,11 +22,42 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 @Configuration
 @EnableWebMvc
 public class WebMvcConfig implements WebMvcConfigurer {
+
+    public static final String[] supportedLocalesArray = { "en", "bg" };
+    public static final Collection<String> supportedLocales = Arrays.asList(supportedLocalesArray);
+    public static final Locale defaultLocale = Locale.forLanguageTag(supportedLocalesArray[0]);
+    public static final String defaultLocalePath = "/" + defaultLocale.toLanguageTag();
+    public static final String localePathParam = "/{locale:en|bg}";
+    public static final String addPath = "/add";
+    public static final String listName = "list";
+    public static final String addName = "add";
+    public static final String detailsName = "details";
+    public static final Map<String, Predicate<Class<?>>> pathPrefixes;
+    public static final Map<Predicate<Class<?>>, Supplier<Optional<?>>> pathPrefixValueSuppliers;
+    static {
+        Predicate<Class<?>> isLocalizedController =
+            LocalizedController.class::isAssignableFrom;
+
+        pathPrefixes = new LinkedHashMap<>();
+        pathPrefixes.put(localePathParam, isLocalizedController);
+
+        pathPrefixValueSuppliers = new LinkedHashMap<>();
+        pathPrefixValueSuppliers.put(isLocalizedController, () ->
+            Optional.of(LocaleContextHolder.getLocale().toLanguageTag()));
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         UrlLocaleInterceptor urlLocaleInterceptor = new UrlLocaleInterceptor();
@@ -73,9 +104,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
-        Predicate<Class<?>> isLocalizedController = LocalizedController.class::isAssignableFrom;
-        configurer
-            .addPathPrefix(Application.localePathParam, isLocalizedController);
+        for (Map.Entry<String, Predicate<Class<?>>> entry : pathPrefixes.entrySet()) {
+            configurer.addPathPrefix(entry.getKey(), entry.getValue());
+        }
     }
 
     @Autowired

@@ -1,6 +1,6 @@
 package emsbj.admin;
 
-import emsbj.Application;
+import emsbj.config.WebMvcConfig;
 import emsbj.controller.LocalizedController;
 import emsbj.user.User;
 import emsbj.user.UserRepository;
@@ -19,6 +19,7 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/admin/users")
 public class AdminUserController implements LocalizedController {
+    public static final String userIdPath = "/{userId:\\d+}";
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -31,13 +32,13 @@ public class AdminUserController implements LocalizedController {
         return "/admin/users.html";
     }
 
-    @GetMapping("/add")
+    @GetMapping(WebMvcConfig.addPath)
     public String add(Model model) {
         model.addAttribute("user", new User());
         return "/admin/user-details.html";
     }
 
-    @PostMapping("/add")
+    @PostMapping(WebMvcConfig.addPath)
     public String addSubmit(User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "admin/user-details";
@@ -47,14 +48,14 @@ public class AdminUserController implements LocalizedController {
         return "redirect:/admin/users";
     }
 
-    @GetMapping("/{userId:\\d+}")
+    @GetMapping(userIdPath)
     public String details(@PathVariable("userId") Long userId, Model model) {
         Optional<User> user = userRepository.findById(userId);
         model.addAttribute("user", user.orElse(null));
         return "/admin/user-details.html";
     }
 
-    @PostMapping("/{userId:\\d+}")
+    @PostMapping(userIdPath)
     public String detailsSubmit(@PathVariable("userId") Long userId, User user, Model model) {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {

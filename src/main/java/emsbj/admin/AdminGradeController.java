@@ -2,6 +2,7 @@ package emsbj.admin;
 
 import emsbj.Grade;
 import emsbj.GradeRepository;
+import emsbj.config.WebMvcConfig;
 import emsbj.controller.LocalizedController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,8 +28,8 @@ public class AdminGradeController implements LocalizedController {
         return "admin/grades.html";
     }
 
-    @PostMapping("/add")
-    public String addGrade(Grade grade, Model model, Locale locale) {
+    @PostMapping(WebMvcConfig.addPath)
+    public String add(Grade grade, Model model, Locale locale) {
         Optional<Grade> optionalGrade = gradeRepository.findByName(
             grade.getName());
         if (optionalGrade.isPresent()) {

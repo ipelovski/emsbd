@@ -4,8 +4,8 @@ import emsbj.SchoolYear;
 import emsbj.SchoolYearRepository;
 import emsbj.Term;
 import emsbj.TermRepository;
+import emsbj.config.WebMvcConfig;
 import emsbj.controller.LocalizedController;
-import emsbj.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,7 +41,7 @@ public class AdminTermController implements LocalizedController {
         }
     }
 
-    @PostMapping("/add")
+    @PostMapping(WebMvcConfig.addPath)
     public String addSubmit(@RequestParam("school-year") Long schoolYearId) {
         Optional<SchoolYear> optionalSchoolYear = schoolYearRepository.findById(schoolYearId);
         if (optionalSchoolYear.isPresent()) {

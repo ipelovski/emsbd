@@ -1,5 +1,6 @@
 package emsbj;
 
+import emsbj.config.WebMvcConfig;
 import emsbj.controller.AuthorizedController;
 import emsbj.controller.SecuredController;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,8 +16,8 @@ public class HomeController implements SecuredController, AuthorizedController {
     @Override
     public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {
         registry
-            .antMatchers( Application.localePathParam, Application.localePathParam + "/",
-                Application.localePathParam + "/home/**")
+            .antMatchers( WebMvcConfig.localePathParam, WebMvcConfig.localePathParam + "/",
+                WebMvcConfig.localePathParam + "/home/**")
             .permitAll();
     }
 

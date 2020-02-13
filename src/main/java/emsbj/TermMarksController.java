@@ -1,5 +1,6 @@
 package emsbj;
 
+import emsbj.config.WebMvcConfig;
 import emsbj.controller.LocalizedController;
 import emsbj.controller.SecuredController;
 import emsbj.mark.Mark;
@@ -26,7 +27,7 @@ public class TermMarksController implements LocalizedController, SecuredControll
     @Override
     public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {
         registry
-            .antMatchers(Application.localePathParam + "/term-marks")
+            .antMatchers(WebMvcConfig.localePathParam + "/term-marks")
             .hasRole(User.Role.student.name().toUpperCase());
     }
 

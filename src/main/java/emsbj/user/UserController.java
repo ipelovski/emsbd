@@ -1,7 +1,7 @@
 package emsbj.user;
 
-import emsbj.Application;
 import emsbj.RedirectingAuthenticationSuccessHandler;
+import emsbj.config.WebMvcConfig;
 import emsbj.controller.LocalizedController;
 import emsbj.controller.SecuredController;
 import org.hibernate.validator.constraints.ScriptAssert;
@@ -41,7 +41,7 @@ public class UserController implements SecuredController, LocalizedController {
     @Override
     public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {
         registry
-            .antMatchers(Application.localePathParam + "/sign-up", Application.localePathParam + "/sign-in*")
+            .antMatchers(WebMvcConfig.localePathParam + "/sign-up", WebMvcConfig.localePathParam + "/sign-in*")
             .permitAll();
     }
 

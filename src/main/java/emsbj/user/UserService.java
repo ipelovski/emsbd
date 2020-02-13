@@ -1,6 +1,6 @@
 package emsbj.user;
 
-import emsbj.Application;
+import emsbj.config.WebMvcConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
@@ -26,7 +26,7 @@ public class UserService {
     public UserService(MessageSource messageSource) {
         this.messageSource = messageSource;
         this.authenticationTrustResolver = new AuthenticationTrustResolverImpl();
-        for (String localeName : Application.supportedLocales) {
+        for (String localeName : WebMvcConfig.supportedLocales) {
             Locale locale = Locale.forLanguageTag(localeName);
             anonymousMap.put(locale, createAnonymous(locale));
         }

@@ -11,6 +11,7 @@ import emsbj.SchoolYear;
 import emsbj.SchoolYearRepository;
 import emsbj.Teacher;
 import emsbj.TeacherRepository;
+import emsbj.config.WebMvcConfig;
 import emsbj.controller.LocalizedController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -44,7 +45,7 @@ public class AdminSchoolClassController implements LocalizedController {
         return "admin/school-classes.html";
     }
 
-    @GetMapping("add")
+    @GetMapping(WebMvcConfig.addPath)
     public String add(Model model) {
         model.addAttribute("schoolClass", new SchoolClass());
         int currentYear = LocalDate.now().getYear();
@@ -59,7 +60,7 @@ public class AdminSchoolClassController implements LocalizedController {
         return "admin/school-class-details.html";
     }
 
-    @PostMapping("add")
+    @PostMapping(WebMvcConfig.addPath)
     public String add(SchoolClass schoolClass, Model model) {
         schoolClassRepository.save(schoolClass);
         return "redirect:" + extensions.getAdminUrls().schoolClasses();

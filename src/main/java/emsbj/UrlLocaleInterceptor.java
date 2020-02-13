@@ -1,5 +1,6 @@
 package emsbj;
 
+import emsbj.config.WebMvcConfig;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.servlet.support.RequestContextUtils;
@@ -21,7 +22,7 @@ public class UrlLocaleInterceptor extends HandlerInterceptorAdapter {
     }
 
     public String[] getPathPatterns() {
-        return Application.supportedLocales.stream()
+        return WebMvcConfig.supportedLocales.stream()
             .map(locale -> String.format("/%s/*", locale))
             .toArray(String[]::new);
     }

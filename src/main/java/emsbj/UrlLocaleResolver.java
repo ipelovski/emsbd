@@ -1,5 +1,6 @@
 package emsbj;
 
+import emsbj.config.WebMvcConfig;
 import org.springframework.web.servlet.LocaleResolver;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,11 +14,11 @@ public class UrlLocaleResolver implements LocaleResolver {
         int nextSlashIndex = requestURI.indexOf("/", 1);
         if (nextSlashIndex > -1) {
             String pathFragment = requestURI.substring(1, nextSlashIndex);
-            if (Application.supportedLocales.contains(pathFragment)) {
+            if (WebMvcConfig.supportedLocales.contains(pathFragment)) {
                 return Locale.forLanguageTag(pathFragment);
             }
         }
-        return Application.defaultLocale;
+        return WebMvcConfig.defaultLocale;
     }
 
     @Override

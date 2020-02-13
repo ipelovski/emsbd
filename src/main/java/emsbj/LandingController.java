@@ -1,5 +1,6 @@
 package emsbj;
 
+import emsbj.config.WebMvcConfig;
 import emsbj.controller.SecuredController;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
@@ -19,6 +20,6 @@ public class LandingController implements SecuredController {
 
     @GetMapping("/")
     public String redirectToHome() {
-        return "redirect:" + Application.defaultLocalePath;
+        return "redirect:" + WebMvcConfig.defaultLocalePath;
     }
 }

@@ -5,6 +5,7 @@ import emsbj.GradeRepository;
 import emsbj.Subject;
 import emsbj.SubjectRepository;
 import emsbj.SubjectService;
+import emsbj.config.WebMvcConfig;
 import emsbj.controller.LocalizedController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,7 +33,7 @@ public class AdminSubjectController implements LocalizedController {
         return "/admin/subjects.html";
     }
 
-    @GetMapping("/add")
+    @GetMapping(WebMvcConfig.addPath)
     public String add(Model model) {
         model.addAttribute("subject", new SubjectForm());
         Iterable<Grade> grades = gradeRepository.findAll();
@@ -40,7 +41,7 @@ public class AdminSubjectController implements LocalizedController {
         return "/admin/subject-details.html";
     }
 
-    @PostMapping("/add")
+    @PostMapping(WebMvcConfig.addPath)
     public String add(SubjectForm subjectForm, Model model) {
         Optional<Grade> optionalGrade = gradeRepository.findById(subjectForm.gradeId);
         if (optionalGrade.isPresent()) {
