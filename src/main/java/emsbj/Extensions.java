@@ -152,7 +152,7 @@ public class Extensions {
 
         private String getUrl(Class<?> controllerType, String requestMappingName, Object... methodUriVariableValues) {
             Method method = getMethod(controllerType, requestMappingName);
-            UriComponentsBuilder uriComponentsBuilder = fromMethodInternal(controllerType, method);
+            UriComponentsBuilder uriComponentsBuilder = fromMethod(controllerType, method);
             Object[] uriVariableValues = buildUriVariableValues(controllerType, methodUriVariableValues);
             return uriComponentsBuilder.build()
                 .expand(uriVariableValues)
@@ -170,6 +170,11 @@ public class Extensions {
                     return method;
                 }
             }
+            for (Method method : methods) {
+                if (methodIsNamed(method, requestMappingName)) {
+                    return method;
+                }
+            }
             throw new RuntimeException(String.format(
                 "Cannot find method in %s with name %s",
                 controllerType.getSimpleName(), requestMappingName));
@@ -178,21 +183,19 @@ public class Extensions {
             RequestMapping requestMapping =
                 AnnotatedElementUtils.findMergedAnnotation(method, RequestMapping.class);
             if (requestMapping != null) {
-                if (requestMapping.name().length() > 0) {
-                    return requestMapping.name().equals(requestMappingName);
-                } else {
-                    return method.getName().equals(requestMappingName);
-                }
+                return requestMapping.name().equals(requestMappingName);
             } else {
                 return false;
             }
         }
+        private boolean methodIsNamed(Method method, String requestMappingName) {
+            return method.getName().equals(requestMappingName);
+        }
         private String getKey(Class<?> aClass, String requestMappingName) {
             return aClass.getSimpleName() + "::" + requestMappingName;
         }
-        private UriComponentsBuilder fromMethodInternal(
-            Class<?> controllerType, Method method) {
-
+        // based on MvcUriComponentsBuilder.fromMethodInternal
+        private UriComponentsBuilder fromMethod(Class<?> controllerType, Method method) {
             UriComponentsBuilder builder = ServletUriComponentsBuilder.fromCurrentServletMapping();
             String prefix = getPathPrefix(controllerType);
             builder.path(prefix);
