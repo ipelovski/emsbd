@@ -165,31 +165,27 @@ public class Extensions {
         }
         private Method findMethod(Class<?> controllerType, String requestMappingName) {
             Method[] methods = controllerType.getDeclaredMethods();
-            for (Method method : methods) {
-                if (methodIsMappedToName(method, requestMappingName)) {
+            RequestMapping[] methodRequestMappings = new RequestMapping[methods.length];
+            for (int i = 0; i < methods.length; i++) {
+                Method method = methods[i];
+                RequestMapping requestMapping =
+                    AnnotatedElementUtils.findMergedAnnotation(method, RequestMapping.class);
+                if (requestMapping != null
+                    && requestMapping.name().equals(requestMappingName)) {
                     return method;
                 }
+                methodRequestMappings[i] = requestMapping;
             }
-            for (Method method : methods) {
-                if (methodIsNamed(method, requestMappingName)) {
+            for (int i = 0; i < methods.length; i++) {
+                Method method = methods[i];
+                if (method.getName().equals(requestMappingName)
+                    && methodRequestMappings[i] != null) {
                     return method;
                 }
             }
             throw new RuntimeException(String.format(
                 "Cannot find method in %s with name %s",
                 controllerType.getSimpleName(), requestMappingName));
-        }
-        private boolean methodIsMappedToName(Method method, String requestMappingName) {
-            RequestMapping requestMapping =
-                AnnotatedElementUtils.findMergedAnnotation(method, RequestMapping.class);
-            if (requestMapping != null) {
-                return requestMapping.name().equals(requestMappingName);
-            } else {
-                return false;
-            }
-        }
-        private boolean methodIsNamed(Method method, String requestMappingName) {
-            return method.getName().equals(requestMappingName);
         }
         private String getKey(Class<?> aClass, String requestMappingName) {
             return aClass.getSimpleName() + "::" + requestMappingName;
