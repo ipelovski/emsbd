@@ -19,7 +19,6 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/admin/users")
 public class AdminUserController implements LocalizedController {
-    public static final String userIdPath = "/{userId:\\d+}";
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -48,15 +47,19 @@ public class AdminUserController implements LocalizedController {
         return "redirect:/admin/users";
     }
 
-    @GetMapping(userIdPath)
-    public String details(@PathVariable("userId") Long userId, Model model) {
+    @GetMapping(WebMvcConfig.objectIdPathParam)
+    public String details(
+        @PathVariable(WebMvcConfig.objectIdParamName) Long userId, Model model
+    ) {
         Optional<User> user = userRepository.findById(userId);
         model.addAttribute("user", user.orElse(null));
         return "/admin/user-details.html";
     }
 
-    @PostMapping(userIdPath)
-    public String detailsSubmit(@PathVariable("userId") Long userId, User user, Model model) {
+    @PostMapping(WebMvcConfig.objectIdPathParam)
+    public String detailsSubmit(
+        @PathVariable(WebMvcConfig.objectIdParamName) Long userId, User user, Model model
+    ) {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {
             User existingUser = optionalUser.get();

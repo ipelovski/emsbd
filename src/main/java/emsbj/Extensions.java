@@ -1,9 +1,14 @@
 package emsbj;
 
+import emsbj.admin.AdminController;
 import emsbj.admin.AdminGradeController;
+import emsbj.admin.AdminScheduleController;
 import emsbj.admin.AdminSchoolClassController;
+import emsbj.admin.AdminSchoolYearController;
 import emsbj.admin.AdminStudentController;
+import emsbj.admin.AdminSubjectController;
 import emsbj.admin.AdminTeacherController;
+import emsbj.admin.AdminTermController;
 import emsbj.admin.AdminUserController;
 import emsbj.config.WebMvcConfig;
 import emsbj.user.User;
@@ -14,6 +19,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -23,14 +29,17 @@ import org.thymeleaf.util.StringUtils;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @Service
 public class Extensions {
@@ -86,40 +95,57 @@ public class Extensions {
         return adminUrls;
     }
 
-    public static class AdminUrls {
-        private static final EntitiesUrlBuilder<SchoolYear> schoolYearsUrlBuilder =
-            new EntitiesUrlBuilder<>("/school-years");
-        private static final EntitiesUrlBuilder<Term> termsUrlBuilder =
-            new EntitiesUrlBuilder<>("/terms");
-        private static final EntitiesUrlBuilder<Subject> subjectsUrlBuilder =
-            new EntitiesUrlBuilder<>("/subjects");
-        private static final EntitiesUrlBuilder<Grade> gradesUrlBuilder =
-            new EntitiesUrlBuilder<>("/grades");
-        private static final String addUrl = "/add";
+    private String getUrl(Class<?> controllerType, String requestMappingName, Object... uriVariableValues) {
+        return new UrlBuilder(controllerType, requestMappingName)
+            .uriParams(uriVariableValues).build();
+    }
 
-        public String schoolYears() {
-            return schoolYearsUrlBuilder.build();
+    public class AdminUrls {
+
+        public String adminIndex() {
+            return getUrl(AdminController.class, WebMvcConfig.indexName);
         }
 
-        public String schoolYear(SchoolYear schoolYear) {
-            return schoolYearsUrlBuilder.entity(schoolYear).build();
+        public String schoolYears() {
+            return getUrl(AdminSchoolYearController.class, WebMvcConfig.listName);
+        }
+
+        public String addSchoolYear() {
+            return getUrl(AdminSchoolYearController.class, WebMvcConfig.addName);
+        }
+
+        public String terms() {
+            return getUrl(AdminTermController.class, WebMvcConfig.listName);
+        }
+
+        public String termsBySchoolYear(SchoolYear schoolYear) {
+            return new UrlBuilder(AdminTermController.class, WebMvcConfig.listName)
+                .queryParam(AdminTermController.schoolYearQueryParam, schoolYear.getId())
+                .build();
         }
 
         public String term(Term term) {
-            return termsUrlBuilder.entity(term).build();
+            return getUrl(AdminTermController.class, WebMvcConfig.detailsName, term.getId());
         }
 
-        public String addSubject(Term term) {
-            assert !term.isNew();
-            return subjectsUrlBuilder.build() + addUrl + "?term=" + term.getId();
+        public String addTermWithSchoolYear(SchoolYear schoolYear) {
+            return getUrl(AdminTermController.class, WebMvcConfig.addName, schoolYear.getId());
+        }
+
+        public String subjects() {
+            return getUrl(AdminSubjectController.class, WebMvcConfig.listName);
         }
 
         public String addSubject() {
-            return subjectsUrlBuilder.build() + addUrl;
+            return getUrl(AdminSubjectController.class, WebMvcConfig.addName);
         }
 
         public String users() {
             return getUrl(AdminUserController.class, WebMvcConfig.listName);
+        }
+
+        public String addUser() {
+            return getUrl(AdminUserController.class, WebMvcConfig.addName);
         }
 
         public String user(User user) {
@@ -146,23 +172,67 @@ public class Extensions {
             return getUrl(AdminTeacherController.class, WebMvcConfig.listName);
         }
 
+        public String teacher(Teacher teacher) {
+            return getUrl(AdminTeacherController.class, WebMvcConfig.detailsName, teacher.getId());
+        }
+
         public String students() {
             return getUrl(AdminStudentController.class, WebMvcConfig.listName);
         }
 
-        private String getUrl(Class<?> controllerType, String requestMappingName, Object... methodUriVariableValues) {
+        public String student(Student student) {
+            return getUrl(AdminStudentController.class, WebMvcConfig.detailsName, student.getId());
+        }
+
+        public String weeklySlots() {
+            return getUrl(AdminScheduleController.class, AdminScheduleController.weeklySlotsList);
+        }
+    }
+
+    private static class UrlBuilder {
+        private static final Map<String, Method> methods = new HashMap<>();
+        private final Class<?> controllerType;
+        private final String requestMappingName;
+        private List<Object> uriParams;
+        private Map<String, List<String>> queryParams;
+
+        public UrlBuilder(Class<?> controllerType, String requestMappingName) {
+            Objects.requireNonNull(controllerType);
+            Objects.requireNonNull(requestMappingName);
+            this.controllerType = controllerType;
+            this.requestMappingName = requestMappingName;
+            this.uriParams = buildUriVariableValues(controllerType);
+            this.queryParams = new HashMap<>(0);
+        }
+
+        public UrlBuilder queryParam(String name, Object... values) {
+            List<String> paramValues = Arrays.stream(values)
+                .map(value -> value != null ? value.toString() : null)
+                .collect(Collectors.toList());
+            queryParams.put(name, paramValues);
+            return this;
+        }
+
+        public UrlBuilder uriParams(Object... values) {
+            Collections.addAll(uriParams, values);
+            return this;
+        }
+
+        public String build() {
             Method method = getMethod(controllerType, requestMappingName);
             UriComponentsBuilder uriComponentsBuilder = fromMethod(controllerType, method);
-            Object[] uriVariableValues = buildUriVariableValues(controllerType, methodUriVariableValues);
-            return uriComponentsBuilder.build()
-                .expand(uriVariableValues)
+            Object[] uriVariableValues = uriParams.toArray();
+            return uriComponentsBuilder
+                .queryParams(CollectionUtils.toMultiValueMap(queryParams))
+                .buildAndExpand(uriVariableValues)
                 .toUriString();
         }
-        private Map<String, Method> methods = new HashMap<>();
+
         private Method getMethod(Class<?> controllerType, String requestMappingName) {
             String key = getKey(controllerType, requestMappingName);
             return methods.computeIfAbsent(key, s -> findMethod(controllerType, requestMappingName));
         }
+
         private Method findMethod(Class<?> controllerType, String requestMappingName) {
             Method[] methods = controllerType.getDeclaredMethods();
             RequestMapping[] methodRequestMappings = new RequestMapping[methods.length];
@@ -187,9 +257,11 @@ public class Extensions {
                 "Cannot find method in %s with name %s",
                 controllerType.getSimpleName(), requestMappingName));
         }
+
         private String getKey(Class<?> aClass, String requestMappingName) {
             return aClass.getSimpleName() + "::" + requestMappingName;
         }
+
         // based on MvcUriComponentsBuilder.fromMethodInternal
         private UriComponentsBuilder fromMethod(Class<?> controllerType, Method method) {
             UriComponentsBuilder builder = ServletUriComponentsBuilder.fromCurrentServletMapping();
@@ -201,6 +273,7 @@ public class Extensions {
             builder.path(path);
             return builder;
         }
+
         private String getPathPrefix(Class<?> controllerType) {
             for (Map.Entry<String, Predicate<Class<?>>> entry : WebMvcConfig.pathPrefixes.entrySet()) {
                 if (entry.getValue().test(controllerType)) {
@@ -209,6 +282,7 @@ public class Extensions {
             }
             return "";
         }
+
         private String getRequestMappingPath(AnnotatedElement annotatedElement) {
             RequestMapping requestMapping = AnnotatedElementUtils.
                 findMergedAnnotation(annotatedElement, RequestMapping.class);
@@ -218,7 +292,8 @@ public class Extensions {
                 return "";
             }
         }
-        private Object[] buildUriVariableValues(Class<?> controllerType, Object... methodUriVariableValues) {
+
+        private List<Object> buildUriVariableValues(Class<?> controllerType, Object... methodUriVariableValues) {
             List<Object> uriVariableValues = new ArrayList<>(
                 methodUriVariableValues.length + WebMvcConfig.pathPrefixValueSuppliers.size());
             for (Map.Entry<Predicate<Class<?>>, Supplier<Optional<?>>> entry :
@@ -228,32 +303,7 @@ public class Extensions {
                 }
             }
             Collections.addAll(uriVariableValues, methodUriVariableValues);
-            return uriVariableValues.toArray();
-        }
-
-        private static class EntitiesUrlBuilder<T extends JournalPersistable> {
-            private final String path;
-            EntitiesUrlBuilder(String path) {
-                this.path = path;
-            }
-            EntityUrlBuilder<T> entity(T entity) {
-                return new EntityUrlBuilder<>(this, entity);
-            }
-            String build() {
-                return "/admin" + path;
-            }
-        }
-        private static class EntityUrlBuilder<T extends JournalPersistable> {
-            private final EntitiesUrlBuilder<T> parent;
-            private final T entity;
-            EntityUrlBuilder(EntitiesUrlBuilder<T> parent, T entity) {
-                assert !entity.isNew();
-                this.parent = parent;
-                this.entity = entity;
-            }
-            String build() {
-                return parent.build() + "/" + entity.getId();
-            }
+            return uriVariableValues;
         }
     }
 }

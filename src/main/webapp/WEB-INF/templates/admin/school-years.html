@@ -6,16 +6,15 @@
 </head>
 <body>
     <p>
-        <a th:href="@{/admin}">Back to administration home</a>
+        <a th:href="@{${x.au().adminIndex()}}">Back to administration home</a>
     </p>
-    <form th:action="@{/admin/school-years/add}" method="post">
+    <form th:action="@{${x.au().addSchoolYear()}}" method="post">
         <input type="submit" value="Add school year">
     </form>
     <table>
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Details</th>
                 <th>Terms</th>
             </tr>
         </thead>
@@ -23,10 +22,7 @@
             <tr th:each="schoolYear : ${schoolYears}">
                 <td th:text="${schoolYear.name()}"></td>
                 <td>
-                    <a th:href="@{'/admin/school-years/' + ${schoolYear.id}}">Details</a>
-                </td>
-                <td>
-                    <a th:href="@{'/admin/terms?school-year=' + ${schoolYear.id}}">Terms</a>
+                    <a th:href="@{${x.au().termsBySchoolYear(schoolYear.id)}}">Terms</a>
                     <a th:each="term : ${schoolYear.terms}"
                        th:href="@{${x.au().term(term)}}"
                        th:text="'Term ' + ${term.name}"></a>

@@ -40,7 +40,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public static final Locale defaultLocale = Locale.forLanguageTag(supportedLocalesArray[0]);
     public static final String defaultLocalePath = "/" + defaultLocale.toLanguageTag();
     public static final String localePathParam = "/{locale:en|bg}";
+    public static final String objectIdPathParam = "/{id:\\d+}";
+    public static final String objectIdParamName = "id";
     public static final String addPath = "/add";
+    public static final String indexName = "index";
     public static final String listName = "list";
     public static final String addName = "add";
     public static final String detailsName = "details";

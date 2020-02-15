@@ -2,6 +2,7 @@ package emsbj.admin;
 
 import emsbj.WeeklySlot;
 import emsbj.WeeklySlotRepository;
+import emsbj.controller.LocalizedController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,12 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/admin/schedule")
-public class AdminScheduleController {
+public class AdminScheduleController implements LocalizedController {
+    public static final String weeklySlotsList = "weeklySlotsList";
     @Autowired
     private WeeklySlotRepository weeklySlotRepository;
 
-    @GetMapping("/weekly-slots")
-    public String listWeeklySlots(Model model) {
+    @GetMapping(value = "/weekly-slots", name = weeklySlotsList)
+    public String weeklySlotsList(Model model) {
         Iterable<WeeklySlot> weeklySlots = weeklySlotRepository.findAll();
         model.addAttribute("weeklySlots", weeklySlots);
         return "admin/weekly-slots.html";

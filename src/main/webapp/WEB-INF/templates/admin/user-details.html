@@ -7,7 +7,7 @@
 </head>
 <body>
     <p>
-        <a th:href="@{/admin/users}">Back to users</a>
+        <a th:href="@{${x.au().users()}}">Back to users</a>
     </p>
     <p th:if="${user == null}">
         No user found!
@@ -38,8 +38,10 @@
                 <select class="select" id="role" th:field="*{role}">
                     <option value="user">Unspecified</option>
                     <option value="student">Student</option>
+                    <option value="parent">Parent</option>
                     <option value="teacher">Teacher</option>
                     <option value="admin">Admin</option>
+                    <option value="principal">Principal</option>
                 </select>
             </div>
             <div class="col col-4">

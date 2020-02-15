@@ -5,7 +5,6 @@ import emsbj.SchoolYearRepository;
 import emsbj.config.WebMvcConfig;
 import emsbj.controller.LocalizedController;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,8 +18,6 @@ import java.time.LocalDateTime;
 public class AdminSchoolYearController implements LocalizedController {
     @Autowired
     private SchoolYearRepository schoolYearRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @GetMapping
     public String list(Model model) {
@@ -29,7 +26,7 @@ public class AdminSchoolYearController implements LocalizedController {
         return "/admin/school-years.html";
     }
 
-    @PostMapping(WebMvcConfig.addPath)
+    @PostMapping(value = WebMvcConfig.addPath, name = WebMvcConfig.addName)
     public String addSubmit() {
         int currentYear = LocalDateTime.now().getYear();
         SchoolYear schoolYear = new SchoolYear(currentYear, currentYear + 1);

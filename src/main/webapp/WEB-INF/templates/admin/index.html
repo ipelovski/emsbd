@@ -10,10 +10,10 @@
         <a th:href="@{${x.au().users()}}" th:text="'View all users'"></a>
     </p>
     <p>
-        <a th:href="@{/admin/school-years}" th:text="'View school years'"></a>
+        <a th:href="@{${x.au().schoolYears()}}" th:text="'View school years'"></a>
     </p>
     <p>
-        <a th:href="@{/admin/subjects}" th:text="'View subjects'"></a>
+        <a th:href="@{${x.au().subjects()}}" th:text="'View subjects'"></a>
     </p>
     <p>
         <a th:href="@{${x.au().grades()}}" th:text="'View available grades'"></a>
@@ -28,7 +28,7 @@
         <a th:href="@{${x.au().students()}}" th:text="'View students'"></a>
     </p>
     <p>
-        <a th:href="@{/admin/schedule/weekly-slots}" th:text="'View weekly slots'"></a>
+        <a th:href="@{${x.au().weeklySlots()}}" th:text="'View weekly slots'"></a>
     </p>
 </body>
 </html>

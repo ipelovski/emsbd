@@ -6,9 +6,9 @@
 </head>
 <body>
     <p>
-        <a th:href="@{/admin}">Back to administration home</a>
+        <a th:href="@{${x.au().adminIndex()}}">Back to administration home</a>
     </p>
-    <form th:action="@{/admin/users/add}" method="post">
+    <form th:action="@{${x.au().addUser()}}" method="post">
         <input type="submit" value="Add user">
     </form>
     <table>
@@ -36,7 +36,7 @@
                           th:text="${student.schoolClass.getGrade() + ' ' + student.schoolClass.name}"></span>
                 </td>
                 <td>
-                    <a th:href="@{'/admin/students/' + ${student.id}}">Details</a>
+                    <a th:href="@{${x.au().student(student)}}">Details</a>
                 </td>
             </tr>
         </tbody>

@@ -22,13 +22,14 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/admin/terms")
 public class AdminTermController implements LocalizedController {
+    public static final String schoolYearQueryParam = "school-year";
     @Autowired
     private SchoolYearRepository schoolYearRepository;
     @Autowired
     private TermRepository termRepository;
 
     @GetMapping
-    public String list(@RequestParam("school-year") Long schoolYearId, Model model) {
+    public String list(@RequestParam(schoolYearQueryParam) Long schoolYearId, Model model) {
         Optional<SchoolYear> optionalSchoolYear = schoolYearRepository.findById(schoolYearId);
         if (optionalSchoolYear.isPresent()) {
             SchoolYear schoolYear = optionalSchoolYear.get();
@@ -41,7 +42,7 @@ public class AdminTermController implements LocalizedController {
         }
     }
 
-    @PostMapping(WebMvcConfig.addPath)
+    @PostMapping(value = WebMvcConfig.addPath, name = WebMvcConfig.addName)
     public String addSubmit(@RequestParam("school-year") Long schoolYearId) {
         Optional<SchoolYear> optionalSchoolYear = schoolYearRepository.findById(schoolYearId);
         if (optionalSchoolYear.isPresent()) {
@@ -60,8 +61,10 @@ public class AdminTermController implements LocalizedController {
         }
     }
 
-    @GetMapping("/{termId:\\d+}")
-    public String details(@PathVariable("termId") Long termId, Model model) {
+    @GetMapping(WebMvcConfig.objectIdPathParam)
+    public String details(
+        @PathVariable(WebMvcConfig.objectIdParamName) Long termId, Model model
+    ) {
         Optional<Term> term = termRepository.findById(termId);
         model.addAttribute("term", term.orElse(null));
         return "/admin/term-details.html";
