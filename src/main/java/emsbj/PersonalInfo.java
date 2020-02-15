@@ -1,6 +1,8 @@
 package emsbj;
 
 import javax.persistence.Embeddable;
+import javax.persistence.FetchType;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.Period;
@@ -17,6 +19,8 @@ public class PersonalInfo {
     @Size(max = 200)
     private String address;
     private LocalDate bornAt;
+    @OneToOne(fetch = FetchType.LAZY)
+    private Blob picture;
 
     public PersonalInfo() {
 
@@ -77,5 +81,13 @@ public class PersonalInfo {
         } else {
             return Optional.empty();
         }
+    }
+
+    public Blob getPicture() {
+        return picture;
+    }
+
+    public void setPicture(Blob picture) {
+        this.picture = picture;
     }
 }

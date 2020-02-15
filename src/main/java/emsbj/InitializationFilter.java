@@ -14,6 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalTime;
@@ -45,6 +46,8 @@ public class InitializationFilter implements Filter {
     private StudentRepository studentRepository;
     @Autowired
     private WeeklySlotRepository weeklySlotRepository;
+    @Autowired
+    private BlobRepository blobRepository;
     private boolean initialized;
     private SchoolYear schoolYear;
     private Map<Integer, Grade> grades = new HashMap<>(4);
@@ -63,6 +66,12 @@ public class InitializationFilter implements Filter {
         admin.setRole(User.Role.admin);
         admin.setPassword(passwordEncoder.encode("admin"));
         admin.setEmail("admin@admin.admin");
+        Blob adminPicture = new Blob();
+        byte[] byteArray = readFile("sokka-small.png");
+        adminPicture.setData(byteArray);
+        adminPicture.setMimeType("image/png");
+        blobRepository.save(adminPicture);
+        admin.getPersonalInfo().setPicture(adminPicture);
         userRepository.save(admin);
         JournalAuditAware.setCurrentUser(admin);
         createSchoolYear();
@@ -74,6 +83,23 @@ public class InitializationFilter implements Filter {
         createTeachers();
         createStudents();
         initialized = true;
+    }
+
+    private byte[] readFile(String fileName) {
+        try (InputStream inputStream = getClass().getClassLoader()
+            .getResourceAsStream(fileName)) {
+            if (inputStream == null) {
+                throw new IllegalArgumentException("Cannot load file " + fileName);
+            }
+            byte[] byteArray = new byte[inputStream.available()];
+            int bytesRead = inputStream.read(byteArray, 0, byteArray.length);
+            if (bytesRead != byteArray.length) {
+                throw new RuntimeException("Could not read the whole file.");
+            }
+            return byteArray;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void createSchoolYear() {

@@ -17,6 +17,10 @@
           method="post" class="sm-flex mx-auto">
         <fieldset class="">
             <legend th:text="Details"></legend>
+            <div class="col col-12">
+                <img th:if="*{personalInfo.picture != null}" th:src="|data:*{personalInfo.picture.mimeType};base64,*{personalInfo.picture.getEncodedData()}|">
+                <img th:if="*{personalInfo.picture == null}" th:src="@{/img/blank-user.png}">
+            </div>
             <div class="col col-4">
                 <label class="label" for="username">Username:</label>
             </div>
