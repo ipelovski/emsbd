@@ -47,7 +47,7 @@ public class InitializationFilter implements Filter {
     @Autowired
     private WeeklySlotRepository weeklySlotRepository;
     @Autowired
-    private BlobRepository blobRepository;
+    private BlobDataRepository blobDataRepository;
     private boolean initialized;
     private SchoolYear schoolYear;
     private Map<Integer, Grade> grades = new HashMap<>(4);
@@ -66,11 +66,11 @@ public class InitializationFilter implements Filter {
         admin.setRole(User.Role.admin);
         admin.setPassword(passwordEncoder.encode("admin"));
         admin.setEmail("admin@admin.admin");
-        Blob adminPicture = new Blob();
+        BlobData adminPicture = new BlobData();
         byte[] byteArray = readFile("sokka-small.png");
         adminPicture.setData(byteArray);
         adminPicture.setMimeType("image/png");
-        blobRepository.save(adminPicture);
+        blobDataRepository.save(adminPicture);
         admin.getPersonalInfo().setPicture(adminPicture);
         userRepository.save(admin);
         JournalAuditAware.setCurrentUser(admin);

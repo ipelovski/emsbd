@@ -24,7 +24,7 @@ import java.util.Optional;
 public class BlobController {
     public static final String uploadProfilePicture = "uploadProfilePicture";
     @Autowired
-    private BlobRepository blobRepository;
+    private BlobDataRepository blobDataRepository;
     @Autowired
     private UserRepository userRepository;
 
@@ -33,13 +33,13 @@ public class BlobController {
     public ResponseEntity<byte[]> details(
         @PathVariable(WebMvcConfig.objectIdParamName) Long blobId
     ) {
-        Optional<Blob> optionalBlob = blobRepository.findById(blobId);
-        if (optionalBlob.isPresent()) {
-            Blob blob = optionalBlob.get();
+        Optional<BlobData> optionalBlobData = blobDataRepository.findById(blobId);
+        if (optionalBlobData.isPresent()) {
+            BlobData blobData = optionalBlobData.get();
             return ResponseEntity
                 .ok()
-                .contentType(MediaType.valueOf(blob.getMimeType()))
-                .body(blob.getData());
+                .contentType(MediaType.valueOf(blobData.getMimeType()))
+                .body(blobData.getData());
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -54,21 +54,21 @@ public class BlobController {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            Blob blob = new Blob();
-            blob.setMimeType(file.getContentType());
+            BlobData blobData = new BlobData();
+            blobData.setMimeType(file.getContentType());
             try {
-                blob.setData(file.getBytes());
+                blobData.setData(file.getBytes());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            blobRepository.save(blob);
+            blobDataRepository.save(blobData);
             if (user.getPersonalInfo().getPicture() != null) {
                 Long oldBlobId = user.getPersonalInfo().getPicture().getId();
                 user.getPersonalInfo().setPicture(null);
                 userRepository.save(user);
-                blobRepository.deleteById(oldBlobId);
+                blobDataRepository.deleteById(oldBlobId);
             }
-            user.getPersonalInfo().setPicture(blob);
+            user.getPersonalInfo().setPicture(blobData);
             userRepository.save(user);
             redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded " + file.getOriginalFilename() + "!");
