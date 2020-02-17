@@ -5,6 +5,7 @@
     <title>Courses</title>
 </head>
 <body>
-    <a th:href="@{}"
+    <a th:href="@{}"></a>
+    <div th:each="someVar : ${@someService.getData(someParameter)}" th:text="${someVar}">Template Text</div>
 </body>
 </html>

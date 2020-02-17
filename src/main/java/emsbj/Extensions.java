@@ -47,6 +47,7 @@ public class Extensions {
     private MessageSource messageSource;
     @Autowired
     private WebApplicationContext webApplicationContext;
+    private Urls urls;
     private AdminUrls adminUrls;
 
     protected Extensions() {
@@ -84,6 +85,17 @@ public class Extensions {
         return "/" + locale.toLanguageTag() + url;
     }
 
+    public Urls u() {
+        return getUrls();
+    }
+
+    public Urls getUrls() {
+        if(urls == null) {
+            urls = new Urls();
+        }
+        return urls;
+    }
+
     public AdminUrls au() {
         return getAdminUrls();
     }
@@ -98,6 +110,24 @@ public class Extensions {
     private String getUrl(Class<?> controllerType, String requestMappingName, Object... uriVariableValues) {
         return new UrlBuilder(controllerType, requestMappingName)
             .uriParams(uriVariableValues).build();
+    }
+
+    public class Urls {
+        public String blob(Blob blob) {
+            return getUrl(BlobController.class, WebMvcConfig.detailsName, blob.getId());
+        }
+
+        public String profilePicture(User user) {
+            if (user.getPersonalInfo().getPicture() != null) {
+                return blob(user.getPersonalInfo().getPicture());
+            } else {
+                return WebMvcConfig.noProfilePicture;
+            }
+        }
+
+        public String uploadProfilePicture(User user) {
+            return getUrl(BlobController.class, BlobController.uploadProfilePicture, user.getId());
+        }
     }
 
     public class AdminUrls {

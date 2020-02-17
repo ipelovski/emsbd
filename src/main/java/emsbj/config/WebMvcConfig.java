@@ -47,6 +47,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public static final String listName = "list";
     public static final String addName = "add";
     public static final String detailsName = "details";
+    public static final String noProfilePicture = "/img/blank-user.png";
     public static final Map<String, Predicate<Class<?>>> pathPrefixes;
     public static final Map<Predicate<Class<?>>, Supplier<Optional<?>>> pathPrefixValueSuppliers;
     static {

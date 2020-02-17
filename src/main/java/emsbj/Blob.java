@@ -6,6 +6,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.validation.constraints.NotNull;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Base64;
 
 @Entity
@@ -40,6 +42,10 @@ public class Blob implements JournalPersistable {
     }
 
     public String getEncodedData() {
-        return Base64.getEncoder().encodeToString(getData());
+        try {
+            return URLEncoder.encode(Base64.getEncoder().encodeToString(getData()), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
