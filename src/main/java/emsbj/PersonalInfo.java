@@ -3,7 +3,6 @@ package emsbj;
 import javax.persistence.Embeddable;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.Period;

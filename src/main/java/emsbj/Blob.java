@@ -18,6 +18,8 @@ public class Blob implements JournalPersistable {
     @NotNull
     private String mimeType;
     private String purpose;
+    @Lob
+    private byte[] data;
 
     @Override
     public Long getId() {
@@ -30,5 +32,21 @@ public class Blob implements JournalPersistable {
 
     public void setMimeType(String mimeType) {
         this.mimeType = mimeType;
+    }
+
+    public byte[] getData() {
+        return data;
+    }
+
+    public void setData(byte[] data) {
+        this.data = data;
+    }
+
+    public String getEncodedData() {
+        try {
+            return URLEncoder.encode(Base64.getEncoder().encodeToString(getData()), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
