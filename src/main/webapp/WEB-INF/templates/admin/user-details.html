@@ -33,6 +33,7 @@ window.onProfilePictureUpdated = function (newSrc) {
             </form>
         </div>
     </div>
+<!--    TODO @{${#httpServletRequest.requestURI}}-->
     <form th:if="${user != null}" th:object="${user}"
           th:action="@{${#httpServletRequest.requestURI}}"
           method="post" class="sm-flex mx-auto">
@@ -59,7 +60,6 @@ window.onProfilePictureUpdated = function (newSrc) {
                 <select class="select" id="role" th:field="*{role}">
                     <option value="user">Unspecified</option>
                     <option value="student">Student</option>
-                    <option value="parent">Parent</option>
                     <option value="teacher">Teacher</option>
                     <option value="admin">Admin</option>
                     <option value="principal">Principal</option>

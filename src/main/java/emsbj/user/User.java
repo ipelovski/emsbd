@@ -51,13 +51,14 @@ public class User implements UserDetails, JournalPersistable {
     private PersonalInfo personalInfo;
     @NotNull
     private Role role;
-    private boolean active;
+    @NotNull
+    private Status status;
     @Transient
     private Collection<SimpleGrantedAuthority> grantedAuthorities;
 
     public User() {
         this.role = Role.user;
-        this.active = true;
+        this.status = Status.active;
         this.personalInfo = new PersonalInfo();
     }
 
@@ -130,12 +131,12 @@ public class User implements UserDetails, JournalPersistable {
         grantedAuthorities = null;
     }
 
-    public boolean isActive() {
-        return active;
+    public Status getStatus() {
+        return status;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     @Override
@@ -164,11 +165,15 @@ public class User implements UserDetails, JournalPersistable {
 
     @Override
     public boolean isEnabled() {
-        return active;
+        return status == Status.active;
+    }
+
+    public enum Status {
+        active, inactive, waitingApproval
     }
 
     public enum Role {
-        anonymous, user, admin, principal, teacher, student, parent;
+        anonymous, user, admin, principal, teacher, student;
         private final String name;
         private static final Map<String, Role> valuesMap = new HashMap<>();
 

@@ -3,7 +3,6 @@ roles
     principal
     teacher
     student
-    parent
 data
     user
         personal info
@@ -48,14 +47,12 @@ data
         current grade
         form-master
         room
-    lesson
+    course
         school class
-        active teacher
         subject
-        date and time
-        weekly slot
-        room
+        teachers
         term
+        weekly slots
     weekly schedule
     weekly slot
     room
@@ -89,13 +86,29 @@ actions
         view student's own student info
 screens
     login
-    home, specific for each role
-    marks given to a student during a specific term (current marks)
-        same for notes and absences
-    classes of a teacher
-    marks given to students from a single grade for a specific subject (seen by a teacher)
     administration
         grades with add grade
         subjects
             add subject
         check for duplicate lessons in a single room at given time
+    student
+        home
+            lessons for today
+        profile
+        marks this term for all subjects
+        absences and notes this term for all subjects
+    teacher
+        home
+            lessons for today
+        profile
+        courses this term
+        marks, absences, and notes for each course
+        search student
+            student (if in a course led by the teacher)
+            course marks (and absences and notes)
+    principal
+        home
+            ? administration dashboard ?
+        profile
+    profile
+        change password

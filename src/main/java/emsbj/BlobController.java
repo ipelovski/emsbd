@@ -38,9 +38,9 @@ public class BlobController {
     public ResponseEntity<byte[]> details(
         @PathVariable(WebMvcConfig.objectIdParamName) Long blobId
     ) {
-        Optional<Blob> optionalBlobData = blobRepository.findById(blobId);
-        if (optionalBlobData.isPresent()) {
-            Blob blob = optionalBlobData.get();
+        Optional<Blob> optionalBlob = blobRepository.findById(blobId);
+        if (optionalBlob.isPresent()) {
+            Blob blob = optionalBlob.get();
             return ResponseEntity
                 .ok()
                 .contentType(MediaType.valueOf(blob.getMimeType()))

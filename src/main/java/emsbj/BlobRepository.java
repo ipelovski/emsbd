@@ -12,6 +12,6 @@ public interface BlobRepository extends CrudRepository<Blob, Long> {
     @Override
     @Modifying
     @Transactional
-    @Query("delete from BlobData b where b.id = ?1")
+    @Query("delete from Blob b where b.id = ?1")
     void deleteById(Long id);
 }

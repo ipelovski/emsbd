@@ -12,6 +12,7 @@ import emsbj.admin.AdminTermController;
 import emsbj.admin.AdminUserController;
 import emsbj.config.WebMvcConfig;
 import emsbj.user.User;
+import emsbj.user.UserController;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -113,6 +114,10 @@ public class Extensions {
     }
 
     public class Urls {
+        public String home() {
+            return getUrl(HomeController.class, WebMvcConfig.indexName);
+        }
+
         public String blob(Blob blob) {
             return getUrl(BlobController.class, WebMvcConfig.detailsName, blob.getId());
         }
@@ -127,6 +132,22 @@ public class Extensions {
 
         public String uploadProfilePicture(User user) {
             return getUrl(BlobController.class, BlobController.uploadProfilePicture, user.getId());
+        }
+
+        public String signIn() {
+            return getUrl(UserController.class, UserController.signIn);
+        }
+
+        public String signInRole() {
+            return getUrl(UserController.class, UserController.signInRole);
+        }
+
+        public String signUp() {
+            return getUrl(UserController.class, UserController.signUp);
+        }
+
+        public String profile() {
+            return getUrl(UserController.class, UserController.profile);
         }
     }
 

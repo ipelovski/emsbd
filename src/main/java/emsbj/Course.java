@@ -24,6 +24,8 @@ public class Course implements JournalPersistable {
     private Term term;
     @ManyToMany
     private List<WeeklySlot> weeklySlots;
+    @ManyToOne
+    private Room room;
 
     public Course() {
 

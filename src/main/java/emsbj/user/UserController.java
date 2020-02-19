@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +30,10 @@ import java.util.Optional;
 
 @Controller
 public class UserController implements SecuredController, LocalizedController {
+    public static final String signIn = "signIn";
+    public static final String signInRole = "signInRole";
+    public static final String signUp = "signUp";
+    public static final String profile = "profile";
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -45,7 +50,7 @@ public class UserController implements SecuredController, LocalizedController {
             .permitAll();
     }
 
-    @GetMapping("/sign-in")
+    @GetMapping(value = "/sign-in", name = signIn)
     public String signIn(Model model, String error, String logout, String requested) {
         if (error != null) {
             model.addAttribute("error", "Username or password is incorrect.");
@@ -57,7 +62,7 @@ public class UserController implements SecuredController, LocalizedController {
         return "sign-in";
     }
 
-    @PostMapping("/sign-in-role")
+    @PostMapping(value = "/sign-in-role", name = signInRole)
     public String signInRole(HttpServletRequest request, HttpServletResponse response,
         User.Role role, RedirectAttributes model) {
         Optional<User> optionalUser = userRepository.findFirstByRole(role);
@@ -74,7 +79,7 @@ public class UserController implements SecuredController, LocalizedController {
         }
     }
 
-    @GetMapping("/sign-up")
+    @GetMapping(value = "/sign-up", name = signUp)
     public String signUpForm(SignUpForm signUpForm) {
         return "sign-up";
     }
@@ -98,7 +103,7 @@ public class UserController implements SecuredController, LocalizedController {
             user.setUsername(username);
             user.setPassword(encodedPassword);
             user.setEmail(signUpForm.getEmail());
-            user.setRole(User.Role.user);
+            user.setRole(User.Role.valueOf(signUpForm.getRole().name()));
             userRepository.save(user);
             Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(username, password));
@@ -109,6 +114,20 @@ public class UserController implements SecuredController, LocalizedController {
             signUpForm.setError(e.getMessage());
             return "sign-up";
         }
+    }
+
+    @GetMapping(value = "/profile", name = profile)
+    public String profile(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.getPrincipal() instanceof User) {
+            User authenticationPrincipal = (User) authentication.getPrincipal();
+            User user = userRepository.findById(authenticationPrincipal.getId()).get();
+            model.addAttribute("user", user);
+        } else {
+            throw new IllegalStateException("Unknown principal type "
+                + authentication.getPrincipal().getClass().getCanonicalName());
+        }
+        return "profile";
     }
 
     @ScriptAssert(lang = "javascript", reportOn = "confirmPassword",
@@ -133,6 +152,8 @@ public class UserController implements SecuredController, LocalizedController {
         private String confirmPassword;
         @NotNull
         private String email;
+        @NotNull
+        private SignUpRole role;
         private String error;
 
         public String getUsername() {
@@ -167,6 +188,14 @@ public class UserController implements SecuredController, LocalizedController {
             this.email = email;
         }
 
+        public SignUpRole getRole() {
+            return role;
+        }
+
+        public void setRole(SignUpRole role) {
+            this.role = role;
+        }
+
         public String getError() {
             return error;
         }
@@ -174,5 +203,9 @@ public class UserController implements SecuredController, LocalizedController {
         public void setError(String error) {
             this.error = error;
         }
+    }
+
+    public enum SignUpRole {
+        student, teacher
     }
 }

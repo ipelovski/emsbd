@@ -80,8 +80,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         roleHierarchy.setHierarchy(User.Role.createHierarchy(
             new User.Role[]{User.Role.principal, User.Role.admin},
             new User.Role[]{User.Role.admin, User.Role.teacher},
-            new User.Role[]{User.Role.teacher, User.Role.parent},
-            new User.Role[]{User.Role.parent, User.Role.student},
+            new User.Role[]{User.Role.teacher, User.Role.student},
             new User.Role[]{User.Role.student, User.Role.user}
         ));
         return roleHierarchy;

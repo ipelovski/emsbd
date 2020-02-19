@@ -24,10 +24,9 @@
         <input type="submit" value="Sign in">
     </form>
     <h4>Or as a user with role</h4>
-    <form th:action="@{/sign-in-role(requested=${requested})}" method="post">
+    <form th:action="@{${x.u().signInRole()}(requested=${requested})}" method="post">
         <select name="role">
             <option value="student">student</option>
-            <option value="parent">parent</option>
             <option value="teacher">teacher</option>
             <option value="principal">principal</option>
         </select>

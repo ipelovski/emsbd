@@ -1,6 +1,7 @@
 package emsbj;
 
 import emsbj.user.JournalUserDetailsService;
+import org.h2.tools.Server;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.MessageSource;
@@ -14,6 +15,7 @@ import org.springframework.security.util.InMemoryResource;
 import org.springframework.web.servlet.LocaleResolver;
 
 import javax.sql.DataSource;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
@@ -59,5 +61,11 @@ public class Application {
         dataSourceInitializer.setDataSource(dataSource);
         dataSourceInitializer.setDatabasePopulator(resourceDatabasePopulator);
         return dataSourceInitializer;
+    }
+
+    @Bean(initMethod = "start", destroyMethod = "stop")
+    public Server h2WebConsole() throws SQLException {
+        return Server.createWebServer(
+            "-web", "-webAllowOthers", "-webDaemon", "-webPort", "8082");
     }
 }

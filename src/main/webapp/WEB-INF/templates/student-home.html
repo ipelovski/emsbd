@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+    <p th:replace="~{fragments/header::header(${activeUser})}"></p>
+    <table>
+        <thead>
+            <tr>
+                <th>Lesson (hour)</th>
+                <th>Subject</th>
+                <th>Teacher</th>
+                <th>Room</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="lesson : ${lessons}">
+                <td th:text="|${lesson.weeklySlot.ordinal} (${lesson.weeklySlot.begin})|"></td>
+                <td th:text="${lesson.subject.name}"></td>
+                <td th:text="${lesson.teacher.personalInfo.getName()}"></td>
+                <td th:text="${lesson.room.name}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

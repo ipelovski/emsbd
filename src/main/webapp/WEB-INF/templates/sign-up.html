@@ -7,6 +7,13 @@
 <body>
     <form action="#" th:action="@{/sign-up}" th:object="${signUpForm}" method="post">
         <p>
+            <label for="role">You are a</label>
+            <select class="select" id="role" th:field="*{role}">
+                <option value="student">Student</option>
+                <option value="teacher">Teacher</option>
+            </select>
+        </p>
+        <p>
             <label for="username">Username</label>
             <input type="text" id="username" th:field="*{username}"/>
             <span th:if="${#fields.hasErrors('username')}" th:each="error : ${#fields.detailedErrors('username')}">
