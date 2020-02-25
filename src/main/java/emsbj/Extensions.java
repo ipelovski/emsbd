@@ -219,6 +219,10 @@ public class Extensions {
             return getUrl(AdminSchoolClassController.class, WebMvcConfig.addName);
         }
 
+        public String schoolClass(SchoolClass schoolClass) {
+            return getUrl(AdminSchoolClassController.class, WebMvcConfig.detailsName, schoolClass.getId());
+        }
+
         public String teachers() {
             return getUrl(AdminTeacherController.class, WebMvcConfig.listName);
         }
@@ -227,12 +231,24 @@ public class Extensions {
             return getUrl(AdminTeacherController.class, WebMvcConfig.detailsName, teacher.getId());
         }
 
+        public String selectFormMasterFragment() {
+            return getUrl(AdminTeacherController.class, AdminTeacherController.selectFormMasterFragment);
+        }
+
+        public String teacherList() {
+            return getUrl(AdminTeacherController.class, AdminTeacherController.teacherList);
+        }
+
         public String students() {
             return getUrl(AdminStudentController.class, WebMvcConfig.listName);
         }
 
         public String student(Student student) {
             return getUrl(AdminStudentController.class, WebMvcConfig.detailsName, student.getId());
+        }
+
+        public String studentList() {
+            return getUrl(AdminStudentController.class, AdminStudentController.studentList);
         }
 
         public String weeklySlots() {

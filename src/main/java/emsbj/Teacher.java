@@ -25,7 +25,7 @@ public class Teacher implements JournalPersistable {
     private List<Subject> skills = new ArrayList<>();
     @OneToMany
     private List<TeacherAssignment> assignments = new ArrayList<>();
-    @OneToMany
+    @OneToMany(mappedBy = "formMaster")
     private List<SchoolClass> formMasterOf = new ArrayList<>();
 
     @Override

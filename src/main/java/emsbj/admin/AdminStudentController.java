@@ -10,12 +10,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin/students")
 public class AdminStudentController implements LocalizedController {
+    public static final String studentList = "studentList";
     @Autowired
     private StudentRepository studentRepository;
 
@@ -37,5 +40,24 @@ public class AdminStudentController implements LocalizedController {
         } else {
             return "";
         }
+    }
+
+    @GetMapping(value = "/student-list", name = studentList)
+    public String studentList(
+        @RequestParam(value = "studentIds", required = false) List<Long> studentIds,
+        @RequestParam("id") String id,
+        @RequestParam("mode") String mode,
+        Model model
+    ) {
+        Iterable<Student> students;
+        if (studentIds != null) {
+            students = studentRepository.findAllById(studentIds);
+        } else {
+            students = studentRepository.findAll();
+        }
+        model.addAttribute("students", students);
+        model.addAttribute("id", id);
+        model.addAttribute("mode", mode);
+        return "fragments/student-list";
     }
 }

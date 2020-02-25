@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student list</title>
+    <link data-th-replace="~{fragments/header :: headResources}">
+</head>
+<body>
+    <div data-th-fragment="studentList(students, mode, onSelect)" data-th-remove="tag">
+        <ul id="student-list">
+            <li>
+                <div class="lg-flex flex-wrap">
+                    <div data-th-replace="~{fragments/list-fragments::listHeader(${mode})}"></div>
+                    <div class="col col-4" data-th-text="'Picture'"></div>
+                    <div class="col col-4" data-th-text="'Name'"></div>
+                    <div class="col col-3" data-th-text="'Class'"></div>
+                </div>
+            </li>
+            <li data-th-each="student : ${students}">
+                <div class="lg-flex flex-wrap">
+                    <div data-th-replace="~{fragments/list-fragments::listBody(mode=${mode},detailsUrl=${x.au().student(student)},objectId=${student.id})}">
+                    </div>
+                    <div class="col col-4" data-th-insert="~{fragments/profile-picture::profilePicture(@{${x.u().profilePicture(student.user)}})}">
+                    </div>
+                    <div class="col col-4">
+                        <span data-th-text="${student.user.personalInfo.getName()}"></span>
+                    </div>
+                    <div class="col col-3">
+                        <span data-th-if="${student.schoolClass != null}" data-th-text="${student.schoolClass.getGrade().name} + ' ' + ${student.schoolClass.name}"></span>
+                        <span data-th-if="${student.schoolClass == null}">&mdash;</span>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

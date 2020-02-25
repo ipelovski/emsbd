@@ -45,6 +45,8 @@ public class InitializationFilter implements Filter {
     @Autowired
     private StudentRepository studentRepository;
     @Autowired
+    private SchoolClassRepository schoolClassRepository;
+    @Autowired
     private WeeklySlotRepository weeklySlotRepository;
     @Autowired
     private BlobRepository blobRepository;
@@ -52,6 +54,8 @@ public class InitializationFilter implements Filter {
     private SchoolYear schoolYear;
     private Map<Integer, Grade> grades = new HashMap<>(4);
     private List<Subject> subjects = new LinkedList<>();
+    private List<Teacher> teachers = new LinkedList<>();
+    private List<Student> students = new LinkedList<>();
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -82,6 +86,7 @@ public class InitializationFilter implements Filter {
         createPrincipal();
         createTeachers();
         createStudents();
+        createSchoolClasses();
         initialized = true;
     }
 
@@ -166,16 +171,28 @@ public class InitializationFilter implements Filter {
     }
 
     private void createTeachers() {
-        User teacherUser = createUser(User.Role.teacher, "Унуфри", "Методиев", "Харалампиев");
-        Teacher teacher = new Teacher();
-        teacher.setUser(teacherUser);
-        teacher.getSkills().add(subjects.get(0));
-        teacherRepository.save(teacher);
+        {
+            User teacherUser = createUser(User.Role.teacher, "Унуфри", "Методиев", "Харалампиев");
+            Teacher teacher = new Teacher();
+            teacher.setUser(teacherUser);
+            teacher.getSkills().add(subjects.get(0));
+            teacherRepository.save(teacher);
+            teachers.add(teacher);
+        }
+        {
+            User teacherUser = createUser(User.Role.teacher, "Генади", "Захариев", "Хаджитошев");
+            Teacher teacher = new Teacher();
+            teacher.setUser(teacherUser);
+            teacher.getSkills().add(subjects.get(0));
+            teacherRepository.save(teacher);
+            teachers.add(teacher);
+        }
     }
 
     private void createStudents() {
         createStudent("Гошко", "Георгиев", "Гошев");
         createStudent("Тошко", "Теодоров", "Тодоров");
+        createStudent("Лъв", "Леонидов", "Котов");
     }
 
     private void createStudent(String firstName, String middleName, String lastName) {
@@ -184,6 +201,20 @@ public class InitializationFilter implements Filter {
         student.setUser(studentUser);
         student.getMarks().add(new Mark(student, subjects.get(0), 599));
         studentRepository.save(student);
+        students.add(student);
+    }
+
+    private void createSchoolClasses() {
+        SchoolClass schoolClass = new SchoolClass();
+        schoolClass.setBeginningSchoolYear(schoolYear);
+        schoolClass.setName("А");
+        schoolClass.setBeginningGrade(grades.get(9));
+        schoolClass.setFormMaster(teachers.get(0));
+        schoolClassRepository.save(schoolClass);
+        students.get(0).setSchoolClass(schoolClass);
+        studentRepository.save(students.get(0));
+        students.get(1).setSchoolClass(schoolClass);
+        studentRepository.save(students.get(1));
     }
 
     private User createUser(User.Role role, String firstName, String middleName, String lastName) {

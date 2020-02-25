@@ -54,16 +54,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             securedController.configure(registry);
         }
         registry
-            .anyRequest().authenticated()
-            .and()
+            .anyRequest()
+                .authenticated()
+                .and()
             .formLogin()
-            .loginPage("/sign-in")
-            .permitAll()
-            .successHandler(successHandler())
-            .and()
+                .loginPage("/sign-in")
+                .permitAll()
+                .successHandler(successHandler())
+                .and()
             .logout()
-            .logoutUrl("/sign-out")
-            .permitAll();
+                .logoutUrl("/sign-out")
+                .permitAll()
+                .and()
+            .headers()
+                .frameOptions()
+                .sameOrigin();
     }
 
     @Bean

@@ -36,7 +36,11 @@ public class RedirectingLoginUrlAuthenticationEntryPoint extends LoginUrlAuthent
         uriComponentsBuilder.path(locale.toLanguageTag() + uri.getPath());
         uriComponentsBuilder.query(uri.getQuery());
         uriComponentsBuilder.fragment(uri.getFragment());
-        uriComponentsBuilder.queryParam("requested", encode(request.getRequestURI()));
+        String requestUri = request.getRequestURI();
+        if (request.getQueryString() != null) {
+            requestUri += "?" + request.getQueryString();
+        }
+        uriComponentsBuilder.queryParam("requested", encode(requestUri));
         return uriComponentsBuilder.build().toUriString();
     }
 

@@ -21,6 +21,8 @@ import java.time.LocalTime;
 @RequestMapping
 public class HomeController implements SecuredController, AuthorizedController {
     @Autowired
+    private Extensions extensions;
+    @Autowired
     private UserRepository userRepository;
 
     @Override
@@ -37,7 +39,7 @@ public class HomeController implements SecuredController, AuthorizedController {
         if (authentication.getPrincipal() instanceof User) {
             User user = (User) authentication.getPrincipal();
             if (user.getRole() == User.Role.student) {
-                model.addAttribute("lessons", new Object[] {
+                model.addAttribute("lessons", new Object[]{
                     new Object() {
                         public Object weeklySlot = new Object() {
                             public int ordinal = 1;
@@ -53,6 +55,8 @@ public class HomeController implements SecuredController, AuthorizedController {
                     }
                 });
                 return "student-home";
+            } else if (user.getRole() == User.Role.admin) {
+                return "redirect:" + extensions.getAdminUrls().adminIndex();
             } else {
                 return "home";
             }

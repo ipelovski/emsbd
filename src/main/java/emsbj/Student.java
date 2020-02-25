@@ -25,6 +25,7 @@ public class Student implements JournalPersistable {
     private User user;
     @ManyToOne
     private SchoolClass schoolClass;
+    private Integer number;
     @OneToMany(
         fetch = FetchType.LAZY,
         cascade = { CascadeType.PERSIST, CascadeType.REMOVE },
@@ -59,6 +60,14 @@ public class Student implements JournalPersistable {
 
     public void setSchoolClass(SchoolClass schoolClass) {
         this.schoolClass = schoolClass;
+    }
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
     }
 
     public List<Mark> getMarks() {

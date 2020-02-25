@@ -21,15 +21,18 @@
         </div>
     </div>
     <div class="pt4">
-        <img id="profile-picture" data-th-src="@{${x.u().profilePicture(user)}}">
+        <div data-th-replace="~{fragments/profile-picture::profilePicture(
+        imageSrc=@{${x.u().profilePicture(user)}},
+        imageSize=128,id='profilePicture')}">
+        </div>
         <script>
 window.onProfilePictureUpdated = function (newSrc) {
-    let profilePicture = document.getElementById('profile-picture');
+    let profilePicture = document.getElementById('profilePicture');
     profilePicture.src = newSrc;
 };
         </script>
     </div>
-    <div data-th-insert="~{fragments/file-upload(id='profile-picture',
+    <div data-th-insert="~{fragments/file-upload(id='profilePicture',
         target=@{${x.u().uploadProfilePicture(user)}},
         accept='image/png, image/jpeg',
         onSuccess='onProfilePictureUpdated')}"></div>

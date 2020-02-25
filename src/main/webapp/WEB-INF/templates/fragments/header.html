@@ -7,6 +7,7 @@
 <body>
     <div th:fragment="headResources" th:remove="tag">
         <link th:href="@{/css/basscss.min.css}" rel="stylesheet">
+        <link th:href="@{/css/micromodal.css}" rel="stylesheet">
     </div>
     <div th:fragment="header (activeUser)">
         <span th:text="#{greetingMessageBegin}"></span>

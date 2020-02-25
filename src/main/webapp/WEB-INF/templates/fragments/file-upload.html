@@ -14,7 +14,7 @@
         <script th:inline="javascript">
 {
     let form = document.getElementById([[${id}]] + '-form');
-    form.addEventListener('submit', function(ev) {
+    form.addEventListener('submit', function(e) {
         let output = document.getElementById([[${id}]] + '-output');
         let data = new FormData(form);
         let request = new XMLHttpRequest();
@@ -29,7 +29,7 @@
             }
         };
         request.send(data);
-        ev.preventDefault();
+        e.preventDefault();
     }, false);
 }
         </script>

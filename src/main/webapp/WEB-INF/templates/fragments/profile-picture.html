@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile Picture</title>
+</head>
+<body>
+    <img data-th-fragment="profilePicture(imageSrc)"
+         data-th-with="imageSize=${imageSize}?:32,id=${id}?:''"
+         data-th-id="${id}"
+         data-th-src="${imageSrc}"
+         data-th-width="${imageSize}" data-th-height="${imageSize}">
+</body>
+</html>

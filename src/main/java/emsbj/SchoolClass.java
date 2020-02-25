@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 public class SchoolClass implements JournalPersistable {
@@ -24,11 +26,17 @@ public class SchoolClass implements JournalPersistable {
     private Teacher formMaster;
     @ManyToOne
     private Room classRoom;
+    @OneToMany(mappedBy = "schoolClass")
+    private List<Student> students;
     private Integer shift;
 
     @Override
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -85,6 +93,14 @@ public class SchoolClass implements JournalPersistable {
 
     public void setClassRoom(Room classRoom) {
         this.classRoom = classRoom;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
     }
 
     public Integer getShift() {
