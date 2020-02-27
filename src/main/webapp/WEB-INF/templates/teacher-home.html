@@ -19,7 +19,7 @@
             <tr data-th-each="lesson : ${lessons}">
                 <td data-th-text="|${lesson.weeklySlot.ordinal} (${lesson.weeklySlot.begin})|"></td>
                 <td data-th-text="${lesson.course.subject.name.value}"></td>
-                <td data-th-text="${lesson.course.teachers.get(0).teacher.user.personalInfo.getName()}"></td>
+                <td data-th-text="${lesson.course.teacher.user.personalInfo.getName()}"></td>
                 <td data-th-text="${lesson.course.room.name}"></td>
             </tr>
         </tbody>

@@ -8,7 +8,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import java.util.List;
 
 @Entity
@@ -16,8 +15,8 @@ public class Course implements JournalPersistable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @OneToMany(mappedBy = "course")
-    private List<TeacherAssignment> teachers;
+    @ManyToOne
+    private Teacher teacher;
     @ManyToOne
     private SchoolClass schoolClass;
     @ManyToOne
@@ -42,12 +41,12 @@ public class Course implements JournalPersistable {
         return id;
     }
 
-    public List<TeacherAssignment> getTeachers() {
-        return teachers;
+    public Teacher getTeacher() {
+        return teacher;
     }
 
-    public void setTeachers(List<TeacherAssignment> teachers) {
-        this.teachers = teachers;
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
     }
 
     public SchoolClass getSchoolClass() {

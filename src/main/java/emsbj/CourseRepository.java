@@ -9,9 +9,8 @@ import java.time.LocalTime;
 
 public interface CourseRepository extends CrudRepository<Course, Long> {
     @Query("select new emsbj.Lesson(c, ws) from Course c" +
-        " left join TeacherAssignment ta on ta.course = c.id" +
         " left join c.weeklySlots ws" +
-        " where ta.teacher = :teacher" +
+        " where c.teacher = :teacher" +
         " and ws.day = :dayOfWeek" +
         " and ws.begin > :currentTime")
     Iterable<Lesson> findAllForToday(

@@ -55,8 +55,6 @@ public class InitializationFilter implements Filter {
     private CourseRepository courseRepository;
     @Autowired
     private RoomRepository roomRepository;
-    @Autowired
-    private TeacherAssignmentRepository teacherAssignmentRepository;
     private boolean initialized;
     private SchoolYear schoolYear;
     private Map<Integer, Grade> grades = new HashMap<>(4);
@@ -246,6 +244,7 @@ public class InitializationFilter implements Filter {
         Course course = new Course();
         course.setSubject(subjects.get(0));
         course.setRoom(rooms.get(0));
+        course.setTeacher(teachers.get(0));
         course.setSchoolClass(schoolClasses.get(0));
         course.setTerm(schoolYear.getTerms().get(0));
         List<WeeklySlot> courseWeeklySlots = new ArrayList<>(2);
@@ -253,10 +252,6 @@ public class InitializationFilter implements Filter {
         courseWeeklySlots.add(weeklySlots.get(1));
         course.setWeeklySlots(courseWeeklySlots);
         courseRepository.save(course);
-        TeacherAssignment teacherAssignment = new TeacherAssignment();
-        teacherAssignment.setCourse(course);
-        teacherAssignment.setTeacher(teachers.get(0));
-        teacherAssignmentRepository.save(teacherAssignment);
     }
 
     private User createUser(User.Role role, String firstName, String middleName, String lastName) {

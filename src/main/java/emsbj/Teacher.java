@@ -2,13 +2,11 @@ package emsbj;
 
 import emsbj.user.User;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.util.ArrayList;
@@ -24,7 +22,7 @@ public class Teacher implements JournalPersistable {
     @ManyToMany
     private List<Subject> skills = new ArrayList<>();
     @OneToMany(mappedBy = "teacher")
-    private List<TeacherAssignment> assignments = new ArrayList<>();
+    private List<Course> courses = new ArrayList<>();
     @OneToMany(mappedBy = "formMaster")
     private List<SchoolClass> formMasterOf = new ArrayList<>();
 
@@ -49,12 +47,12 @@ public class Teacher implements JournalPersistable {
         this.skills = skills;
     }
 
-    public List<TeacherAssignment> getAssignments() {
-        return assignments;
+    public List<Course> getCourses() {
+        return courses;
     }
 
-    public void setAssignments(List<TeacherAssignment> assignments) {
-        this.assignments = assignments;
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
     }
 
     public List<SchoolClass> getFormMasterOf() {
