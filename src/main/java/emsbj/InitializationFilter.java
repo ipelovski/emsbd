@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -50,12 +51,21 @@ public class InitializationFilter implements Filter {
     private WeeklySlotRepository weeklySlotRepository;
     @Autowired
     private BlobRepository blobRepository;
+    @Autowired
+    private CourseRepository courseRepository;
+    @Autowired
+    private RoomRepository roomRepository;
+    @Autowired
+    private TeacherAssignmentRepository teacherAssignmentRepository;
     private boolean initialized;
     private SchoolYear schoolYear;
     private Map<Integer, Grade> grades = new HashMap<>(4);
     private List<Subject> subjects = new LinkedList<>();
     private List<Teacher> teachers = new LinkedList<>();
     private List<Student> students = new LinkedList<>();
+    private List<Room> rooms = new LinkedList<>();
+    private List<SchoolClass> schoolClasses = new LinkedList<>();
+    private List<WeeklySlot> weeklySlots = new LinkedList<>();
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -87,6 +97,8 @@ public class InitializationFilter implements Filter {
         createTeachers();
         createStudents();
         createSchoolClasses();
+        createRooms();
+        createCourses();
         initialized = true;
     }
 
@@ -117,6 +129,7 @@ public class InitializationFilter implements Filter {
         termRepository.save(firstTerm);
         Term secondTerm = new Term(schoolYear, "II");
         termRepository.save(secondTerm);
+        schoolYear = schoolYearRepository.findByIdWithAll(schoolYear.getId()).get();
     }
 
     private void createGrades() {
@@ -154,6 +167,7 @@ public class InitializationFilter implements Filter {
                     WeeklySlot lesson = new WeeklySlot(
                         DayOfWeek.of(day), shift, ordinal, begin, end);
                     weeklySlotRepository.save(lesson);
+                    weeklySlots.add(lesson);
                     if (ordinal == lessonsBeforeLongBreak) {
                         begin = end.plus(longBreakDuration);
                     }
@@ -210,11 +224,39 @@ public class InitializationFilter implements Filter {
         schoolClass.setName("А");
         schoolClass.setBeginningGrade(grades.get(9));
         schoolClass.setFormMaster(teachers.get(0));
+        schoolClasses.add(schoolClass);
         schoolClassRepository.save(schoolClass);
         students.get(0).setSchoolClass(schoolClass);
+        students.get(0).setNumber(1);
         studentRepository.save(students.get(0));
         students.get(1).setSchoolClass(schoolClass);
+        students.get(1).setNumber(2);
         studentRepository.save(students.get(1));
+    }
+
+    private void createRooms() {
+        Room room = new Room();
+        room.setName("1");
+        room.setFloor(1);
+        roomRepository.save(room);
+        rooms.add(room);
+    }
+
+    private void createCourses() {
+        Course course = new Course();
+        course.setSubject(subjects.get(0));
+        course.setRoom(rooms.get(0));
+        course.setSchoolClass(schoolClasses.get(0));
+        course.setTerm(schoolYear.getTerms().get(0));
+        List<WeeklySlot> courseWeeklySlots = new ArrayList<>(2);
+        courseWeeklySlots.add(weeklySlots.get(0));
+        courseWeeklySlots.add(weeklySlots.get(1));
+        course.setWeeklySlots(courseWeeklySlots);
+        courseRepository.save(course);
+        TeacherAssignment teacherAssignment = new TeacherAssignment();
+        teacherAssignment.setCourse(course);
+        teacherAssignment.setTeacher(teachers.get(0));
+        teacherAssignmentRepository.save(teacherAssignment);
     }
 
     private User createUser(User.Role role, String firstName, String middleName, String lastName) {

@@ -6,7 +6,7 @@
     <link data-th-replace="~{fragments/header :: headResources}">
 </head>
 <body>
-    <div class="fixed left-0 right-0 top-0 lg-flex flex-wrap mx4 my2">
+    <div class="fixed left-0 right-0 top-0 flex flex-wrap mx4 my2">
         <div class="col col-3">
             <a data-th-href="@{${x.u().home()}}" data-th-text="${x.c('home')}"></a>
         </div>
@@ -36,7 +36,7 @@ window.onProfilePictureUpdated = function (newSrc) {
         target=@{${x.u().uploadProfilePicture(user)}},
         accept='image/png, image/jpeg',
         onSuccess='onProfilePictureUpdated')}"></div>
-    <div class="sm-flex flex-wrap" data-th-object="${user}">
+    <div class="flex flex-wrap" data-th-object="${user}">
         <div class="col col-4">
             <label class="label" for="username">Username:</label>
         </div>

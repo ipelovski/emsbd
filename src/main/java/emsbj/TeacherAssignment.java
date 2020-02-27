@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class TeacherAssignment implements JournalPersistable {
@@ -12,10 +13,11 @@ public class TeacherAssignment implements JournalPersistable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @ManyToOne
+    @NotNull
     private Teacher teacher;
     @ManyToOne
+    @NotNull
     private Course course;
-    private boolean substitute;
 
     @Override
     public Long getId() {
@@ -36,13 +38,5 @@ public class TeacherAssignment implements JournalPersistable {
 
     public void setCourse(Course course) {
         this.course = course;
-    }
-
-    public boolean isSubstitute() {
-        return substitute;
-    }
-
-    public void setSubstitute(boolean substitute) {
-        this.substitute = substitute;
     }
 }

@@ -2,23 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Courses</title>
+    <title>Rooms</title>
 </head>
 <body>
     <p>
         <a data-th-href="@{${x.au().adminIndex()}}">Back to administration home</a>
     </p>
+    <p>
+        <a data-th-href="@{${x.au().addRoom()}}">Add new</a>
+    </p>
     <table>
         <thead>
             <tr>
-                <th>Subject</th>
-                <th>Class</th>
+                <th>Name</th>
+                <th>Floor</th>
             </tr>
         </thead>
         <tbody>
-            <tr data-th-each="course : ${courses}">
-                <td data-th-text="${course.subject.name.value}"></td>
-                <td data-th-text="${course.schoolClass.name}"></td>
+            <tr data-th-each="room : ${rooms}">
+                <td data-th-text="${room.name}"></td>
+                <td data-th-text="${room.floor}"></td>
             </tr>
         </tbody>
     </table>

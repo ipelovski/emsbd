@@ -51,7 +51,7 @@ public class AdminStudentController implements LocalizedController {
     ) {
         Iterable<Student> students;
         if (studentIds != null) {
-            students = studentRepository.findAllById(studentIds);
+            students = studentRepository.findByIdInOrderByNumberAsc(studentIds);
         } else {
             students = studentRepository.findAll();
         }

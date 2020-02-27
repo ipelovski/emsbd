@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+    <p data-th-replace="~{fragments/header::header(${activeUser})}"></p>
+    <table>
+        <thead>
+            <tr>
+                <th>Lesson (hour)</th>
+                <th>Subject</th>
+                <th>Teacher</th>
+                <th>Room</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-th-each="lesson : ${lessons}">
+                <td data-th-text="|${lesson.weeklySlot.ordinal} (${lesson.weeklySlot.begin})|"></td>
+                <td data-th-text="${lesson.course.subject.name.value}"></td>
+                <td data-th-text="${lesson.course.teachers.get(0).teacher.user.personalInfo.getName()}"></td>
+                <td data-th-text="${lesson.course.room.name}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

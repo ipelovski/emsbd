@@ -36,7 +36,7 @@ window.onProfilePictureUpdated = function (newSrc) {
 <!--    TODO @{${#httpServletRequest.requestURI}}-->
     <form th:if="${user != null}" th:object="${user}"
           th:action="@{${#httpServletRequest.requestURI}}"
-          method="post" class="sm-flex mx-auto">
+          method="post" class="flex mx-auto">
         <fieldset class="">
             <legend th:text="Details"></legend>
             <div class="col col-4">

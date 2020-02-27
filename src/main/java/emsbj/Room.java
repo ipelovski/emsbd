@@ -14,11 +14,31 @@ public class Room implements JournalPersistable {
     private Long id;
     private Integer floor;
     private String name;
-    @OneToMany
+    @OneToMany(mappedBy = "classRoom")
     private List<SchoolClass> classRoomOf;
 
     @Override
     public Long getId() {
         return id;
+    }
+
+    public Integer getFloor() {
+        return floor;
+    }
+
+    public void setFloor(Integer floor) {
+        this.floor = floor;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<SchoolClass> getClassRoomOf() {
+        return classRoomOf;
     }
 }

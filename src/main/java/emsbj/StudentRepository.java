@@ -12,5 +12,5 @@ public interface StudentRepository extends CrudRepository<Student, Long> {
         "inner join User u on s.user = u.id " +
         "where u.personalInfo.lastName = ?1")
     List<Student> findByLastName(String lastName);
-    Optional<Student> findById(long id);
+    Iterable<Student> findByIdInOrderByNumberAsc(Iterable<Long> ids);
 }

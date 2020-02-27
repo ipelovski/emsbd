@@ -6,38 +6,40 @@
     <link data-th-replace="~{fragments/header :: headResources}">
 </head>
 <body>
+    <p>
+        <a data-th-href="@{${x.au().schoolClasses()}}">Back to classes</a>
+    </p>
     <form data-th-action="${schoolClass.isNew() ? x.au().addSchoolClass() : x.au().schoolClass(schoolClass)}" method="post">
         <fieldset data-th-object="${schoolClass}">
             <legend data-th-text="${schoolClass.isNew() ? 'Add' : 'Edit'}"></legend>
-            <label for="name" data-th-text="'Name'"></label>
-            <input type="text" id="name" data-th-field="*{name}">
-            <label for="beginningSchoolYear" data-th-text="'Beginning school year'"></label>
-            <select id="beginningSchoolYear" data-th-field="*{beginningSchoolYear}">
+            <label for="name" class="label" data-th-text="'Name'"></label>
+            <input type="text" id="name" class="input" data-th-field="*{name}">
+            <label for="beginningSchoolYear" class="label" data-th-text="'Beginning school year'"></label>
+            <select id="beginningSchoolYear" class="select" data-th-field="*{beginningSchoolYear}">
                 <option data-th-each="schoolYear : ${schoolYears}"
                         data-th-value="${schoolYear.id}" data-th-text="${schoolYear.name()}"></option>
             </select>
-            <label for="beginningGrade" data-th-text="'Beginning grade'"></label>
-            <select id="beginningGrade" data-th-field="*{beginningGrade}">
+            <label for="beginningGrade" class="label" data-th-text="'Beginning grade'"></label>
+            <select id="beginningGrade" class="select" data-th-field="*{beginningGrade}">
                 <option data-th-each="grade : ${grades}"
                         data-th-value="${grade.id}" data-th-text="${grade.name}"></option>
             </select>
-            <label for="formMaster" data-th-text="'Form-master'"></label>
+            <label for="formMaster" class="label" data-th-text="'Form-master'"></label>
             <input type="text" id="formMaster" class="display-none" data-th-field="*{formMaster}">
             <div id="formMasterContainer"></div>
-            <input type="hidden" id="formMasterId"
-                   data-th-value="${schoolClass.formMaster!=null?schoolClass.formMaster.id:''}">
-            <input type="button" id="changeFormMaster" data-th-value="'Select'">
-            <label for="classRoom" data-th-text="'Class room'"></label>
-            <select id="classRoom" data-th-field="*{classRoom}">
+            <input type="button" id="changeFormMaster" class="btn btn-primary bg-olive" data-th-value="'Select'">
+            <label for="classRoom" class="label" data-th-text="'Class room'"></label>
+            <select id="classRoom" class="select" data-th-field="*{classRoom}">
+                <option data-th-value="null">No room</option>
                 <option data-th-each="room : ${rooms}"
                         data-th-value="${room.id}" data-th-text="${room.floor + ' ' + room.name}"></option>
             </select>
-            <label data-th-text="'Students'"></label>
-            <input type="button" id="selectStudents" data-th-value="'Select students'">
+            <label class="label" data-th-text="'Students'"></label>
+            <input type="button" id="selectStudents" class="btn btn-primary bg-olive" data-th-value="'Select students'">
             <div id="studentsContainer"></div>
             <input type="text" id="students" class="display-none" data-th-field="*{students}">
         </fieldset>
-        <input type="submit" value="Save">
+        <input type="submit" class="btn btn-primary bg-olive" value="Save">
     </form>
     <div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
         <div class="modal__overlay" tabindex="-1" data-micromodal-close>
@@ -51,14 +53,9 @@
                 <main class="modal__content" id="modal-1-content">
                     <p id="modalBodyContainer"></p>
                 </main>
-                <footer class="modal__footer">
-                    <button class="modal__btn modal__btn-primary">Continue</button>
-                    <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">Close</button>
-                </footer>
             </div>
         </div>
     </div>
-    <button type="button" id="openDialog">Open dialog</button>
     <script type="module" data-th-inline="javascript">
 import { Fragment, ListFragment } from [[@{/js/fragment.js}]];
 import MicroModal from [[@{/js/micromodal.js}]];
@@ -69,7 +66,7 @@ let formMaster = new Fragment('formMasterContainer',
         id: 'formMaster',
         mode: 'details',
         teacherIds() {
-            return [document.getElementById('formMasterId').value];
+            return [document.getElementById('formMaster').value];
         }
     });
 formMaster.load();
@@ -77,7 +74,6 @@ let selectFormMaster = new ListFragment(
     'singleSelect', function(teacherId) {
         MicroModal.close('modal-1');
         document.getElementById('formMaster').value = teacherId;
-        document.getElementById('formMasterId').value = teacherId;
         formMaster.load();
     },
     'modalBodyContainer', [[${x.au().selectFormMasterFragment()}]], {

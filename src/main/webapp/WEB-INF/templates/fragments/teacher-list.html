@@ -9,7 +9,7 @@
     <div data-th-fragment="teacherList(id, teachers, mode)" data-th-remove="tag">
         <ul data-th-id="${id}">
             <li>
-                <div class="lg-flex flex-wrap">
+                <div class="flex flex-wrap">
                     <div data-th-replace="~{fragments/list-fragments::listHeader(${mode})}"></div>
                     <div class="col col-3" data-th-text="'Picture'"></div>
                     <div class="col col-3" data-th-text="'Name'"></div>
@@ -18,7 +18,7 @@
                 </div>
             </li>
             <li data-th-each="teacher : ${teachers}">
-                <div class="lg-flex flex-wrap">
+                <div class="flex flex-wrap">
                     <div data-th-replace="~{fragments/list-fragments::listBody(mode=${mode},detailsUrl=${x.au().teacher(teacher)},objectId=${teacher.id})}">
                     </div>
                     <div class="col col-3" data-th-insert="~{fragments/profile-picture::profilePicture(@{${x.u().profilePicture(teacher.user)}})}">

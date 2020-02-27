@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 @Controller
@@ -24,6 +25,10 @@ public class HomeController implements SecuredController, AuthorizedController {
     private Extensions extensions;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private CourseRepository courseRepository;
+    @Autowired
+    private TeacherRepository teacherRepository;
 
     @Override
     public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {
@@ -55,6 +60,13 @@ public class HomeController implements SecuredController, AuthorizedController {
                     }
                 });
                 return "student-home";
+            } else if (user.getRole() == User.Role.teacher) {
+                Teacher teacher = teacherRepository.findByUserId(user.getId()).get();
+                Iterable<Lesson> lessons = courseRepository.findAllForToday(
+                    teacher, DayOfWeek.MONDAY, LocalTime.of(6, 0)
+                );
+                model.addAttribute("lessons", lessons);
+                return "teacher-home";
             } else if (user.getRole() == User.Role.admin) {
                 return "redirect:" + extensions.getAdminUrls().adminIndex();
             } else {

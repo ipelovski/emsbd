@@ -23,7 +23,7 @@ public class Teacher implements JournalPersistable {
     private User user;
     @ManyToMany
     private List<Subject> skills = new ArrayList<>();
-    @OneToMany
+    @OneToMany(mappedBy = "teacher")
     private List<TeacherAssignment> assignments = new ArrayList<>();
     @OneToMany(mappedBy = "formMaster")
     private List<SchoolClass> formMasterOf = new ArrayList<>();

@@ -1,7 +1,9 @@
 package emsbj;
 
 import emsbj.admin.AdminController;
+import emsbj.admin.AdminCourseController;
 import emsbj.admin.AdminGradeController;
+import emsbj.admin.AdminRoomController;
 import emsbj.admin.AdminScheduleController;
 import emsbj.admin.AdminSchoolClassController;
 import emsbj.admin.AdminSchoolYearController;
@@ -253,6 +255,18 @@ public class Extensions {
 
         public String weeklySlots() {
             return getUrl(AdminScheduleController.class, AdminScheduleController.weeklySlotsList);
+        }
+
+        public String rooms() {
+            return getUrl(AdminRoomController.class, WebMvcConfig.listName);
+        }
+
+        public String addRoom() {
+            return getUrl(AdminRoomController.class, WebMvcConfig.addName);
+        }
+
+        public String courses() {
+            return getUrl(AdminCourseController.class, WebMvcConfig.listName);
         }
     }
 

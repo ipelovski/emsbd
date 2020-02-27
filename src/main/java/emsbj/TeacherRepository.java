@@ -4,6 +4,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.Optional;
+
 public interface TeacherRepository extends CrudRepository<Teacher, Long> {
     @Query("select new emsbj.FormMaster(t, COUNT(sc.id) as schoolClasses," +
         " u.personalInfo.firstName as firstName," +
@@ -14,4 +16,6 @@ public interface TeacherRepository extends CrudRepository<Teacher, Long> {
         " left join SchoolClass sc on sc.formMaster = t.id" +
         " group by sc.formMaster")
     Iterable<FormMaster> findAllOrderByFormMaster(Sort sort);
+
+    Optional<Teacher> findByUserId(Long userId);
 }
