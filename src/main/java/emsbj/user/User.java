@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -205,11 +206,11 @@ public class User implements UserDetails, JournalPersistable {
         public static String createHierarchy(Map<Role, Role[]> hierarchy) {
             return hierarchy.entrySet().stream()
                 .map(roleEntry -> roleEntry.getKey().includes(roleEntry.getValue()))
-                .collect(Collectors.joining("\n"));
+                .collect(Collectors.joining(System.lineSeparator()));
         }
 
         public static String createHierarchy(Role[]... rules) {
-            Map<Role, Role[]> hierarchy = new HashMap<>(rules.length);
+            Map<Role, Role[]> hierarchy = new LinkedHashMap<>(rules.length);
             for (int i = 0; i < rules.length; i++) {
                 Role[] rule = rules[i];
                 assert rule.length > 1;

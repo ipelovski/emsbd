@@ -16,7 +16,7 @@ public class AdminController implements SecuredController, LocalizedController {
     @Override
     public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {
         registry
-            .antMatchers(WebMvcConfig.localePathParam + "/admin**")
+            .antMatchers(WebMvcConfig.localePathParam + "/admin/**")
             .hasRole(User.Role.admin.name().toUpperCase());
     }
 

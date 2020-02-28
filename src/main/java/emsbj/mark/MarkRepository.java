@@ -1,6 +1,5 @@
 package emsbj.mark;
 
-import emsbj.Grade;
 import emsbj.SchoolClass;
 import emsbj.Subject;
 import org.springframework.data.repository.CrudRepository;

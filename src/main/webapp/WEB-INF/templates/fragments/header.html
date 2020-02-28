@@ -5,22 +5,22 @@
     <title>Header</title>
 </head>
 <body>
-    <div th:fragment="headResources" th:remove="tag">
-        <link th:href="@{/css/basscss.min.css}" rel="stylesheet">
-        <link th:href="@{/css/micromodal.css}" rel="stylesheet">
+    <div data-th-fragment="headResources" data-th-remove="tag">
+        <link data-th-href="@{/css/basscss.min.css}" rel="stylesheet">
+        <link data-th-href="@{/css/micromodal.css}" rel="stylesheet">
     </div>
-    <div th:fragment="header (activeUser)">
-        <span th:text="#{greetingMessageBegin}"></span>
-        <span th:if="${activeUser.isAnonymous()}" th:text="${activeUser.username}"></span>
-        <a th:if="${!activeUser.isAnonymous()}" th:href="@{${x.u().profile()}}" th:text="${activeUser.username}"></a>
-        <span th:text="#{greetingMessageEnd}"></span>
-        <span th:if="${activeUser.isAnonymous()}">
-            <a th:href="@{${x.u().signIn()}}" th:text="${x.c('signIn')}">Sign in</a>
-            <span th:text="#{or}">or</span>
-            <a th:href="@{${x.u().signUp()}}" th:text="${x.c('signUp')}">Sign up</a>
+    <div data-th-fragment="header (activeUser)">
+        <span data-th-text="#{greetingMessageBegin}"></span>
+        <span data-th-if="${activeUser.isAnonymous()}" data-th-text="${activeUser.username}"></span>
+        <a data-th-if="${!activeUser.isAnonymous()}" data-th-href="@{${x.u().profile()}}" data-th-text="${activeUser.username}"></a>
+        <span data-th-text="#{greetingMessageEnd}"></span>
+        <span data-th-if="${activeUser.isAnonymous()}">
+            <a data-th-href="@{${x.u().signIn()}}" data-th-text="${x.c('signIn')}">Sign in</a>
+            <span data-th-text="#{or}">or</span>
+            <a data-th-href="@{${x.u().signUp()}}" data-th-text="${x.c('signUp')}">Sign up</a>
         </span>
-        <span th:if="${!activeUser.isAnonymous()}">
-            <a href="/sign-out" th:text="${x.c('signOut')}">Sign out</a>
+        <span data-th-if="${!activeUser.isAnonymous()}">
+            <a data-th-href="${x.u().signOut()}" data-th-text="${x.c('signOut')}">Sign out</a>
         </span>
     </div>
 </body>

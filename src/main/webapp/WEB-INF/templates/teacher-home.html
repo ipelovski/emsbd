@@ -3,26 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
+    <link data-th-replace="~{fragments/header :: headResources}">
 </head>
 <body>
     <p data-th-replace="~{fragments/header::header(${activeUser})}"></p>
-    <table>
-        <thead>
-            <tr>
-                <th>Lesson (hour)</th>
-                <th>Subject</th>
-                <th>Teacher</th>
-                <th>Room</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr data-th-each="lesson : ${lessons}">
-                <td data-th-text="|${lesson.weeklySlot.ordinal} (${lesson.weeklySlot.begin})|"></td>
-                <td data-th-text="${lesson.course.subject.name.value}"></td>
-                <td data-th-text="${lesson.course.teacher.user.personalInfo.getName()}"></td>
-                <td data-th-text="${lesson.course.room.name}"></td>
-            </tr>
-        </tbody>
-    </table>
+    <h3 data-th-text="|Lessons today ${currentDate}|"></h3>
+    <div data-th-if="${currentLessons.size() > 0}">
+        <h4>Current lesson</h4>
+        <div data-th-insert="~{fragments/teacher-lesson-list::lessonList(${currentLessons})}"></div>
+    </div>
+    <div data-th-if="${currentLessons.size() == 0}">
+        <h4>No current lesson</h4>
+    </div>
+    <div>
+        <h4>Next lessons</h4>
+        <div data-th-insert="~{fragments/teacher-lesson-list::lessonList(${nextLessons})}"></div>
+    </div>
+    <div>
+        <h4>Previous lessons</h4>
+        <div data-th-insert="~{fragments/teacher-lesson-list::lessonList(${previousLessons})}"></div>
+    </div>
 </body>
 </html>

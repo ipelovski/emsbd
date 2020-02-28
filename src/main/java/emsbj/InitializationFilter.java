@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 @Order(1000000)
@@ -248,8 +249,12 @@ public class InitializationFilter implements Filter {
         course.setSchoolClass(schoolClasses.get(0));
         course.setTerm(schoolYear.getTerms().get(0));
         List<WeeklySlot> courseWeeklySlots = new ArrayList<>(2);
-        courseWeeklySlots.add(weeklySlots.get(0));
-        courseWeeklySlots.add(weeklySlots.get(1));
+        for (DayOfWeek day : DayOfWeek.values()) {
+            Optional<WeeklySlot> optionalWeeklySlot = weeklySlots.stream()
+                .filter(weeklySlot -> weeklySlot.getDay() == day)
+                .findAny();
+            optionalWeeklySlot.ifPresent(courseWeeklySlots::add);
+        }
         course.setWeeklySlots(courseWeeklySlots);
         courseRepository.save(course);
     }

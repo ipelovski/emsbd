@@ -1,7 +1,9 @@
 package emsbj.config;
 
+import emsbj.Extensions;
 import emsbj.RedirectingAuthenticationSuccessHandler;
 import emsbj.RedirectingLoginUrlAuthenticationEntryPoint;
+import emsbj.UrlLocaleResolver;
 import emsbj.controller.SecuredController;
 import emsbj.user.JournalUserDetailsService;
 import emsbj.user.User;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,8 +22,15 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.ForwardLogoutSuccessHandler;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Locale;
 import java.util.Map;
 
 @Configuration
@@ -33,6 +43,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private JournalUserDetailsService userDetailsService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private Extensions extensions;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -58,13 +70,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticated()
                 .and()
             .formLogin()
-                .loginPage("/sign-in")
+                .loginPage(WebMvcConfig.localePathParam + "/sign-in")
                 .permitAll()
                 .successHandler(successHandler())
                 .and()
             .logout()
-                .logoutUrl("/sign-out")
+                .logoutUrl(WebMvcConfig.localePathParam + "/sign-out")
                 .permitAll()
+                .logoutSuccessHandler(new ForwardLogoutSuccessHandler("/") {
+                    @Override
+                    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+                        Locale locale = new UrlLocaleResolver().resolveLocale(request);
+                        String targetUrl = extensions.getUrls().signIn(locale);
+                        response.sendRedirect(targetUrl);
+                    }
+                })
                 .and()
             .headers()
                 .frameOptions()

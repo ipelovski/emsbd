@@ -16,7 +16,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Controller
 @RequestMapping
@@ -61,11 +66,29 @@ public class HomeController implements SecuredController, AuthorizedController {
                 });
                 return "student-home";
             } else if (user.getRole() == User.Role.teacher) {
+                LocalDate currentDate = LocalDate.now();
                 Teacher teacher = teacherRepository.findByUserId(user.getId()).get();
-                Iterable<Lesson> lessons = courseRepository.findAllForToday(
-                    teacher, DayOfWeek.MONDAY, LocalTime.of(6, 0)
-                );
-                model.addAttribute("lessons", lessons);
+                Iterable<Lesson> lessonsToday = courseRepository
+                    .findAllByTeacherAndDay(teacher, currentDate.getDayOfWeek());
+                LocalTime currentTime = LocalTime.now();
+                List<Lesson> previousLessons = StreamSupport
+                    .stream(lessonsToday.spliterator(), false)
+                    .filter(lesson -> lesson.getWeeklySlot().getEnd().isBefore(currentTime))
+                    .collect(Collectors.toList());
+                List<Lesson> nextLessons = StreamSupport
+                    .stream(lessonsToday.spliterator(), false)
+                    .filter(lesson -> lesson.getWeeklySlot().getBegin().isAfter(currentTime))
+                    .collect(Collectors.toList());
+                List<Lesson> currentLessons = StreamSupport
+                    .stream(lessonsToday.spliterator(), false)
+                    .filter(lesson ->
+                        lesson.getWeeklySlot().getBegin().isBefore(currentTime)
+                        && lesson.getWeeklySlot().getEnd().isAfter(currentTime))
+                    .collect(Collectors.toList());
+                model.addAttribute("currentDate", currentDate);
+                model.addAttribute("previousLessons", previousLessons);
+                model.addAttribute("nextLessons", nextLessons);
+                model.addAttribute("currentLessons", currentLessons);
                 return "teacher-home";
             } else if (user.getRole() == User.Role.admin) {
                 return "redirect:" + extensions.getAdminUrls().adminIndex();

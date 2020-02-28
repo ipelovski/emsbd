@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Course</title>
+    <link data-th-replace="~{fragments/header :: headResources}">
+</head>
+<body>
+    <ul>
+        <li class="flex flex-wrap">
+            <div class="col col-1" data-th-text="'Number'"></div>
+            <div class="col col-3" data-th-text="'Name'"></div>
+            <div class="col col-2" data-th-text="'Marks'"></div>
+            <div class="col col-2" data-th-text="'Average mark (total marks)'"></div>
+            <div class="col col-2" data-th-text="'Notes'"></div>
+            <div class="col col-2" data-th-text="'Absences'"></div>
+        </li>
+        <li class="flex flex-wrap" data-th-each="courseStudent:${courseStudents}">
+            <div class="col col-1" data-th-text="${courseStudent.number}"></div>
+            <div class="col col-3" data-th-text="${courseStudent.name}"></div>
+            <div class="col col-2">
+                <span data-th-each="mark:${courseStudent.marks}">
+                    <span data-th-text="${mark.score}" data-th-title="${mark.createdOn}"></span>
+                    <span>, </span>
+                </span>
+                <a class="addMark" href="#" data-th-attr="data-object-id = ${courseStudent.id}">+</a>
+                <form data-th-action="${x.u().course(course)}" method="post"
+                      data-th-attr="id = 'mark-form-' + ${courseStudent.id}"
+                      class="display-none" tabindex="0">
+                    <input type="reset" data-th-value="'X'">
+                    <input type="text" name="markScore">
+                    <input type="hidden" name="studentId" data-th-value="${courseStudent.id}">
+                    <input type="submit" data-th-value="'+'">
+                </form>
+            </div>
+            <div class="col col-2" data-th-text="${courseStudent.notes}"></div>
+            <div class="col col-2" data-th-text="|${courseStudent.averageMark != null ? courseStudent.averageMark : '-'} (${courseStudent.marks.size()})|"></div>
+            <div class="col col-2" data-th-text="${courseStudent.absences}"></div>
+        </li>
+    </ul>
+<script type="module">
+let lastFocusedForm = null;
+let addMarkButtons = document.querySelectorAll('.addMark');
+for (let addMarkButton of addMarkButtons) {
+    addMarkButton.addEventListener('click', addMarkClicked, false);
+}
+let resetButtons = document.querySelectorAll('input[type=reset]');
+for (let resetButton of resetButtons) {
+    resetButton.addEventListener('click', hideLastFocusedForm, false);
+}
+function addMarkClicked(e) {
+    hideLastFocusedForm();
+    let objectId = e.target.getAttribute('data-object-id');
+    let form = document.getElementById('mark-form-' + objectId);
+    form.classList.toggle('display-none');
+    let input = form.querySelector('input[type=text]');
+    input.focus();
+    lastFocusedForm = form;
+    e.preventDefault();
+}
+function hideLastFocusedForm() {
+    if (lastFocusedForm != null) {
+        hideForm(lastFocusedForm);
+        lastFocusedForm = null;
+    }
+}
+function hideForm(form) {
+    form.classList.toggle('display-none', true);
+}
+</script>
+</body>
+</html>

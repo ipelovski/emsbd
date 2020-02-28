@@ -29,6 +29,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.thymeleaf.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -78,13 +79,17 @@ public class Extensions {
     }
 
     public String localizedUrl(String url) {
+        Locale locale = LocaleContextHolder.getLocale();
+        return localizedUrl(url, locale);
+    }
+
+    public String localizedUrl(String url, Locale locale) {
         if (Strings.isBlank(url)) {
             throw new IllegalArgumentException("url should not be blank");
         }
         if (url.charAt(0) != '/') {
             throw new IllegalArgumentException("non absolute urls are not supported");
         }
-        Locale locale = LocaleContextHolder.getLocale();
         return "/" + locale.toLanguageTag() + url;
     }
 
@@ -115,7 +120,22 @@ public class Extensions {
             .uriParams(uriVariableValues).build();
     }
 
+    private String getUrl(HttpServletRequest request, Class<?> controllerType, String requestMappingName, Object... uriVariableValues) {
+        return new UrlBuilder(request, controllerType, requestMappingName)
+            .uriParams(uriVariableValues).build();
+    }
+
     public class Urls {
+        private HttpServletRequest request;
+
+        public Urls() {
+            this.request = null;
+        }
+
+        public Urls(HttpServletRequest request) {
+            this.request = request;
+        }
+
         public String home() {
             return getUrl(HomeController.class, WebMvcConfig.indexName);
         }
@@ -137,7 +157,11 @@ public class Extensions {
         }
 
         public String signIn() {
-            return getUrl(UserController.class, UserController.signIn);
+            return getUrl(request, UserController.class, UserController.signIn);
+        }
+
+        public String signIn(Locale locale) {
+            return localizedUrl("/sign-in", locale);
         }
 
         public String signInRole() {
@@ -148,8 +172,16 @@ public class Extensions {
             return getUrl(UserController.class, UserController.signUp);
         }
 
+        public String signOut() {
+            return localizedUrl("/sign-out");
+        }
+
         public String profile() {
             return getUrl(UserController.class, UserController.profile);
+        }
+
+        public String course(Course course) {
+            return getUrl(CourseController.class, WebMvcConfig.detailsName, course.getId());
         }
     }
 
@@ -272,12 +304,18 @@ public class Extensions {
 
     private static class UrlBuilder {
         private static final Map<String, Method> methods = new HashMap<>();
+        private final Optional<HttpServletRequest> request;
         private final Class<?> controllerType;
         private final String requestMappingName;
         private List<Object> uriParams;
         private Map<String, List<String>> queryParams;
 
         public UrlBuilder(Class<?> controllerType, String requestMappingName) {
+            this(null, controllerType, requestMappingName);
+        }
+
+        public UrlBuilder(HttpServletRequest request, Class<?> controllerType, String requestMappingName) {
+            this.request = Optional.ofNullable(request);
             Objects.requireNonNull(controllerType);
             Objects.requireNonNull(requestMappingName);
             this.controllerType = controllerType;
@@ -345,7 +383,7 @@ public class Extensions {
 
         // based on MvcUriComponentsBuilder.fromMethodInternal
         private UriComponentsBuilder fromMethod(Class<?> controllerType, Method method) {
-            UriComponentsBuilder builder = ServletUriComponentsBuilder.fromCurrentServletMapping();
+            UriComponentsBuilder builder = fromRequest();
             String prefix = getPathPrefix(controllerType);
             builder.path(prefix);
             String typePath = getRequestMappingPath(controllerType);
@@ -353,6 +391,14 @@ public class Extensions {
             String path = new AntPathMatcher().combine(typePath, methodPath);
             builder.path(path);
             return builder;
+        }
+
+        private UriComponentsBuilder fromRequest() {
+            if (request.isPresent()) {
+                return ServletUriComponentsBuilder.fromRequest(request.get());
+            } else {
+                return ServletUriComponentsBuilder.fromCurrentServletMapping();
+            }
         }
 
         private String getPathPrefix(Class<?> controllerType) {
