@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Layout Template</title>
+    <link data-th-replace="~{fragments/header::headResources}">
+</head>
+<body>
+    <div data-th-insert="~{fragments/header::header(${activeUser})}"></div>
+    <div data-layout-fragment="content"></div>
+</body>
+</html>

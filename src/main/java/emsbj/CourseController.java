@@ -1,7 +1,7 @@
 package emsbj;
 
 import emsbj.config.WebMvcConfig;
-import emsbj.controller.LocalizedController;
+import emsbj.controller.AuthorizedController;
 import emsbj.controller.SecuredController;
 import emsbj.mark.Mark;
 import emsbj.mark.MarkRepository;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/courses")
-public class CourseController implements LocalizedController, SecuredController {
+public class CourseController implements AuthorizedController, SecuredController {
     @Autowired
     private CourseRepository courseRepository;
     @Autowired

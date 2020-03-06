@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Header</title>
@@ -9,7 +9,7 @@
         <link data-th-href="@{/css/basscss.min.css}" rel="stylesheet">
         <link data-th-href="@{/css/micromodal.css}" rel="stylesheet">
     </div>
-    <div data-th-fragment="header (activeUser)">
+    <div data-th-fragment="greetings(activeUser)">
         <span data-th-text="#{greetingMessageBegin}"></span>
         <span data-th-if="${activeUser.isAnonymous()}" data-th-text="${activeUser.username}"></span>
         <a data-th-if="${!activeUser.isAnonymous()}" data-th-href="@{${x.u().profile()}}" data-th-text="${activeUser.username}"></a>
@@ -22,6 +22,14 @@
         <span data-th-if="${!activeUser.isAnonymous()}">
             <a data-th-href="${x.u().signOut()}" data-th-text="${x.c('signOut')}">Sign out</a>
         </span>
+    </div>
+    <div data-th-fragment="menu(activeUser)">
+        <div data-th-if="${activeUser.role == T(emsbj.user.User.Role).student}">Student</div>
+        <div data-th-if="${activeUser.role == T(emsbj.user.User.Role).teacher}">Teacher</div>
+    </div>
+    <div data-th-fragment="header(activeUser)">
+        <div data-th-replace="::greetings(${activeUser})"></div>
+        <div data-th-replace="::menu(${activeUser})"></div>
     </div>
 </body>
 </html>

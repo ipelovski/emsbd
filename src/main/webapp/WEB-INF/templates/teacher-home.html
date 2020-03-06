@@ -6,7 +6,7 @@
     <link data-th-replace="~{fragments/header :: headResources}">
 </head>
 <body>
-    <p data-th-replace="~{fragments/header::header(${activeUser})}"></p>
+    <p data-th-replace="~{fragments/header::greetings(${activeUser})}"></p>
     <h3 data-th-text="|Lessons today ${currentDate}|"></h3>
     <div data-th-if="${currentLessons.size() > 0}">
         <h4>Current lesson</h4>

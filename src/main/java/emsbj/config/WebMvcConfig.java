@@ -3,6 +3,7 @@ package emsbj.config;
 import emsbj.UrlLocaleInterceptor;
 import emsbj.admin.AdminGradeController;
 import emsbj.controller.LocalizedController;
+import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -103,6 +104,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         // across different data types, so this flag is "false" by default
         // for safer backwards compatibility.
         templateEngine.setEnableSpringELCompiler(true);
+        templateEngine.addDialect(new LayoutDialect());
         return templateEngine;
     }
 
