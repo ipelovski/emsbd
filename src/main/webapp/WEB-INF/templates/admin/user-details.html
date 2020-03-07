@@ -1,110 +1,112 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${user == null ? x.l('userNotFound') : !user.isNew() ? x.l('detailsAbout', user.username) : x.l('createUser')}">Details</title>
-    <link th:href="@{/css/basscss.min.css}" rel="stylesheet">
+    <title data-th-text="${user == null ? x.l('userNotFound') : !user.isNew() ? x.l('detailsAbout', user.username) : x.l('createUser')}">Details</title>
+    <link data-th-href="@{/css/basscss.min.css}" rel="stylesheet">
 </head>
 <body>
-    <p>
-        <a th:href="@{${x.au().users()}}">Back to users</a>
-    </p>
-    <p th:if="${user == null}">
-        No user found!
-    </p>
+    <div data-layout-fragment="content">
+        <p>
+            <a data-th-href="@{${x.au().users()}}">Back to users</a>
+        </p>
+        <p data-th-if="${user == null}">
+            No user found!
+        </p>
 
-    <div th:if="${user != null}" th:object="${user}">
-        <div>
-            <img id="profile-picture" th:src="@{${x.u().profilePicture(user)}}">
-            <script>
+        <div data-th-if="${user != null}" data-th-object="${user}">
+            <div>
+                <img id="profile-picture" data-th-src="@{${x.u().profilePicture(user)}}">
+                <script>
 window.onProfilePictureUpdated = function (newSrc) {
     let profilePicture = document.getElementById('profile-picture');
     profilePicture.src = newSrc;
 };
-            </script>
-        </div>
-        <div>
-            <div th:insert="~{fragments/file-upload(id='profile-picture',
-                target=@{${x.u().uploadProfilePicture(user)}},
-                accept='image/png, image/jpeg',
-                onSuccess='onProfilePictureUpdated')}"></div>
-            <form>
-                <input type="submit" th:value="'Remove picture'">
-            </form>
-        </div>
-    </div>
-<!--    TODO @{${#httpServletRequest.requestURI}}-->
-    <form th:if="${user != null}" th:object="${user}"
-          th:action="@{${#httpServletRequest.requestURI}}"
-          method="post" class="flex mx-auto">
-        <fieldset class="">
-            <legend th:text="Details"></legend>
-            <div class="col-4">
-                <label class="label" for="username">Username:</label>
+                </script>
             </div>
-            <div class="col-8">
-                <input class="input" type="text" id="username" th:field="*{username}">
+            <div>
+                <div data-th-insert="~{fragments/file-upload(id='profile-picture',
+                    target=@{${x.u().uploadProfilePicture(user)}},
+                    accept='image/png, image/jpeg',
+                    onSuccess='onProfilePictureUpdated')}"></div>
+                <form>
+                    <input type="submit" data-th-value="'Remove picture'">
+                </form>
             </div>
-            <div th:if="${user.isNew()}">
+        </div>
+    <!--    TODO @{${#httpServletRequest.requestURI}}-->
+        <form data-th-if="${user != null}" data-th-object="${user}"
+              data-th-action="@{${#httpServletRequest.requestURI}}"
+              method="post" class="flex mx-auto">
+            <fieldset class="">
+                <legend data-th-text="Details"></legend>
                 <div class="col-4">
-                    <label class="label" for="password">Password:</label>
+                    <label class="label" for="username">Username:</label>
                 </div>
                 <div class="col-8">
-                    <input class="input" type="text" id="password" th:field="*{password}">
+                    <input class="input" type="text" id="username" data-th-field="*{username}">
                 </div>
-            </div>
-            <div class="col-4">
-                <label class="label" for="role">Role:</label>
-            </div>
-            <div class="col-8">
-                <select class="select" id="role" th:field="*{role}">
-                    <option value="user">Unspecified</option>
-                    <option value="student">Student</option>
-                    <option value="teacher">Teacher</option>
-                    <option value="admin">Admin</option>
-                    <option value="principal">Principal</option>
-                </select>
-            </div>
-            <div class="col-4">
-                <label class="label" for="email">Email:</label>
-            </div>
-            <div class="col-8">
-                <input class="input" type="text" id="email" th:field="*{email}">
-            </div>
-            <div class="col-4">
-                <label class="label" for="firstName">First name:</label>
-            </div>
-            <div class="col-8">
-                <input class="input" type="text" id="firstName" th:field="*{personalInfo.firstName}">
-            </div>
-            <div class="col-4">
-                <label class="label" for="middleName">Middle name:</label>
-            </div>
-            <div class="col-8">
-                <input class="input" type="text" id="middleName" th:field="*{personalInfo.middleName}">
-            </div>
-            <div class="col-4">
-                <label class="label" for="lastName">Last name:</label>
-            </div>
-            <div class="col-8">
-                <input class="input" type="text" id="lastName" th:field="*{personalInfo.lastName}">
-            </div>
-            <div class="col-4">
-                <label class="label" for="bornAt">Born at:</label>
-            </div>
-            <div class="col-8">
-                <input class="input" type="text" id="bornAt" th:field="*{personalInfo.bornAt}">
-            </div>
-            <div class="col-4">
-                <label class="label" for="address">Address:</label>
-            </div>
-            <div class="col-8">
-                <input class="input" type="text" id="address" th:field="*{personalInfo.address}">
-            </div>
-            <div class="col-12">
-                <input class="input" type="submit" th:value="${user.isNew() ? 'Create' : 'Update'}">
-            </div>
-        </fieldset>
-    </form>
+                <div data-th-if="${user.isNew()}">
+                    <div class="col-4">
+                        <label class="label" for="password">Password:</label>
+                    </div>
+                    <div class="col-8">
+                        <input class="input" type="text" id="password" data-th-field="*{password}">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <label class="label" for="role">Role:</label>
+                </div>
+                <div class="col-8">
+                    <select class="select" id="role" data-th-field="*{role}">
+                        <option value="user">Unspecified</option>
+                        <option value="student">Student</option>
+                        <option value="teacher">Teacher</option>
+                        <option value="admin">Admin</option>
+                        <option value="principal">Principal</option>
+                    </select>
+                </div>
+                <div class="col-4">
+                    <label class="label" for="email">Email:</label>
+                </div>
+                <div class="col-8">
+                    <input class="input" type="text" id="email" data-th-field="*{email}">
+                </div>
+                <div class="col-4">
+                    <label class="label" for="firstName">First name:</label>
+                </div>
+                <div class="col-8">
+                    <input class="input" type="text" id="firstName" data-th-field="*{personalInfo.firstName}">
+                </div>
+                <div class="col-4">
+                    <label class="label" for="middleName">Middle name:</label>
+                </div>
+                <div class="col-8">
+                    <input class="input" type="text" id="middleName" data-th-field="*{personalInfo.middleName}">
+                </div>
+                <div class="col-4">
+                    <label class="label" for="lastName">Last name:</label>
+                </div>
+                <div class="col-8">
+                    <input class="input" type="text" id="lastName" data-th-field="*{personalInfo.lastName}">
+                </div>
+                <div class="col-4">
+                    <label class="label" for="bornAt">Born at:</label>
+                </div>
+                <div class="col-8">
+                    <input class="input" type="text" id="bornAt" data-th-field="*{personalInfo.bornAt}">
+                </div>
+                <div class="col-4">
+                    <label class="label" for="address">Address:</label>
+                </div>
+                <div class="col-8">
+                    <input class="input" type="text" id="address" data-th-field="*{personalInfo.address}">
+                </div>
+                <div class="col-12">
+                    <input class="input" type="submit" data-th-value="${user.isNew() ? 'Create' : 'Update'}">
+                </div>
+            </fieldset>
+        </form>
+    </div>
 </body>
 </html>

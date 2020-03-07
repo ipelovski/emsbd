@@ -183,6 +183,10 @@ public class Extensions {
         public String course(Course course) {
             return getUrl(CourseController.class, WebMvcConfig.detailsName, course.getId());
         }
+
+        public String addNote() {
+            return getUrl(NoteController.class, WebMvcConfig.addName);
+        }
     }
 
     public class AdminUrls {

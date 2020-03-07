@@ -4,7 +4,7 @@ import emsbj.Extensions;
 import emsbj.Room;
 import emsbj.RoomRepository;
 import emsbj.config.WebMvcConfig;
-import emsbj.controller.LocalizedController;
+import emsbj.controller.AuthorizedController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/admin/rooms")
-public class AdminRoomController implements LocalizedController {
+public class AdminRoomController implements AuthorizedController {
     @Autowired
     private RoomRepository roomRepository;
     @Autowired

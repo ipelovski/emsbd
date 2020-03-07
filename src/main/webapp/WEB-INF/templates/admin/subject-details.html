@@ -1,26 +1,28 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${subject.isNew() ? 'Adding Subject' : 'Editing Subject'}"></title>
+    <title data-th-text="${subject.isNew() ? 'Adding Subject' : 'Editing Subject'}"></title>
 </head>
 <body>
-    <form th:action="@{${x.au().addSubject()}}" method="post">
-        <fieldset th:object="${subject}">
-            <legend th:text="${subject.isNew() ? 'Add' : 'Edit'}"></legend>
-            <p th:if="${!subject.isNew()}">
-                <label th:text="Id"></label>
-                <span th:text="*{id}"></span>
-            </p>
-            <label for="name" th:text="Name"></label>
-            <input type="text" id="name" th:field="*{name}">
-            <label for="gradeId" th:text="Grade"></label>
-            <select id="gradeId" th:field="*{gradeId}">
-                <option th:each="grade : ${grades}"
-                        th:value="${grade.id}" th:text="${grade.name}"></option>
-            </select>
-        </fieldset>
-        <input type="submit" value="Save">
-    </form>
+    <div data-layout-fragment="content">
+        <form data-th-action="@{${x.au().addSubject()}}" method="post">
+            <fieldset data-th-object="${subject}">
+                <legend data-th-text="${subject.isNew() ? 'Add' : 'Edit'}"></legend>
+                <p data-th-if="${!subject.isNew()}">
+                    <label data-th-text="Id"></label>
+                    <span data-th-text="*{id}"></span>
+                </p>
+                <label for="name" data-th-text="Name"></label>
+                <input type="text" id="name" data-th-field="*{name}">
+                <label for="gradeId" data-th-text="Grade"></label>
+                <select id="gradeId" data-th-field="*{gradeId}">
+                    <option data-th-each="grade : ${grades}"
+                            data-th-value="${grade.id}" data-th-text="${grade.name}"></option>
+                </select>
+            </fieldset>
+            <input type="submit" value="Save">
+        </form>
+    </div>
 </body>
 </html>

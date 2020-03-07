@@ -1,29 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
     <title>Rooms</title>
 </head>
 <body>
-    <p>
-        <a data-th-href="@{${x.au().adminIndex()}}">Back to administration home</a>
-    </p>
-    <p>
-        <a data-th-href="@{${x.au().addRoom()}}">Add new</a>
-    </p>
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Floor</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr data-th-each="room : ${rooms}">
-                <td data-th-text="${room.name}"></td>
-                <td data-th-text="${room.floor}"></td>
-            </tr>
-        </tbody>
-    </table>
+    <div data-layout-fragment="content">
+        <p>
+            <a data-th-href="@{${x.au().adminIndex()}}">Back to administration home</a>
+        </p>
+        <p>
+            <a data-th-href="@{${x.au().addRoom()}}">Add new</a>
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Floor</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-th-each="room : ${rooms}">
+                    <td data-th-text="${room.name}"></td>
+                    <td data-th-text="${room.floor}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

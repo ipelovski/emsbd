@@ -1,35 +1,37 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
     <title>Grades</title>
 </head>
 <body>
-    <p>
-        <a th:href="@{${x.au().adminIndex()}}">Back to administration home</a>
-    </p>
-    <form th:action="@{${x.au().addGrade()}}" th:object="${emptyGrade}" method="post">
-        <label for="name">Name</label>
-        <input type="text" id="name" th:field="*{name}">
-        <input type="submit" value="Add">
-    </form>
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Delete</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="grade : ${grades}">
-                <td th:text="${grade.name}"></td>
-                <td>
-                    <form>
-                        <input type="submit" value="Delete">
-                    </form>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div data-layout-fragment="content">
+        <p>
+            <a data-th-href="@{${x.au().adminIndex()}}">Back to administration home</a>
+        </p>
+        <form data-th-action="@{${x.au().addGrade()}}" data-th-object="${emptyGrade}" method="post">
+            <label for="name">Name</label>
+            <input type="text" id="name" data-th-field="*{name}">
+            <input type="submit" value="Add">
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-th-each="grade : ${grades}">
+                    <td data-th-text="${grade.name}"></td>
+                    <td>
+                        <form>
+                            <input type="submit" value="Delete">
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

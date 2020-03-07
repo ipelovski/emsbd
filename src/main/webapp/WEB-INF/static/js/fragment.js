@@ -1,5 +1,5 @@
 class Fragment {
-    constructor(elementId, controllerURL, search) {
+    constructor({elementId, controllerURL, search}) {
         this.elementId = elementId;
         this.controllerURL = controllerURL;
         this.search = this._checkSearch(search);
@@ -41,8 +41,8 @@ class Fragment {
     }
 }
 class ListFragment extends Fragment {
-    constructor(mode, onSelect, ...args) {
-        super(...args);
+    constructor({mode, onSelect, ...args}) {
+        super({...args});
         this.mode = mode;
         this.onSelect = onSelect;
     }

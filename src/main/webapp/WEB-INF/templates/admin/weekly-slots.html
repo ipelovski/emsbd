@@ -1,32 +1,34 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
     <title>Weekly Slots</title>
 </head>
 <body>
-    <p>
-        <a th:href="@{${x.au().adminIndex()}}">Back to administration home</a>
-    </p>
-    <table>
-        <thead>
-            <tr>
-                <th>Shift</th>
-                <th>Day</th>
-                <th>Ordinal</th>
-                <th>Begins</th>
-                <th>Ends</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="weeklySlot : ${weeklySlots}">
-                <td th:text="${weeklySlot.shift}"></td>
-                <td th:text="${weeklySlot.day}"></td>
-                <td th:text="${weeklySlot.ordinal}"></td>
-                <td th:text="${weeklySlot.begin}"></td>
-                <td th:text="${weeklySlot.end}"></td>
-            </tr>
-        </tbody>
-    </table>
+    <div data-layout-fragment="content">
+        <p>
+            <a data-th-href="@{${x.au().adminIndex()}}">Back to administration home</a>
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Shift</th>
+                    <th>Day</th>
+                    <th>Ordinal</th>
+                    <th>Begins</th>
+                    <th>Ends</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-th-each="weeklySlot : ${weeklySlots}">
+                    <td data-th-text="${weeklySlot.shift}"></td>
+                    <td data-th-text="${weeklySlot.day}"></td>
+                    <td data-th-text="${weeklySlot.ordinal}"></td>
+                    <td data-th-text="${weeklySlot.begin}"></td>
+                    <td data-th-text="${weeklySlot.end}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

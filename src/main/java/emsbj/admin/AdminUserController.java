@@ -1,7 +1,7 @@
 package emsbj.admin;
 
 import emsbj.config.WebMvcConfig;
-import emsbj.controller.LocalizedController;
+import emsbj.controller.AuthorizedController;
 import emsbj.user.User;
 import emsbj.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin/users")
-public class AdminUserController implements LocalizedController {
+public class AdminUserController implements AuthorizedController {
     @Autowired
     private UserRepository userRepository;
     @Autowired

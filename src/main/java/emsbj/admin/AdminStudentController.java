@@ -3,7 +3,7 @@ package emsbj.admin;
 import emsbj.Student;
 import emsbj.StudentRepository;
 import emsbj.config.WebMvcConfig;
-import emsbj.controller.LocalizedController;
+import emsbj.controller.AuthorizedController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin/students")
-public class AdminStudentController implements LocalizedController {
+public class AdminStudentController implements AuthorizedController {
     public static final String studentList = "studentList";
     @Autowired
     private StudentRepository studentRepository;

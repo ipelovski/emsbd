@@ -5,39 +5,47 @@
 </head>
 <body>
     <div data-layout-fragment="content">
-    <ul>
-        <li class="flex flex-wrap">
-            <div class="col-1" data-th-text="'Number'"></div>
-            <div class="col-3" data-th-text="'Name'"></div>
-            <div class="col-2" data-th-text="'Marks'"></div>
-            <div class="col-2" data-th-text="'Average mark (total marks)'"></div>
-            <div class="col-2" data-th-text="'Notes'"></div>
-            <div class="col-2" data-th-text="'Absences'"></div>
-        </li>
-        <li class="flex flex-wrap" data-th-each="courseStudent:${courseStudents}">
-            <div class="col-1" data-th-text="${courseStudent.number}"></div>
-            <div class="col-3" data-th-text="${courseStudent.name}"></div>
-            <div class="col-2">
-                <span data-th-each="mark:${courseStudent.marks}">
-                    <span data-th-text="${mark.score}" data-th-title="${mark.createdOn}"></span>
-                    <span>, </span>
-                </span>
-                <a class="addMark" href="#" data-th-attr="data-object-id = ${courseStudent.id}">+</a>
-                <form data-th-action="${x.u().course(course)}" method="post"
-                      data-th-attr="id = 'mark-form-' + ${courseStudent.id}"
-                      class="display-none" tabindex="0">
-                    <input type="reset" data-th-value="'X'">
-                    <input type="text" name="markScore">
-                    <input type="hidden" name="studentId" data-th-value="${courseStudent.id}">
-                    <input type="submit" data-th-value="'+'">
-                </form>
-            </div>
-            <div class="col-2" data-th-text="|${courseStudent.averageMark != null ? courseStudent.averageMark : '-'} (${courseStudent.marks.size()})|"></div>
-            <div class="col-2" data-th-text="${courseStudent.notes}"></div>
-            <div class="col-2" data-th-text="${courseStudent.absences}"></div>
-        </li>
-    </ul>
-<script type="module">
+        <ul>
+            <li class="flex flex-wrap">
+                <div class="col-1" data-th-text="'Number'"></div>
+                <div class="col-3" data-th-text="'Name'"></div>
+                <div class="col-2" data-th-text="'Marks'"></div>
+                <div class="col-2" data-th-text="'Average mark (total marks)'"></div>
+                <div class="col-2" data-th-text="'Notes'"></div>
+                <div class="col-2" data-th-text="'Absences'"></div>
+            </li>
+            <li class="flex flex-wrap" data-th-each="courseStudent:${courseStudents}">
+                <div class="col-1" data-th-text="${courseStudent.number}"></div>
+                <div class="col-3" data-th-text="${courseStudent.name}"></div>
+                <div class="col-2">
+                    <span data-th-each="mark:${courseStudent.marks}">
+                        <span data-th-text="${mark.score}" data-th-title="${mark.createdOn}"></span>
+                        <span>, </span>
+                    </span>
+                    <a class="addMark" href="#" data-th-attr="data-object-id = ${courseStudent.id}">+</a>
+                    <form data-th-action="${x.u().course(course)}" method="post"
+                          data-th-attr="id = 'mark-form-' + ${courseStudent.id}"
+                          class="display-none" tabindex="0">
+                        <input type="reset" data-th-value="'X'">
+                        <input type="text" name="markScore">
+                        <input type="hidden" name="studentId" data-th-value="${courseStudent.id}">
+                        <input type="submit" data-th-value="'+'">
+                    </form>
+                </div>
+                <div class="col-2" data-th-text="|${courseStudent.averageMark != null ? courseStudent.averageMark : '-'} (${courseStudent.marks.size()})|"></div>
+                <div class="col-2">
+                    <a class="addNote" href="#" data-th-attr="data-object-id = ${courseStudent.id}">+</a>
+                    <span data-th-text="${courseStudent.notes}"></span>
+                </div>
+                <div class="col-2" data-th-text="${courseStudent.absences}"></div>
+            </li>
+        </ul>
+        <div data-th-replace="~{fragments/modal-dialog::dialog('modalDialog')}"></div>
+        <script type="module" data-th-inline="javascript">
+import { Fragment } from [[@{/js/fragment.js}]];
+import Dialog from [[@{/js/modal-dialog.js}]];
+
+let dialog = new Dialog('modalDialog');
 let lastFocusedForm = null;
 let addMarkButtons = document.querySelectorAll('.addMark');
 for (let addMarkButton of addMarkButtons) {
@@ -66,7 +74,26 @@ function hideLastFocusedForm() {
 function hideForm(form) {
     form.classList.toggle('display-none', true);
 }
-</script>
+
+let addNoteButtons = document.querySelectorAll('.addNote');
+for (let addNoteButton of addNoteButtons) {
+    addNoteButton.addEventListener('click', addNoteClicked, false);
+}
+let addNoteFragment = new Fragment({
+    elementId: dialog.contentElementId,
+    controllerURL: [[${x.u().addNote()}]],
+    search: {}
+});
+function addNoteClicked(e) {
+    let objectId = e.target.getAttribute('data-object-id');
+    addNoteFragment.load({
+        studentId: objectId,
+        courseId: [[${course.id}]]
+    });
+    dialog.show();
+    e.preventDefault();
+}
+        </script>
     </div>
 </body>
 </html>

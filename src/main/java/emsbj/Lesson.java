@@ -1,12 +1,30 @@
 package emsbj;
 
-public class Lesson {
-    private Course course;
-    private WeeklySlot weeklySlot;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import java.time.LocalDateTime;
 
-    public Lesson(Course course, WeeklySlot weeklySlot) {
-        this.course = course;
-        this.weeklySlot = weeklySlot;
+@Entity
+public class Lesson implements JournalPersistable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @ManyToOne
+    private Course course;
+    @ManyToOne
+    private WeeklySlot weeklySlot;
+    private LocalDateTime begin;
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Course getCourse() {
@@ -23,5 +41,13 @@ public class Lesson {
 
     public void setWeeklySlot(WeeklySlot weeklySlot) {
         this.weeklySlot = weeklySlot;
+    }
+
+    public LocalDateTime getBegin() {
+        return begin;
+    }
+
+    public void setBegin(LocalDateTime begin) {
+        this.begin = begin;
     }
 }

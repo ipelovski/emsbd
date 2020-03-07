@@ -6,7 +6,7 @@ import emsbj.Subject;
 import emsbj.SubjectRepository;
 import emsbj.SubjectService;
 import emsbj.config.WebMvcConfig;
-import emsbj.controller.LocalizedController;
+import emsbj.controller.AuthorizedController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin/subjects")
-public class AdminSubjectController implements LocalizedController {
+public class AdminSubjectController implements AuthorizedController {
     @Autowired
     private SubjectRepository subjectRepository;
     @Autowired

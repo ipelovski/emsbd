@@ -1,25 +1,27 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
     <title>Term Details</title>
 </head>
 <body>
-    <form th:if="${term != null}" th:object="${term}" th:action="@{${#httpServletRequest.requestURI}}" method="post">
-        <fieldset>
-            <legend th:text="Details"></legend>
-            <label for="id">Id:</label>
-            <span id="id" th:text="*{id}"></span>
-            <label for="school-year">School year:</label>
-            <span id="school-year" th:text="*{schoolYear.name()}"></span>
-            <label for="name">Name:</label>
-            <input type="text" id="name" th:field="*{name}">
-            <label for="begin">Begins:</label>
-            <input type="text" id="begin" th:field="*{begin}">
-            <label for="end">Ends:</label>
-            <input type="text" id="end" th:field="*{end}">
-            <input type="submit" value="Update">
-        </fieldset>
-    </form>
+    <div data-layout-fragment="content">
+        <form data-th-if="${term != null}" data-th-object="${term}" data-th-action="@{${#httpServletRequest.requestURI}}" method="post">
+            <fieldset>
+                <legend data-th-text="Details"></legend>
+                <label for="id">Id:</label>
+                <span id="id" data-th-text="*{id}"></span>
+                <label for="school-year">School year:</label>
+                <span id="school-year" data-th-text="*{schoolYear.name()}"></span>
+                <label for="name">Name:</label>
+                <input type="text" id="name" data-th-field="*{name}">
+                <label for="begin">Begins:</label>
+                <input type="text" id="begin" data-th-field="*{begin}">
+                <label for="end">Ends:</label>
+                <input type="text" id="end" data-th-field="*{end}">
+                <input type="submit" value="Update">
+            </fieldset>
+        </form>
+    </div>
 </body>
 </html>

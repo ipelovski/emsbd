@@ -1,29 +1,31 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
     <title>Subjects</title>
 </head>
 <body>
-    <p>
-        <a th:href="@{${x.au().adminIndex()}}">Back to administration home</a>
-    </p>
-    <p>
-        <a th:href="@{${x.au().addSubject()}}">Add new</a>
-    </p>
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Grade</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="subject : ${subjects}">
-                <td th:text="${subject.name.value}"></td>
-                <td th:text="${subject.grade.name}"></td>
-            </tr>
-        </tbody>
-    </table>
+    <div data-layout-fragment="content">
+        <p>
+            <a data-th-href="@{${x.au().adminIndex()}}">Back to administration home</a>
+        </p>
+        <p>
+            <a data-th-href="@{${x.au().addSubject()}}">Add new</a>
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Grade</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-th-each="subject : ${subjects}">
+                    <td data-th-text="${subject.name.value}"></td>
+                    <td data-th-text="${subject.grade.name}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

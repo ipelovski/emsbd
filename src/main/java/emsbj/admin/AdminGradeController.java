@@ -3,7 +3,7 @@ package emsbj.admin;
 import emsbj.Grade;
 import emsbj.GradeRepository;
 import emsbj.config.WebMvcConfig;
-import emsbj.controller.LocalizedController;
+import emsbj.controller.AuthorizedController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin/grades")
-public class AdminGradeController implements LocalizedController {
+public class AdminGradeController implements AuthorizedController {
     @Autowired
     private GradeRepository gradeRepository;
 

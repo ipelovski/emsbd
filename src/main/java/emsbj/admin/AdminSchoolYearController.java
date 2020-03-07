@@ -3,7 +3,7 @@ package emsbj.admin;
 import emsbj.SchoolYear;
 import emsbj.SchoolYearRepository;
 import emsbj.config.WebMvcConfig;
-import emsbj.controller.LocalizedController;
+import emsbj.controller.AuthorizedController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 
 @Controller
 @RequestMapping("/admin/school-years")
-public class AdminSchoolYearController implements LocalizedController {
+public class AdminSchoolYearController implements AuthorizedController {
     @Autowired
     private SchoolYearRepository schoolYearRepository;
 

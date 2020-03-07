@@ -1,40 +1,41 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
-    <title th:text="#{administrationHome}"></title>
-    <link th:href="@{/css/basscss.min.css}" rel="stylesheet">
+    <title data-th-text="#{administrationHome}"></title>
 </head>
 <body>
-    <p>
-        <a th:href="@{${x.au().users()}}" th:text="'View all users'"></a>
-    </p>
-    <p>
-        <a th:href="@{${x.au().schoolYears()}}" th:text="'View school years'"></a>
-    </p>
-    <p>
-        <a th:href="@{${x.au().subjects()}}" th:text="'View subjects'"></a>
-    </p>
-    <p>
-        <a th:href="@{${x.au().grades()}}" th:text="'View available grades'"></a>
-    </p>
-    <p>
-        <a th:href="@{${x.au().schoolClasses()}}" th:text="'View available classes'"></a>
-    </p>
-    <p>
-        <a th:href="@{${x.au().teachers()}}" th:text="'View teachers'"></a>
-    </p>
-    <p>
-        <a th:href="@{${x.au().students()}}" th:text="'View students'"></a>
-    </p>
-    <p>
-        <a th:href="@{${x.au().weeklySlots()}}" th:text="'View weekly slots'"></a>
-    </p>
-    <p>
-        <a th:href="@{${x.au().rooms()}}" th:text="'View rooms'"></a>
-    </p>
-    <p>
-        <a th:href="@{${x.au().courses()}}" th:text="'View courses'"></a>
-    </p>
+    <div data-layout-fragment="content">
+        <p>
+            <a data-th-href="@{${x.au().users()}}" data-th-text="'View all users'"></a>
+        </p>
+        <p>
+            <a data-th-href="@{${x.au().schoolYears()}}" data-th-text="'View school years'"></a>
+        </p>
+        <p>
+            <a data-th-href="@{${x.au().subjects()}}" data-th-text="'View subjects'"></a>
+        </p>
+        <p>
+            <a data-th-href="@{${x.au().grades()}}" data-th-text="'View available grades'"></a>
+        </p>
+        <p>
+            <a data-th-href="@{${x.au().schoolClasses()}}" data-th-text="'View available classes'"></a>
+        </p>
+        <p>
+            <a data-th-href="@{${x.au().teachers()}}" data-th-text="'View teachers'"></a>
+        </p>
+        <p>
+            <a data-th-href="@{${x.au().students()}}" data-th-text="'View students'"></a>
+        </p>
+        <p>
+            <a data-th-href="@{${x.au().weeklySlots()}}" data-th-text="'View weekly slots'"></a>
+        </p>
+        <p>
+            <a data-th-href="@{${x.au().rooms()}}" data-th-text="'View rooms'"></a>
+        </p>
+        <p>
+            <a data-th-href="@{${x.au().courses()}}" data-th-text="'View courses'"></a>
+        </p>
+    </div>
 </body>
 </html>

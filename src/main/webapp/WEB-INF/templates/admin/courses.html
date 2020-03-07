@@ -1,26 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
     <title>Courses</title>
 </head>
 <body>
-    <p>
-        <a data-th-href="@{${x.au().adminIndex()}}">Back to administration home</a>
-    </p>
-    <table>
-        <thead>
-            <tr>
-                <th>Subject</th>
-                <th>Class</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr data-th-each="course : ${courses}">
-                <td data-th-text="${course.subject.name.value}"></td>
-                <td data-th-text="${course.schoolClass.name}"></td>
-            </tr>
-        </tbody>
-    </table>
+    <div data-layout-fragment="content">
+        <p>
+            <a data-th-href="@{${x.au().adminIndex()}}">Back to administration home</a>
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Class</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-th-each="course : ${courses}">
+                    <td data-th-text="${course.subject.name.value}"></td>
+                    <td data-th-text="${course.schoolClass.name}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

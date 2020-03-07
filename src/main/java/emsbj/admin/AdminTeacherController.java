@@ -5,7 +5,7 @@ import emsbj.Teacher;
 import emsbj.FormMaster;
 import emsbj.TeacherRepository;
 import emsbj.config.WebMvcConfig;
-import emsbj.controller.LocalizedController;
+import emsbj.controller.AuthorizedController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -22,7 +22,7 @@ import java.util.stream.StreamSupport;
 
 @Controller
 @RequestMapping("/admin/teachers")
-public class AdminTeacherController implements LocalizedController {
+public class AdminTeacherController implements AuthorizedController {
     public static final String selectFormMasterFragment = "selectFormMasterFragment";
     public static final String teacherList = "teacherList";
     @Autowired

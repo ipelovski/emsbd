@@ -7,11 +7,11 @@ import org.springframework.data.repository.query.Param;
 import java.time.DayOfWeek;
 
 public interface CourseRepository extends CrudRepository<Course, Long> {
-    @Query("select new emsbj.Lesson(c, ws) from Course c" +
+    @Query("select new emsbj.AvailableLesson(c, ws) from Course c" +
         " left join c.weeklySlots ws" +
         " where c.teacher = :teacher" +
         " and ws.day = :dayOfWeek")
-    Iterable<Lesson> findAllByTeacherAndDay(
+    Iterable<AvailableLesson> findAllByTeacherAndDay(
         @Param("teacher") Teacher teacher,
         @Param("dayOfWeek") DayOfWeek dayOfWeek);
 }

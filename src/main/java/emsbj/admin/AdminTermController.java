@@ -5,7 +5,7 @@ import emsbj.SchoolYearRepository;
 import emsbj.Term;
 import emsbj.TermRepository;
 import emsbj.config.WebMvcConfig;
-import emsbj.controller.LocalizedController;
+import emsbj.controller.AuthorizedController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +21,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin/terms")
-public class AdminTermController implements LocalizedController {
+public class AdminTermController implements AuthorizedController {
     public static final String schoolYearQueryParam = "school-year";
     @Autowired
     private SchoolYearRepository schoolYearRepository;

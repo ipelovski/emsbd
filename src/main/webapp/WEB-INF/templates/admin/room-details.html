@@ -1,19 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
     <title data-th-text="${room.isNew() ? 'Adding Room' : 'Editing Room'}"></title>
 </head>
 <body>
-    <form data-th-action="${x.au().addRoom()}" method="post">
-        <fieldset data-th-object="${room}">
-            <legend data-th-text="${room.isNew() ? 'Add' : 'Edit'}"></legend>
-            <label for="name" data-th-text="Name"></label>
-            <input type="text" id="name" data-th-field="*{name}">
-            <label for="floor" data-th-text="Floor"></label>
-            <input type="text" id="floor" data-th-field="*{floor}">
-        </fieldset>
-        <input type="submit" value="Save">
-    </form>
+    <div data-layout-fragment="content">
+        <form data-th-action="${x.au().addRoom()}" method="post">
+            <fieldset data-th-object="${room}">
+                <legend data-th-text="${room.isNew() ? 'Add' : 'Edit'}"></legend>
+                <label for="name" data-th-text="Name"></label>
+                <input type="text" id="name" data-th-field="*{name}">
+                <label for="floor" data-th-text="Floor"></label>
+                <input type="text" id="floor" data-th-field="*{floor}">
+            </fieldset>
+            <input type="submit" value="Save">
+        </form>
+    </div>
 </body>
 </html>

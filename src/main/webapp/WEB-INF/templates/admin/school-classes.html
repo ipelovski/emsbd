@@ -1,46 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
     <title>Classes</title>
 </head>
 <body>
-    <p>
-        <a data-th-href="@{${x.au().adminIndex()}}">Back to administration home</a>
-    </p>
-    <a data-th-href="@{${x.au().addSchoolClass()}}" data-th-text="'Add class'"></a>
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Beginning school year</th>
-                <th>Grade</th>
-                <th>Form-master</th>
-                <th>Room</th>
-                <th>Details</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr data-th-each="schoolClass : ${schoolClasses}">
-                <td data-th-text="${schoolClass.name}"></td>
-                <td data-th-text="${schoolClass.beginningSchoolYear.beginYear}"></td>
-                <td>
-                    <span data-th-if="${schoolClass.currentGrade != null}"
-                          data-th-text="${schoolClass.currentGrade.name}"></span>
-                </td>
-                <td>
-                    <span data-th-if="${schoolClass.formMaster != null}"
-                          data-th-text="${schoolClass.formMaster.user.personalInfo.getName()}"></span>
-                </td>
-                <td>
-                    <span data-th-if="${schoolClass.classRoom != null}"
-                          data-th-text="${schoolClass.classRoom.floor + ' ' + schoolClass.classRoom.name}"></span>
-                </td>
-                <td>
-                    <a data-th-href="@{${x.au().schoolClass(schoolClass)}}">Details</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div data-layout-fragment="content">
+        <p>
+            <a data-th-href="@{${x.au().adminIndex()}}">Back to administration home</a>
+        </p>
+        <a data-th-href="@{${x.au().addSchoolClass()}}" data-th-text="'Add class'"></a>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Beginning school year</th>
+                    <th>Grade</th>
+                    <th>Form-master</th>
+                    <th>Room</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-th-each="schoolClass : ${schoolClasses}">
+                    <td data-th-text="${schoolClass.name}"></td>
+                    <td data-th-text="${schoolClass.beginningSchoolYear.beginYear}"></td>
+                    <td>
+                        <span data-th-if="${schoolClass.currentGrade != null}"
+                              data-th-text="${schoolClass.currentGrade.name}"></span>
+                    </td>
+                    <td>
+                        <span data-th-if="${schoolClass.formMaster != null}"
+                              data-th-text="${schoolClass.formMaster.user.personalInfo.getName()}"></span>
+                    </td>
+                    <td>
+                        <span data-th-if="${schoolClass.classRoom != null}"
+                              data-th-text="${schoolClass.classRoom.floor + ' ' + schoolClass.classRoom.name}"></span>
+                    </td>
+                    <td>
+                        <a data-th-href="@{${x.au().schoolClass(schoolClass)}}">Details</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

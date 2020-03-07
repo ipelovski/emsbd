@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Note</title>
+</head>
+<body>
+    <div data-th-fragment="addNote(note)">
+        <form data-th-object="${note}">
+            <input type="hidden" data-th-field="*{student}">
+            <input type="hidden" data-th-field="*{course}">
+            <textarea data-th-field="*{text}"></textarea>
+            <input type="submit" data-th-value="'Add'">
+        </form>
+    </div>
+</body>
+</html>

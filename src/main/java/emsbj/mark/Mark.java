@@ -1,12 +1,11 @@
 package emsbj.mark;
 
+import emsbj.JournalPersistable;
+import emsbj.Lesson;
 import emsbj.Student;
 import emsbj.Subject;
-import emsbj.user.User;
-import org.springframework.data.annotation.CreatedBy;
+import emsbj.Teacher;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,27 +14,24 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
-public class Mark {
+public class Mark implements JournalPersistable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @CreatedBy
     @ManyToOne
-    private User createdBy;
+    private Teacher setBy;
     @CreatedDate
-    private Instant createdOn;
-    @LastModifiedBy
-    @ManyToOne
-    private User updatedBy;
-    @LastModifiedDate
-    private Instant updatedOn;
+    private LocalDateTime createdOn;
     @ManyToOne
     private Student student;
     @ManyToOne
     private Subject subject;
+    // can be null. for example the mark is from exam
+    @ManyToOne
+    private Lesson lesson;
     @Min(200)
     @Max(600)
     private short rawScore;
@@ -50,24 +46,25 @@ public class Mark {
         setRawScore(rawScore);
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
-    public User getCreatedBy() {
-        return createdBy;
+    public Teacher getSetBy() {
+        return setBy;
     }
 
-    public Instant getCreatedOn() {
+    public void setSetBy(Teacher setBy) {
+        this.setBy = setBy;
+    }
+
+    public LocalDateTime getCreatedOn() {
         return createdOn;
     }
 
-    public User getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public Instant getUpdatedOn() {
-        return updatedOn;
+    public void setCreatedOn(LocalDateTime createdOn) {
+        this.createdOn = createdOn;
     }
 
     public Student getStudent() {
@@ -76,6 +73,14 @@ public class Mark {
 
     public Subject getSubject() {
         return subject;
+    }
+
+    public Lesson getLesson() {
+        return lesson;
+    }
+
+    public void setLesson(Lesson lesson) {
+        this.lesson = lesson;
     }
 
     public int getRawScore() {

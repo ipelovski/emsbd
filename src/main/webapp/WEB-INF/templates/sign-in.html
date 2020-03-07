@@ -7,11 +7,11 @@
 </head>
 <body>
     <p>
-        If not registered then <a data-th-href="@{/sign-up}">sign up</a>.
+        If not registered then <a data-th-href="${x.u().signUp()}">sign up</a>.
     </p>
     <h3>Sign in</h3>
     <h4>As a specific user</h4>
-    <form data-th-action="@{/sign-in(requested=${requested})}" method="post">
+    <form data-th-action="@{${x.u().signIn()}(requested=${requested})}" method="post">
         <p data-th-if="${error != null}" data-th-text="${error}"></p>
         <p data-th-if="${logout != null}" data-th-text="${logout}"></p>
         <p>
