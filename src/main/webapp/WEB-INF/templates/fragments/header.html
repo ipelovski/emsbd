@@ -8,6 +8,7 @@
     <div data-th-fragment="headResources" data-th-remove="tag">
         <link data-th-href="@{/css/basscss.min.css}" rel="stylesheet">
         <link data-th-href="@{/css/micromodal.css}" rel="stylesheet">
+        <link data-th-href="@{/css/site-style.css}" rel="stylesheet">
     </div>
     <div data-th-fragment="greetings(activeUser)">
         <span data-th-text="#{greetingMessageBegin}"></span>
@@ -25,7 +26,32 @@
     </div>
     <div data-th-fragment="menu(activeUser)">
         <div data-th-if="${activeUser.role == T(emsbj.user.User.Role).student}">Student</div>
-        <div data-th-if="${activeUser.role == T(emsbj.user.User.Role).teacher}">Teacher</div>
+        <div data-th-if="${activeUser.role == T(emsbj.user.User.Role).teacher}" class="flex">
+            <div class="col-3">
+                <a data-th-href="@{${x.u().home()}}">
+                    <img class="icon" data-th-src="@{/img/icons/octicons/home.svg}">
+                    <span data-th-text="${x.c('home')}"></span>
+                </a>
+            </div>
+            <div class="col-3">
+                <a data-th-href="@{${x.u().schedule()}}">
+                    <img class="icon" data-th-src="@{/img/icons/octicons/calendar.svg}">
+                    <span data-th-text="${x.c('schedule')}"></span>
+                </a>
+            </div>
+            <div class="col-3">
+                <a data-th-href="@{${x.u().profile()}}">
+                    <div class="icon" data-th-insert="~{fragments/icons::calendar}"></div>
+                    <span data-th-text="${x.c('courses')}"></span>
+                </a>
+            </div>
+            <div class="col-3">
+                <a data-th-href="@{${x.u().profile()}}">
+                    <div class="icon" data-th-insert="~{fragments/icons::calendar}"></div>
+                    <span data-th-text="${x.c('students')}"></span>
+                </a>
+            </div>
+        </div>
     </div>
     <div data-th-fragment="languageSelector">
         <span data-th-each="locale : ${x.getSupportedLocales()}">
@@ -35,10 +61,12 @@
             <span data-th-if="${locale.equals(x.getLocale())}" data-th-text="${locale.getDisplayName(locale)}"></span>
         </span>
     </div>
-    <div data-th-fragment="header(activeUser)">
-        <div data-th-replace="::languageSelector"></div>
-        <div data-th-replace="::greetings(${activeUser})"></div>
-        <div data-th-replace="::menu(${activeUser})"></div>
+    <div class="flex header" data-th-fragment="header(activeUser)">
+        <div class="col-9 content" data-th-insert="::menu(${activeUser})"></div>
+        <div class="col-3 content">
+            <div data-th-replace="::languageSelector"></div>
+            <div data-th-replace="::greetings(${activeUser})"></div>
+        </div>
     </div>
 </body>
 </html>

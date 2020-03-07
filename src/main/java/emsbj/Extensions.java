@@ -112,15 +112,17 @@ public class Extensions {
 
     public String localizeCurrentRequestURL(Locale locale) {
         HttpServletRequest currentRequest = getCurrentRequest();
-        String currentRequestURL = currentRequest.getRequestURL()
-            .append('?')
-            .append(currentRequest.getQueryString())
-            .toString();
-        Matcher matcher = Pattern.compile(WebMvcConfig.localePathPattern).matcher(currentRequestURL);
+        StringBuffer currentRequestURL = currentRequest.getRequestURL();
+        if (currentRequest.getQueryString() != null) {
+            currentRequestURL
+                .append('?')
+                .append(currentRequest.getQueryString());
+        }
+        Matcher matcher = WebMvcConfig.localePathPattern.matcher(currentRequestURL);
         if (matcher.find()) {
             return matcher.replaceFirst("/" + locale.toLanguageTag());
         } else {
-            return currentRequestURL;
+            return currentRequestURL.toString();
         }
     }
 

@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 
 @Configuration
 @EnableWebMvc
@@ -41,7 +42,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public static final Locale defaultLocale = Locale.forLanguageTag(supportedLocalesArray[0]);
     public static final String defaultLocalePath = "/" + defaultLocale.toLanguageTag();
     public static final String localePathParam = "/{locale:en|bg}";
-    public static final String localePathPattern = "/(en|bg)";
+    public static final Pattern localePathPattern = Pattern.compile("/(en|bg)");
     public static final String objectIdPathParam = "/{id:\\d+}";
     public static final String objectIdParamName = "id";
     public static final String addPath = "/add";

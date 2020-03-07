@@ -4,7 +4,8 @@
     <title>Course</title>
 </head>
 <body>
-    <div data-layout-fragment="content">
+    <div data-layout-fragment="content" class="content">
+        <h3 class="center" data-th-text="|${course.subject.name.value} ${course.schoolClass.name} #{class}|"></h3>
         <ul>
             <li class="flex flex-wrap">
                 <div class="col-1" data-th-text="'Number'"></div>
