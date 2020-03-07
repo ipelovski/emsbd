@@ -22,9 +22,13 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.thymeleaf.util.StringUtils;
@@ -34,6 +38,7 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +48,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -55,6 +62,16 @@ public class Extensions {
     private AdminUrls adminUrls;
 
     protected Extensions() {
+    }
+
+    public Locale getLocale() {
+        return LocaleContextHolder.getLocale();
+    }
+
+    public Collection<Locale> getSupportedLocales() {
+        return WebMvcConfig.supportedLocales.stream()
+            .map(Locale::forLanguageTag)
+            .collect(Collectors.toList());
     }
 
     public String c(String label, String... args) {
@@ -93,6 +110,20 @@ public class Extensions {
         return "/" + locale.toLanguageTag() + url;
     }
 
+    public String localizeCurrentRequestURL(Locale locale) {
+        HttpServletRequest currentRequest = getCurrentRequest();
+        String currentRequestURL = currentRequest.getRequestURL()
+            .append('?')
+            .append(currentRequest.getQueryString())
+            .toString();
+        Matcher matcher = Pattern.compile(WebMvcConfig.localePathPattern).matcher(currentRequestURL);
+        if (matcher.find()) {
+            return matcher.replaceFirst("/" + locale.toLanguageTag());
+        } else {
+            return currentRequestURL;
+        }
+    }
+
     public Urls u() {
         return getUrls();
     }
@@ -123,6 +154,13 @@ public class Extensions {
     private String getUrl(HttpServletRequest request, Class<?> controllerType, String requestMappingName, Object... uriVariableValues) {
         return new UrlBuilder(request, controllerType, requestMappingName)
             .uriParams(uriVariableValues).build();
+    }
+
+    // from ServletUriComponentsBuilder.getCurrentRequest
+    private HttpServletRequest getCurrentRequest() {
+        RequestAttributes attrs = RequestContextHolder.getRequestAttributes();
+        Assert.state(attrs instanceof ServletRequestAttributes, "No current ServletRequestAttributes");
+        return ((ServletRequestAttributes)attrs).getRequest();
     }
 
     public class Urls {
@@ -186,6 +224,10 @@ public class Extensions {
 
         public String addNote() {
             return getUrl(NoteController.class, WebMvcConfig.addName);
+        }
+
+        public String schedule() {
+            return getUrl(CourseController.class, CourseController.schedule);
         }
     }
 

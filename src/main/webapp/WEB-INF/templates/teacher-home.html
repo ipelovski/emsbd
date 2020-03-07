@@ -23,5 +23,9 @@
         <h4>Previous lessons</h4>
         <div data-th-insert="~{fragments/teacher-lesson-list::lessonList(${previousLessons})}"></div>
     </div>
+    <div>
+        <h3>Schedule</h3>
+        <a data-th-href="${x.u().schedule()}" data-th-text="Schedule"></a>
+    </div>
 </body>
 </html>

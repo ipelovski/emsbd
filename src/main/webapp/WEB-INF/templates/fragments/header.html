@@ -27,7 +27,16 @@
         <div data-th-if="${activeUser.role == T(emsbj.user.User.Role).student}">Student</div>
         <div data-th-if="${activeUser.role == T(emsbj.user.User.Role).teacher}">Teacher</div>
     </div>
+    <div data-th-fragment="languageSelector">
+        <span data-th-each="locale : ${x.getSupportedLocales()}">
+            <a data-th-unless="${locale.equals(x.getLocale())}"
+               data-th-href="${x.localizeCurrentRequestURL(locale)}"
+               data-th-text="${locale.getDisplayName(locale)}"></a>
+            <span data-th-if="${locale.equals(x.getLocale())}" data-th-text="${locale.getDisplayName(locale)}"></span>
+        </span>
+    </div>
     <div data-th-fragment="header(activeUser)">
+        <div data-th-replace="::languageSelector"></div>
         <div data-th-replace="::greetings(${activeUser})"></div>
         <div data-th-replace="::menu(${activeUser})"></div>
     </div>

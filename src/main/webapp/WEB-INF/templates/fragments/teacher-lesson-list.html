@@ -10,20 +10,22 @@
         <ul data-th-if="${lessons.size() > 0}">
             <li>
                 <div class="flex flex-wrap">
-                    <div class="col-3">Lesson (hour)</div>
+                    <div class="col-2">Lesson (hour)</div>
+                    <div class="col-2">Day</div>
                     <div class="col-3">Subject</div>
                     <div class="col-3">Class</div>
-                    <div class="col-3">Room</div>
+                    <div class="col-2">Room</div>
                 </div>
             </li>
             <li data-th-each="lesson : ${lessons}">
                 <div class="flex flex-wrap">
-                    <div class="col-3" data-th-text="|${lesson.weeklySlot.ordinal} (${lesson.weeklySlot.begin})|"></div>
+                    <div class="col-2" data-th-text="|${lesson.weeklySlot.ordinal} (${lesson.weeklySlot.begin})|"></div>
+                    <div class="col-2" data-th-text="${lesson.weeklySlot.day.name().toLowerCase()}"></div>
                     <div class="col-3">
                         <a data-th-href="${x.u().course(lesson.course)}" data-th-text="${lesson.course.subject.name.value}"></a>
                     </div>
                     <div class="col-3" data-th-text="${lesson.course.schoolClass.name}"></div>
-                    <div class="col-3" data-th-text="${lesson.course.room.name}"></div>
+                    <div class="col-2" data-th-text="${lesson.course.room.name}"></div>
                 </div>
             </li>
         </ul>
