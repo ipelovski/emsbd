@@ -1,9 +1,14 @@
 body {
-    background-color: lightgrey;
+    background-color: lightgoldenrodyellow;
+    color: darkgreen;
+    font-family: sans-serif;
+    margin: 0;
 }
 .content {
-    background-color: white;
+    background-color: beige;
     border-radius: 10px;
+    border-color: yellowgreen;
+    border-style: solid;
     padding: 0.5rem;
     margin: 0.5rem;
 }
@@ -11,9 +16,58 @@ body {
     height: 16px;
     width: 16px;
     display: inline-block;
+    vertical-align: text-top;
 }
 .icon > svg {
     height: 16px;
     width: 16px;
     display: inline-block;
+}
+.top-menu {
+    background-color: yellowgreen;
+    color: darkolivegreen;/*lightgoldenrodyellow*/
+    padding: 1rem;
+}
+.top-menu a {
+    color: darkolivegreen;
+    text-decoration: none;
+    border-bottom: darkolivegreen dashed 1px;
+}
+.caps {
+    text-transform: uppercase;
+}
+.menu a {
+    color: darkolivegreen;
+    text-decoration: none;
+}
+.menu-item {
+    background-color: beige;
+    border-radius: 10px;
+    border-color: yellowgreen;
+    border-style: solid;
+    padding: 0.5rem;
+    margin: 0.5rem;
+    color: darkolivegreen;
+    text-align: center;
+}
+.menu-item .icon > svg {
+    fill: darkolivegreen;
+}
+.content a {
+    color: darkgreen;
+    text-decoration: none;
+    border-bottom: darkgreen dashed 1px;
+}
+.list {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+}
+.list li {
+    margin-top: 0.5em;
+}
+.list li:first-child {
+    font-weight: bold;
+    border-bottom: yellowgreen solid 2px;
+    padding-bottom: 0.5em;
 }

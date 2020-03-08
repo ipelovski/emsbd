@@ -100,12 +100,17 @@ screens
     teacher
         home
             lessons for today
-        profile
+        lessons
+            current lesson
+        ? schedule this week
+            schedules for other weeks
         courses this term
-        marks, absences, and notes for each course
+            course
+                students, marks, absences, and notes
         search student
             student (if in a course led by the teacher)
             course marks (and absences and notes)
+        profile
     principal
         home
             ? administration dashboard ?
