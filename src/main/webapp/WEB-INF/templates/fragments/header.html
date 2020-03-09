@@ -32,15 +32,15 @@
                 <span data-th-text="${x.c('home')}"></span>
             </a>
             <a class="col col-3 menu-item" data-th-href="@{${x.u().schedule()}}">
-                <img class="icon" data-th-src="@{/img/icons/octicons/calendar.svg}">
+                <div class="icon" data-th-insert="~{fragments/icons::octicons-calendar}"></div>
                 <span data-th-text="${x.c('schedule')}"></span>
             </a>
-            <a class="col col-3 menu-item" data-th-href="@{${x.u().profile()}}">
-                <div class="icon" data-th-insert="~{fragments/icons::octicons-calendar}"></div>
-                <span data-th-text="${x.c('courses')}"></span>
+            <a class="col col-3 menu-item" data-th-href="@{${x.u().lessons()}}">
+                <div class="icon" data-th-insert="~{fragments/icons::octicons-book}"></div>
+                <span data-th-text="${x.c('lessons')}"></span>
             </a>
             <a class="col col-3 menu-item" data-th-href="@{${x.u().profile()}}">
-                <div class="icon" data-th-insert="~{fragments/icons::octicons-calendar}"></div>
+                <div class="icon" data-th-insert="~{fragments/icons::material-design-icons-human-male-female}"></div>
                 <span data-th-text="${x.c('students')}"></span>
             </a>
         </div>
@@ -53,7 +53,7 @@
             <span data-th-if="${locale.equals(x.getLocale())}" data-th-text="${locale.getDisplayName(locale)}"></span>
         </span>
     </div>
-    <div data-th-fragment="header(activeUser)">
+    <div data-th-fragment="header(activeUser)" class="header">
         <div class="top-menu flex">
             <div class="col col-4 left-align" data-th-insert="::languageSelector"></div>
             <div class="col col-4 center">

@@ -18,6 +18,13 @@ public class Lesson implements JournalPersistable {
     private WeeklySlot weeklySlot;
     private LocalDateTime begin;
 
+    public Lesson() {}
+
+    public Lesson(Course course, WeeklySlot weeklySlot) {
+        this.course = course;
+        this.weeklySlot = weeklySlot;
+    }
+
     @Override
     public Long getId() {
         return id;

@@ -4,6 +4,16 @@ body {
     font-family: sans-serif;
     margin: 0;
 }
+.header {
+    position: fixed;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: lightgoldenrodyellow;
+}
 .content {
     background-color: beige;
     border-radius: 10px;
@@ -11,6 +21,7 @@ body {
     border-style: solid;
     padding: 0.5rem;
     margin: 0.5rem;
+    margin-top: 106px;
 }
 .icon {
     height: 16px;
@@ -58,16 +69,21 @@ body {
     text-decoration: none;
     border-bottom: darkgreen dashed 1px;
 }
-.list {
+.list, .listwh /*list with a header*/ {
     list-style: none;
     padding: 0;
     text-align: center;
 }
-.list li {
+.list li, .listwh li {
     margin-top: 0.5em;
 }
-.list li:first-child {
+.list li:first-child, .listwh li.list-header {
     font-weight: bold;
     border-bottom: yellowgreen solid 2px;
     padding-bottom: 0.5em;
+}
+.list:not(:last-of-type), .listwh:not(:last-of-type) {
+    border-bottom: yellowgreen solid 2px;
+    padding-bottom: 0.5em;
+    margin-bottom: 2em;
 }

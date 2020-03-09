@@ -12,13 +12,13 @@ public class UrlLocaleResolver implements LocaleResolver {
     public Locale resolveLocale(HttpServletRequest httpServletRequest) {
         String requestURI = httpServletRequest.getRequestURI();
         int nextSlashIndex = requestURI.indexOf("/", 1);
-        if (nextSlashIndex > -1) {
-            String pathFragment = requestURI.substring(1, nextSlashIndex);
-            if (WebMvcConfig.supportedLocales.contains(pathFragment)) {
-                return Locale.forLanguageTag(pathFragment);
-            }
+        int length = nextSlashIndex > -1 ? nextSlashIndex : requestURI.length();
+        String pathFragment = requestURI.substring(1, length);
+        if (WebMvcConfig.supportedLocales.contains(pathFragment)) {
+            return Locale.forLanguageTag(pathFragment);
+        } else {
+            return WebMvcConfig.defaultLocale;
         }
-        return WebMvcConfig.defaultLocale;
     }
 
     @Override

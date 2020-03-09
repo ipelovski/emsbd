@@ -1,31 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
     <link data-th-replace="~{fragments/header :: headResources}">
 </head>
 <body>
-    <p data-th-replace="~{fragments/header::greetings(${activeUser})}"></p>
-    <h3 data-th-text="|Lessons today ${currentDate}|"></h3>
-    <div data-th-if="${currentLessons.size() > 0}">
-        <h4>Current lesson</h4>
-        <div data-th-insert="~{fragments/teacher-lesson-list::lessonList(${currentLessons})}"></div>
-    </div>
-    <div data-th-if="${currentLessons.size() == 0}">
-        <h4>No current lesson</h4>
-    </div>
-    <div>
-        <h4>Next lessons</h4>
-        <div data-th-insert="~{fragments/teacher-lesson-list::lessonList(${nextLessons})}"></div>
-    </div>
-    <div>
-        <h4>Previous lessons</h4>
-        <div data-th-insert="~{fragments/teacher-lesson-list::lessonList(${previousLessons})}"></div>
-    </div>
-    <div>
-        <h3>Schedule</h3>
-        <a data-th-href="${x.u().schedule()}" data-th-text="Schedule"></a>
+    <div data-layout-fragment="content">
+        <h3 data-th-text="|Lessons today ${currentDate}|"></h3>
+        <div data-th-if="${currentLessons.size() > 0}">
+            <h4>Current lesson</h4>
+            <div data-th-insert="~{fragments/teacher-lesson-list::lessonList(${currentLessons})}"></div>
+        </div>
+        <div data-th-if="${currentLessons.size() == 0}">
+            <h4>No current lesson</h4>
+        </div>
+        <div>
+            <h4>Next lessons</h4>
+            <div data-th-insert="~{fragments/teacher-lesson-list::lessonList(${nextLessons})}"></div>
+        </div>
+        <div>
+            <h4>Previous lessons</h4>
+            <div data-th-insert="~{fragments/teacher-lesson-list::lessonList(${previousLessons})}"></div>
+        </div>
     </div>
 </body>
 </html>

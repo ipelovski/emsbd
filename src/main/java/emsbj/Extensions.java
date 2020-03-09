@@ -231,6 +231,10 @@ public class Extensions {
         public String schedule() {
             return getUrl(CourseController.class, CourseController.schedule);
         }
+
+        public String lessons() {
+            return getUrl(LessonController.class, WebMvcConfig.listName);
+        }
     }
 
     public class AdminUrls {

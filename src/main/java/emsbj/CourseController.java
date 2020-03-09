@@ -9,8 +9,6 @@ import emsbj.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +22,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Controller
 @RequestMapping("/courses")
@@ -37,6 +36,8 @@ public class CourseController implements AuthorizedController, SecuredController
     private MarkRepository markRepository;
     @Autowired
     private TeacherRepository teacherRepository;
+    @Autowired
+    private TeacherService teacherService;
     @Autowired
     private Extensions extensions;
 
@@ -90,15 +91,15 @@ public class CourseController implements AuthorizedController, SecuredController
 
     @GetMapping(value = "/schedule", name = schedule)
     public String schedule(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.getPrincipal() instanceof User) {
-            User user = (User) authentication.getPrincipal();
-            Optional<Teacher> optionalTeacher = teacherRepository.findByUserId(user.getId());
-            if (optionalTeacher.isPresent()) {
-                Teacher teacher = optionalTeacher.get();
-                Iterable<AvailableLesson> availableLessons = courseRepository.findAllByTeacher(teacher);
-                model.addAttribute("lessons", availableLessons);
-            }
+        Optional<Teacher> optionalTeacher = teacherService.getCurrentTeacher();
+        if (optionalTeacher.isPresent()) {
+            Teacher teacher = optionalTeacher.get();
+            Iterable<Lesson> lessons = courseRepository.findAllByTeacher(teacher);
+            model.addAttribute("lessons", lessons);
+            model.addAttribute("weeklyLessons", new WeeklyLessons(
+                StreamSupport.stream(lessons.spliterator(), false)
+                .collect(Collectors.toList())
+            ));
         }
         return "schedule";
     }

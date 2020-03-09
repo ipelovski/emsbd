@@ -66,27 +66,27 @@ public class HomeController implements SecuredController, AuthorizedController {
             } else if (user.getRole() == User.Role.teacher) {
                 LocalDate currentDate = LocalDate.now();
                 Teacher teacher = teacherRepository.findByUserId(user.getId()).get();
-                Iterable<AvailableLesson> lessonsToday = courseRepository
+                Iterable<Lesson> lessonsToday = courseRepository
                     .findAllByTeacherAndDay(teacher, currentDate.getDayOfWeek());
                 LocalTime currentTime = LocalTime.now();
-                List<AvailableLesson> previousAvailableLessons = StreamSupport
+                List<Lesson> previousLessons = StreamSupport
                     .stream(lessonsToday.spliterator(), false)
-                    .filter(availableLesson -> availableLesson.getWeeklySlot().getEnd().isBefore(currentTime))
+                    .filter(lesson -> lesson.getWeeklySlot().getEnd().isBefore(currentTime))
                     .collect(Collectors.toList());
-                List<AvailableLesson> nextAvailableLessons = StreamSupport
+                List<Lesson> nextLessons = StreamSupport
                     .stream(lessonsToday.spliterator(), false)
-                    .filter(availableLesson -> availableLesson.getWeeklySlot().getBegin().isAfter(currentTime))
+                    .filter(lesson -> lesson.getWeeklySlot().getBegin().isAfter(currentTime))
                     .collect(Collectors.toList());
-                List<AvailableLesson> currentAvailableLessons = StreamSupport
+                List<Lesson> currentLessons = StreamSupport
                     .stream(lessonsToday.spliterator(), false)
-                    .filter(availableLesson ->
-                        availableLesson.getWeeklySlot().getBegin().isBefore(currentTime)
-                        && availableLesson.getWeeklySlot().getEnd().isAfter(currentTime))
+                    .filter(lesson ->
+                        lesson.getWeeklySlot().getBegin().isBefore(currentTime)
+                        && lesson.getWeeklySlot().getEnd().isAfter(currentTime))
                     .collect(Collectors.toList());
                 model.addAttribute("currentDate", currentDate);
-                model.addAttribute("previousLessons", previousAvailableLessons);
-                model.addAttribute("nextLessons", nextAvailableLessons);
-                model.addAttribute("currentLessons", currentAvailableLessons);
+                model.addAttribute("previousLessons", previousLessons);
+                model.addAttribute("nextLessons", nextLessons);
+                model.addAttribute("currentLessons", currentLessons);
                 return "teacher-home";
             } else if (user.getRole() == User.Role.admin) {
                 return "redirect:" + extensions.getAdminUrls().adminIndex();
