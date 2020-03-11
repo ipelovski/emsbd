@@ -34,7 +34,7 @@ public class Subject implements JournalPersistable {
     @CreatedDate
     private Instant createdOn;
 
-    protected Subject() {
+    public Subject() {
 
     }
 

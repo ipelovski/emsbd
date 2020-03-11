@@ -11,6 +11,11 @@
         <div data-th-if="${currentLessons.size() > 0}">
             <h4>Current lesson</h4>
             <div data-th-insert="~{fragments/teacher-lesson-list::lessonList(${currentLessons})}"></div>
+            <form data-th-action="${x.u().startLesson()}" method="post" data-th-object="${currentLesson}">
+                <input type="hidden" data-th-field="*{course}">
+                <input type="hidden" data-th-field="*{weeklySlot}">
+                <input type="submit" data-th-value="'Start lesson'">
+            </form>
         </div>
         <div data-th-if="${currentLessons.size() == 0}">
             <h4>No current lesson</h4>

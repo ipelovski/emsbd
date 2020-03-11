@@ -17,7 +17,7 @@ public class WeeklyLessons {
     private Map<DayOfWeek, Map<Integer, List<Lesson>>> weeklyLessons;
     private List<Lesson> lessons;
 
-    WeeklyLessons(List<Lesson> lessons) {
+    public WeeklyLessons(List<Lesson> lessons) {
         Map<DayOfWeek, Map<Integer, List<Lesson>>> weeklyLessons =
             new LinkedHashMap<>(DayOfWeek.values().length);
         for (Lesson lesson : lessons) {

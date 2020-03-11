@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="layout.html">
+<head>
+    <meta charset="UTF-8">
+    <title>Lesson</title>
+</head>
+<body>
+    <div data-layout-fragment="content">
+        <ul class="list">
+            <li class="flex flex-wrap">
+                <div class="col-2">Lesson (hour)</div>
+                <div class="col-2">Day</div>
+                <div class="col-3">Subject</div>
+                <div class="col-3">Class</div>
+                <div class="col-2">Room</div>
+            </li>
+            <li class="flex flex-wrap">
+                <div class="col-2" data-th-text="|${lesson.weeklySlot.ordinal} (${lesson.weeklySlot.begin})|"></div>
+                <div class="col-2" data-th-text="#{${lesson.weeklySlot.day.name().toLowerCase()}}"></div>
+                <div class="col-3" data-th-text="${lesson.course != null ? lesson.course.subject.name.value : '- - -'}"></div>
+                <div class="col-3">
+                    <span>
+                        <a data-th-if="${lesson.course != null}" data-th-href="${x.u().course(lesson.course)}"
+                           data-th-text="${lesson.course.schoolClass.name}"></a>
+                    </span>
+                    <span data-th-if="${lesson.course == null}"
+                          data-th-text="'- - -'"></span>
+                </div>
+                <div class="col-2" data-th-text="${lesson.course != null ? lesson.course.room.name : '- - -'}"></div>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

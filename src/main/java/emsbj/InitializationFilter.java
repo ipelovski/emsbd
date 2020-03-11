@@ -1,5 +1,6 @@
 package emsbj;
 
+import emsbj.generation.Generator;
 import emsbj.mark.Mark;
 import emsbj.user.User;
 import emsbj.user.UserRepository;
@@ -23,7 +24,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 @Order(1000000)
@@ -56,6 +57,8 @@ public class InitializationFilter implements Filter {
     private CourseRepository courseRepository;
     @Autowired
     private RoomRepository roomRepository;
+    @Autowired
+    private Generator generator;
     private boolean initialized;
     private SchoolYear schoolYear;
     private Map<Integer, Grade> grades = new HashMap<>(4);
@@ -98,6 +101,7 @@ public class InitializationFilter implements Filter {
         createSchoolClasses();
         createRooms();
         createCourses();
+        generator.generate();
         initialized = true;
     }
 
@@ -163,10 +167,10 @@ public class InitializationFilter implements Filter {
                 LocalTime begin = shiftsBegin[shift - 1];
                 LocalTime end = begin.plus(lessonDuration);
                 for (int ordinal = 1; ordinal <= 7; ordinal++) {
-                    WeeklySlot lesson = new WeeklySlot(
+                    WeeklySlot lessonWeeklySlot = new WeeklySlot(
                         DayOfWeek.of(day), shift, ordinal, begin, end);
-                    weeklySlotRepository.save(lesson);
-                    weeklySlots.add(lesson);
+                    weeklySlotRepository.save(lessonWeeklySlot);
+                    weeklySlots.add(lessonWeeklySlot);
                     if (ordinal == lessonsBeforeLongBreak) {
                         begin = end.plus(longBreakDuration);
                     }
@@ -250,10 +254,10 @@ public class InitializationFilter implements Filter {
         course.setTerm(schoolYear.getTerms().get(0));
         List<WeeklySlot> courseWeeklySlots = new ArrayList<>(2);
         for (DayOfWeek day : DayOfWeek.values()) {
-            Optional<WeeklySlot> optionalWeeklySlot = weeklySlots.stream()
+            List<WeeklySlot> weeklySlotsg = this.weeklySlots.stream()
                 .filter(weeklySlot -> weeklySlot.getDay() == day)
-                .findAny();
-            optionalWeeklySlot.ifPresent(courseWeeklySlots::add);
+                .collect(Collectors.toList());
+            courseWeeklySlots.addAll(weeklySlots);
         }
         course.setWeeklySlots(courseWeeklySlots);
         courseRepository.save(course);

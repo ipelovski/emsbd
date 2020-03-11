@@ -10,8 +10,11 @@ import org.springframework.security.config.annotation.web.configurers.Expression
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,12 +23,15 @@ import java.util.stream.StreamSupport;
 @Controller
 @RequestMapping("/lessons")
 public class LessonController implements AuthorizedController, SecuredController {
+    public static final String start = "start";
     @Autowired
     private LessonRepository lessonRepository;
     @Autowired
     private WeeklySlotRepository weeklySlotRepository;
     @Autowired
     private TeacherService teacherService;
+    @Autowired
+    private Extensions extensions;
 
     @Override
     public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {
@@ -69,5 +75,27 @@ public class LessonController implements AuthorizedController, SecuredController
         } else {
             return "";
         }
+    }
+
+    @GetMapping(WebMvcConfig.objectIdPathParam)
+    public String details(
+        @PathVariable(WebMvcConfig.objectIdParamName) Long lessonId,
+        Model model
+    ) {
+        Optional<Lesson> optionalLesson = lessonRepository.findById(lessonId);
+        if (optionalLesson.isPresent()) {
+            model.addAttribute("lesson", optionalLesson.get());
+            return "lesson";
+        } else {
+            return "";
+        }
+    }
+
+    @PostMapping(value = "/start", name = start)
+    public String start(Course course, WeeklySlot weeklySlot) {
+        Lesson lesson = new Lesson(course, weeklySlot);
+        lesson.setBegin(LocalDateTime.now());
+        lessonRepository.save(lesson);
+        return "redirect:" + extensions.getUrls().lesson(lesson);
     }
 }

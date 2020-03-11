@@ -87,6 +87,9 @@ public class HomeController implements SecuredController, AuthorizedController {
                 model.addAttribute("previousLessons", previousLessons);
                 model.addAttribute("nextLessons", nextLessons);
                 model.addAttribute("currentLessons", currentLessons);
+                if (currentLessons.size() > 0) {
+                    model.addAttribute("currentLesson", currentLessons.get(0));
+                }
                 return "teacher-home";
             } else if (user.getRole() == User.Role.admin) {
                 return "redirect:" + extensions.getAdminUrls().adminIndex();

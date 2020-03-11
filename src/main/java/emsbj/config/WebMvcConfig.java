@@ -37,7 +37,7 @@ import java.util.regex.Pattern;
 @EnableWebMvc
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    public static final String[] supportedLocalesArray = { "en", "bg" };
+    public static final String[] supportedLocalesArray = { "bg", "en" };
     public static final Collection<String> supportedLocales = Arrays.asList(supportedLocalesArray);
     public static final Locale defaultLocale = Locale.forLanguageTag(supportedLocalesArray[0]);
     public static final String defaultLocalePath = "/" + defaultLocale.toLanguageTag();

@@ -6,6 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.Objects;
 
 @Entity
 public class WeeklySlot implements JournalPersistable {
@@ -79,5 +80,24 @@ public class WeeklySlot implements JournalPersistable {
     public String toString() {
         return String.format("Day: %s, shift: %d, lesson: %d, begins: %s, ends: %s",
             day, shift, ordinal, begin, end);
+    }
+
+    public int getValue() {
+        return 1000000 * day.getValue() +
+            100000 * shift +
+            begin.toSecondOfDay() / 60;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        WeeklySlot that = (WeeklySlot) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getValue());
     }
 }

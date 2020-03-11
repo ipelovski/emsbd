@@ -235,6 +235,14 @@ public class Extensions {
         public String lessons() {
             return getUrl(LessonController.class, WebMvcConfig.listName);
         }
+
+        public String lesson(Lesson lesson) {
+            return getUrl(LessonController.class, WebMvcConfig.detailsName, lesson.getId());
+        }
+
+        public String startLesson() {
+            return getUrl(LessonController.class, LessonController.start);
+        }
     }
 
     public class AdminUrls {
