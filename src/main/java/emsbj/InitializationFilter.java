@@ -92,15 +92,15 @@ public class InitializationFilter implements Filter {
         JournalAuditAware.setCurrentUser(admin);
         createSchoolYear();
         createTerms();
-        createGrades();
-        createSubjects();
+//        createGrades();
+//        createSubjects();
         createWeeklySlots();
         createPrincipal();
-        createTeachers();
-        createStudents();
-        createSchoolClasses();
+//        createTeachers();
+//        createStudents();
+//        createSchoolClasses();
         createRooms();
-        createCourses();
+//        createCourses();
         generator.generate();
         initialized = true;
     }
@@ -254,7 +254,7 @@ public class InitializationFilter implements Filter {
         course.setTerm(schoolYear.getTerms().get(0));
         List<WeeklySlot> courseWeeklySlots = new ArrayList<>(2);
         for (DayOfWeek day : DayOfWeek.values()) {
-            List<WeeklySlot> weeklySlotsg = this.weeklySlots.stream()
+            List<WeeklySlot> weeklySlots = this.weeklySlots.stream()
                 .filter(weeklySlot -> weeklySlot.getDay() == day)
                 .collect(Collectors.toList());
             courseWeeklySlots.addAll(weeklySlots);

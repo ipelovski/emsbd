@@ -19,6 +19,7 @@ public class PersonalInfo {
     @Size(max = 200)
     private String address;
     private LocalDate bornAt;
+    private Gender gender;
     @ManyToOne(fetch = FetchType.LAZY)
     private Blob picture;
 
@@ -83,11 +84,25 @@ public class PersonalInfo {
         }
     }
 
+    public Gender getGender() {
+        return gender;
+    }
+
+    public PersonalInfo setGender(Gender gender) {
+        this.gender = gender;
+        return this;
+    }
+
     public Blob getPicture() {
         return picture;
     }
 
-    public void setPicture(Blob picture) {
+    public PersonalInfo setPicture(Blob picture) {
         this.picture = picture;
+        return this;
+    }
+
+    public enum Gender {
+        male, female, other
     }
 }
