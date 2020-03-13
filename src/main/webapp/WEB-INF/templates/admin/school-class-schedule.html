@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>Schedule</title>
 </head>
 <body>
-$END$
+    <div data-layout-fragment="content">
+        <div data-th-replace="~{fragments/teacher-lesson-list::weeklyLessons(${weeklyLessons})}"></div>
+    </div>
 </body>
 </html>

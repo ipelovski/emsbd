@@ -74,10 +74,10 @@ body {
     padding: 0;
     text-align: center;
 }
-.list li, .listwh li {
+.list > li, .listwh > li {
     margin-top: 0.5em;
 }
-.list li:first-child, .listwh li.list-header {
+.list > li:first-child, .listwh > li.list-header {
     font-weight: bold;
     border-bottom: yellowgreen solid 2px;
     padding-bottom: 0.5em;
@@ -86,4 +86,15 @@ body {
     border-bottom: yellowgreen solid 2px;
     padding-bottom: 0.5em;
     margin-bottom: 2em;
+}
+.sequence {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 5px 0;
+}
+.sequence > li {
+    display: inline;
+}
+.sequence > li:not(:last-of-type):after {
+    content: ',';
 }

@@ -10,39 +10,39 @@
             <a data-th-href="@{${x.au().adminIndex()}}">Back to administration home</a>
         </p>
         <a data-th-href="@{${x.au().addSchoolClass()}}" data-th-text="'Add class'"></a>
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Beginning school year</th>
-                    <th>Grade</th>
-                    <th>Form-master</th>
-                    <th>Room</th>
-                    <th>Details</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr data-th-each="schoolClass : ${schoolClasses}">
-                    <td data-th-text="${schoolClass.name}"></td>
-                    <td data-th-text="${schoolClass.beginningSchoolYear.beginYear}"></td>
-                    <td>
-                        <span data-th-if="${schoolClass.currentGrade != null}"
-                              data-th-text="${schoolClass.currentGrade.name}"></span>
-                    </td>
-                    <td>
-                        <span data-th-if="${schoolClass.formMaster != null}"
-                              data-th-text="${schoolClass.formMaster.user.personalInfo.getName()}"></span>
-                    </td>
-                    <td>
-                        <span data-th-if="${schoolClass.classRoom != null}"
-                              data-th-text="${schoolClass.classRoom.floor + ' ' + schoolClass.classRoom.name}"></span>
-                    </td>
-                    <td>
-                        <a data-th-href="@{${x.au().schoolClass(schoolClass)}}">Details</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <ul class="list">
+            <li class="flex flex-wrap">
+                <div class="col col-2">Name</div>
+                <div class="col col-2">Beginning school year</div>
+                <div class="col col-2">Grade</div>
+                <div class="col col-2">Form-master</div>
+                <div class="col col-2">Room</div>
+                <div class="col col-1">Details</div>
+                <div class="col col-1">Schedule</div>
+            </li>
+            <li class="flex flex-wrap" data-th-each="schoolClass : ${schoolClasses}">
+                <div class="col col-2" data-th-text="${schoolClass.name}"></div>
+                <div class="col col-2" data-th-text="${schoolClass.beginningSchoolYear.beginYear}"></div>
+                <div class="col col-2">
+                    <span data-th-if="${schoolClass.currentGrade != null}"
+                          data-th-text="${schoolClass.currentGrade.name}"></span>
+                </div>
+                <div class="col col-2">
+                    <span data-th-if="${schoolClass.formMaster != null}"
+                          data-th-text="${schoolClass.formMaster.user.personalInfo.getName()}"></span>
+                </div>
+                <div class="col col-2">
+                    <span data-th-if="${schoolClass.classRoom != null}"
+                          data-th-text="${schoolClass.classRoom.floor + ' ' + schoolClass.classRoom.name}"></span>
+                </div>
+                <div class="col col-1">
+                    <a data-th-href="@{${x.au().schoolClass(schoolClass)}}">Details</a>
+                </div>
+                <div class="col col-1">
+                    <a data-th-href="@{${x.au().schoolClassSchedule(schoolClass)}}">Schedule</a>
+                </div>
+            </li>
+        </ul>
     </div>
 </body>
 </html>

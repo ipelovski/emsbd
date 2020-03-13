@@ -23,55 +23,71 @@ window.onProfilePictureUpdated = function (newSrc) {
         accept='image/png, image/jpeg',
         onSuccess='onProfilePictureUpdated')}"></div>
     <div class="flex flex-wrap" data-th-object="${user}">
-        <div class="col-4">
+        <div class="col col-4">
             <label class="label" for="username">Username:</label>
         </div>
-        <div class="col-8">
+        <div class="col col-8">
             <span id="username" data-th-text="*{username}"></span>
         </div>
         <div class="col-12">
             <a data-th-href="@{/en/change-password}">Change password</a>
         </div>
-        <div class="col-4">
+        <div class="col col-4">
             <label class="label" for="role">Role:</label>
         </div>
-        <div class="col-8">
+        <div class="col col-8">
             <span id="role" data-th-text="*{role}"></span>
         </div>
-        <div class="col-4">
+        <div class="col col-4">
             <label class="label" for="email">Email:</label>
         </div>
-        <div class="col-8">
+        <div class="col col-8">
             <span id="email" data-th-text="*{email}"></span>
         </div>
-        <div class="col-4">
+        <div class="col col-4">
             <label class="label" for="firstName">First name:</label>
         </div>
-        <div class="col-8">
+        <div class="col col-8">
             <span id="firstName" data-th-text="*{personalInfo.firstName}"></span>
         </div>
-        <div class="col-4">
+        <div class="col col-4">
             <label class="label" for="middleName">Middle name:</label>
         </div>
-        <div class="col-8">
+        <div class="col col-8">
             <span id="middleName" data-th-text="*{personalInfo.middleName}"></span>
         </div>
-        <div class="col-4">
+        <div class="col col-4">
             <label class="label" for="lastName">Last name:</label>
         </div>
-        <div class="col-8">
+        <div class="col col-8">
             <span id="lastName" data-th-text="*{personalInfo.lastName}"></span>
         </div>
-        <div class="col-4">
+        <div class="col col-4">
+            <label class="label" for="gender">Gender:</label>
+        </div>
+        <div class="col col-8">
+            <span id="gender" data-th-text="#{*{personalInfo.gender.name()}}"></span>
+        </div>
+<!--        <p>-->
+<!--            <label for="gender">Gender</label>-->
+<!--            <select id="gender" data-th-field="*{gender}">-->
+<!--                <option data-th-each="gender = ${T(emsbj.PersonalInfo.Gender).values()}"-->
+<!--                        data-th-value="${gender}" data-th-text="#{${gender.name()}}"></option>-->
+<!--            </select>-->
+<!--            <span data-th-if="${#fields.hasErrors('email')}" data-th-each="error : ${#fields.detailedErrors('email')}">-->
+<!--                <span data-th-text="${error.message}"></span>-->
+<!--            </span>-->
+<!--        </p>-->
+        <div class="col col-4">
             <label class="label" for="bornAt">Born at:</label>
         </div>
-        <div class="col-8">
+        <div class="col col-8">
             <span id="bornAt" data-th-text="*{personalInfo.bornAt}"></span>
         </div>
-        <div class="col-4">
+        <div class="col col-4">
             <label class="label" for="address">Address:</label>
         </div>
-        <div class="col-8">
+        <div class="col col-8">
             <span id="address" data-th-text="*{personalInfo.address}"></span>
         </div>
     </div>

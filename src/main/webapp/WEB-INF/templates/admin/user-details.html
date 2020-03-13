@@ -40,24 +40,24 @@ window.onProfilePictureUpdated = function (newSrc) {
               method="post" class="flex mx-auto">
             <fieldset class="">
                 <legend data-th-text="Details"></legend>
-                <div class="col-4">
+                <div class="col col-4">
                     <label class="label" for="username">Username:</label>
                 </div>
-                <div class="col-8">
+                <div class="col col-8">
                     <input class="input" type="text" id="username" data-th-field="*{username}">
                 </div>
                 <div data-th-if="${user.isNew()}">
-                    <div class="col-4">
+                    <div class="col col-4">
                         <label class="label" for="password">Password:</label>
                     </div>
-                    <div class="col-8">
+                    <div class="col col-8">
                         <input class="input" type="text" id="password" data-th-field="*{password}">
                     </div>
                 </div>
-                <div class="col-4">
+                <div class="col col-4">
                     <label class="label" for="role">Role:</label>
                 </div>
-                <div class="col-8">
+                <div class="col col-8">
                     <select class="select" id="role" data-th-field="*{role}">
                         <option value="user">Unspecified</option>
                         <option value="student">Student</option>
@@ -66,40 +66,40 @@ window.onProfilePictureUpdated = function (newSrc) {
                         <option value="principal">Principal</option>
                     </select>
                 </div>
-                <div class="col-4">
+                <div class="col col-4">
                     <label class="label" for="email">Email:</label>
                 </div>
-                <div class="col-8">
+                <div class="col col-8">
                     <input class="input" type="text" id="email" data-th-field="*{email}">
                 </div>
-                <div class="col-4">
+                <div class="col col-4">
                     <label class="label" for="firstName">First name:</label>
                 </div>
-                <div class="col-8">
+                <div class="col col-8">
                     <input class="input" type="text" id="firstName" data-th-field="*{personalInfo.firstName}">
                 </div>
-                <div class="col-4">
+                <div class="col col-4">
                     <label class="label" for="middleName">Middle name:</label>
                 </div>
-                <div class="col-8">
+                <div class="col col-8">
                     <input class="input" type="text" id="middleName" data-th-field="*{personalInfo.middleName}">
                 </div>
-                <div class="col-4">
+                <div class="col col-4">
                     <label class="label" for="lastName">Last name:</label>
                 </div>
-                <div class="col-8">
+                <div class="col col-8">
                     <input class="input" type="text" id="lastName" data-th-field="*{personalInfo.lastName}">
                 </div>
-                <div class="col-4">
+                <div class="col col-4">
                     <label class="label" for="bornAt">Born at:</label>
                 </div>
-                <div class="col-8">
+                <div class="col col-8">
                     <input class="input" type="text" id="bornAt" data-th-field="*{personalInfo.bornAt}">
                 </div>
-                <div class="col-4">
+                <div class="col col-4">
                     <label class="label" for="address">Address:</label>
                 </div>
-                <div class="col-8">
+                <div class="col col-8">
                     <input class="input" type="text" id="address" data-th-field="*{personalInfo.address}">
                 </div>
                 <div class="col-12">

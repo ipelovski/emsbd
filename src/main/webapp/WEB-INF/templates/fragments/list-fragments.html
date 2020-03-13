@@ -7,17 +7,17 @@
 </head>
 <body>
     <div data-th-fragment="listHeader(mode)" data-th-remove="tag">
-        <div data-th-if="${mode == 'details'}" class="col-1" data-th-text="'Details'"></div>
-        <div data-th-if="${mode == 'singleSelect'}" class="col-1" data-th-text="'Select'"></div>
-        <div data-th-if="${mode == 'multiSelect'}" class="col-1">
+        <div data-th-if="${mode == 'details'}" class="col col-1" data-th-text="'Details'"></div>
+        <div data-th-if="${mode == 'singleSelect'}" class="col col-1" data-th-text="'Select'"></div>
+        <div data-th-if="${mode == 'multiSelect'}" class="col col-1">
             <input class="multiSelect" type="button" data-th-value="'Select'">
         </div>
     </div>
     <div data-th-fragment="listBody(mode, detailsUrl, objectId)" data-th-remove="tag">
-        <div data-th-if="${mode == 'details'}" class="col-1">
+        <div data-th-if="${mode == 'details'}" class="col col-1">
             <a data-th-href="${detailsUrl}" target="_blank" data-th-text="'Details'"></a>
         </div>
-        <div data-th-if="${mode != 'details'}" class="col-1">
+        <div data-th-if="${mode != 'details'}" class="col col-1">
             <input data-th-if="${mode == 'multiSelect'}" type="checkbox" data-th-value="${objectId}">
             <input data-th-if="${mode == 'singleSelect'}" type="button" data-th-value="'Select'" data-th-attr="data-object-id=${objectId}">
         </div>

@@ -9,17 +9,17 @@
          data-th-with="noLessonsMessage = ${noLessonsMessage} ?: 'No lessons'">
         <ul data-th-if="${lessons.size() > 0}" class="list">
             <li class="flex flex-wrap">
-                <div class="col-2">Lesson (hour)</div>
-                <div class="col-2">Day</div>
-                <div class="col-3">Subject</div>
-                <div class="col-3">Class</div>
-                <div class="col-2">Room</div>
+                <div class="col col-2">Lesson (hour)</div>
+                <div class="col col-2">Day</div>
+                <div class="col col-3">Subject</div>
+                <div class="col col-3">Class</div>
+                <div class="col col-2">Room</div>
             </li>
             <li data-th-each="lesson : ${lessons}" class="flex flex-wrap">
-                <div class="col-2" data-th-text="|${lesson.weeklySlot.ordinal} (${lesson.weeklySlot.begin})|"></div>
-                <div class="col-2" data-th-text="#{${lesson.weeklySlot.day.name().toLowerCase()}}"></div>
-                <div class="col-3" data-th-text="${lesson.course != null ? lesson.course.subject.name.value : '- - -'}"></div>
-                <div class="col-3">
+                <div class="col col-2" data-th-text="|${lesson.weeklySlot.ordinal} (${lesson.weeklySlot.begin})|"></div>
+                <div class="col col-2" data-th-text="#{${lesson.weeklySlot.day.name().toLowerCase()}}"></div>
+                <div class="col col-3" data-th-text="${lesson.course != null ? lesson.course.subject.name.value : '- - -'}"></div>
+                <div class="col col-3">
                     <span>
                         <a data-th-if="${lesson.course != null}" data-th-href="${x.u().course(lesson.course)}"
                            data-th-text="${lesson.course.schoolClass.name}"></a>
@@ -27,7 +27,7 @@
                     <span data-th-if="${lesson.course == null}"
                           data-th-text="'- - -'"></span>
                 </div>
-                <div class="col-2" data-th-text="${lesson.course != null ? lesson.course.room.name : '- - -'}"></div>
+                <div class="col col-2" data-th-text="${lesson.course != null ? lesson.course.room.name : '- - -'}"></div>
             </li>
         </ul>
         <div data-th-if="${lessons.size() == 0}" data-th-text="${noLessonsMessage}"></div>

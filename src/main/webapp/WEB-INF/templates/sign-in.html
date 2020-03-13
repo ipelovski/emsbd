@@ -26,15 +26,15 @@
     </form>
     <h4>Or sign in as a user with role</h4>
     <div class="flex flex-wrap">
-        <form class="col-1" data-th-action="@{${x.u().signInRole()}(requested=${requested})}" method="post">
+        <form class="col col-1" data-th-action="@{${x.u().signInRole()}(requested=${requested})}" method="post">
             <input type="hidden" name="role" value="student">
             <input type="submit" value="Student">
         </form>
-        <form class="col-1" data-th-action="@{${x.u().signInRole()}(requested=${requested})}" method="post">
+        <form class="col col-1" data-th-action="@{${x.u().signInRole()}(requested=${requested})}" method="post">
             <input type="hidden" name="role" value="teacher">
             <input type="submit" value="Teacher">
         </form>
-        <form class="col-1" data-th-action="@{${x.u().signInRole()}(requested=${requested})}" method="post">
+        <form class="col col-1" data-th-action="@{${x.u().signInRole()}(requested=${requested})}" method="post">
             <input type="hidden" name="role" value="principal">
             <input type="submit" value="Principal">
         </form>

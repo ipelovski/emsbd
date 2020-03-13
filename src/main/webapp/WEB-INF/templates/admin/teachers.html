@@ -9,38 +9,35 @@
         <p>
             <a data-th-href="@{${x.au().adminIndex()}}">Back to administration home</a>
         </p>
-        <form data-th-action="@{${x.au().addUser()}}" method="post">
-            <input type="submit" value="Add user">
-        </form>
-        <table>
-            <thead>
-                <tr>
-                    <th>First name</th>
-                    <th>Middle name</th>
-                    <th>Last name</th>
-                    <th>Skills</th>
-                    <th>Form-master</th>
-                    <th>Details</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr data-th-each="teacher : ${teachers}">
-                    <td data-th-text="${teacher.user.personalInfo.firstName}"></td>
-                    <td data-th-text="${teacher.user.personalInfo.middleName}"></td>
-                    <td data-th-text="${teacher.user.personalInfo.lastName}"></td>
-                    <td>
-                        <span data-th-each="skill: ${teacher.skills}" data-th-text="${skill.name.value}"></span>
-                    </td>
-                    <td>
-                        <span data-th-each="schoolClass: ${teacher.formMasterOf}"
-                              data-th-text="${schoolClass.getGrade().name} + ' ' + ${schoolClass.name}"></span>
-                    </td>
-                    <td>
-                        <a data-th-href="@{${x.au().teacher(teacher)}}">Details</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <ul class="list">
+            <li class="flex flex-wrap">
+                <div class="col col-2">First name</div>
+                <div class="col col-2">Middle name</div>
+                <div class="col col-2">Last name</div>
+                <div class="col col-4">Skills</div>
+                <div class="col col-1">Form-master</div>
+                <div class="col col-1">Details</div>
+            </li>
+            <li class="flex flex-wrap" data-th-each="teacher : ${teachers}">
+                <div class="col col-2" data-th-text="${teacher.user.personalInfo.firstName}"></div>
+                <div class="col col-2" data-th-text="${teacher.user.personalInfo.middleName}"></div>
+                <div class="col col-2" data-th-text="${teacher.user.personalInfo.lastName}"></div>
+                <div class="col col-4">
+                    <ul class="sequence">
+                        <li data-th-each="skill: ${teacher.skills}"
+                            data-th-text="|${skill.name.value} ${skill.grade.name}|">
+                        </li>
+                    </ul>
+                </div>
+                <div class="col col-1">
+                    <span data-th-each="schoolClass: ${teacher.formMasterOf}"
+                          data-th-text="${schoolClass.getGrade().name} + ' ' + ${schoolClass.name}"></span>
+                </div>
+                <div class="col col-1">
+                    <a data-th-href="@{${x.au().teacher(teacher)}}">Details</a>
+                </div>
+            </li>
+        </ul>
     </div>
 </body>
 </html>

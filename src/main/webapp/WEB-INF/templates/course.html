@@ -8,17 +8,17 @@
         <h3 class="center" data-th-text="|${course.subject.name.value} ${course.schoolClass.name} #{class}|"></h3>
         <ul>
             <li class="flex flex-wrap">
-                <div class="col-1" data-th-text="'Number'"></div>
-                <div class="col-3" data-th-text="'Name'"></div>
-                <div class="col-2" data-th-text="'Marks'"></div>
-                <div class="col-2" data-th-text="'Average mark (total marks)'"></div>
-                <div class="col-2" data-th-text="'Notes'"></div>
-                <div class="col-2" data-th-text="'Absences'"></div>
+                <div class="col col-1" data-th-text="'Number'"></div>
+                <div class="col col-3" data-th-text="'Name'"></div>
+                <div class="col col-2" data-th-text="'Marks'"></div>
+                <div class="col col-2" data-th-text="'Average mark (total marks)'"></div>
+                <div class="col col-2" data-th-text="'Notes'"></div>
+                <div class="col col-2" data-th-text="'Absences'"></div>
             </li>
             <li class="flex flex-wrap" data-th-each="courseStudent:${courseStudents}">
-                <div class="col-1" data-th-text="${courseStudent.number}"></div>
-                <div class="col-3" data-th-text="${courseStudent.name}"></div>
-                <div class="col-2">
+                <div class="col col-1" data-th-text="${courseStudent.number}"></div>
+                <div class="col col-3" data-th-text="${courseStudent.name}"></div>
+                <div class="col col-2">
                     <span data-th-each="mark:${courseStudent.marks}">
                         <span data-th-text="${mark.score}" data-th-title="${mark.createdOn}"></span>
                         <span>, </span>
@@ -33,12 +33,12 @@
                         <input type="submit" data-th-value="'+'">
                     </form>
                 </div>
-                <div class="col-2" data-th-text="|${courseStudent.averageMark != null ? courseStudent.averageMark : '-'} (${courseStudent.marks.size()})|"></div>
-                <div class="col-2">
+                <div class="col col-2" data-th-text="|${courseStudent.averageMark != null ? courseStudent.averageMark : '-'} (${courseStudent.marks.size()})|"></div>
+                <div class="col col-2">
                     <a class="addNote" href="#" data-th-attr="data-object-id = ${courseStudent.id}">+</a>
                     <span data-th-text="${courseStudent.notes}"></span>
                 </div>
-                <div class="col-2" data-th-text="${courseStudent.absences}"></div>
+                <div class="col col-2" data-th-text="${courseStudent.absences}"></div>
             </li>
         </ul>
         <div data-th-replace="~{fragments/modal-dialog::dialog('modalDialog')}"></div>
