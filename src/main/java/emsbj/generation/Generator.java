@@ -17,7 +17,6 @@ import emsbj.SubjectRepository;
 import emsbj.Teacher;
 import emsbj.TeacherRepository;
 import emsbj.Term;
-import emsbj.TermRepository;
 import emsbj.WeeklySlot;
 import emsbj.WeeklySlotRepository;
 import emsbj.user.User;
@@ -30,7 +29,6 @@ import org.springframework.stereotype.Component;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -44,6 +42,7 @@ import java.util.stream.StreamSupport;
 @Component
 public class Generator {
     private static final int teacherLessonsPerWeek = 34;
+    private static final int maxOrdinal = 7;
     static class TeacherTimeTable extends TimeTable<Teacher, CourseValue> {
         TeacherTimeTable(Teacher owner, List<WeeklySlot> weeklySlots) {
             super(owner, weeklySlots);
@@ -83,7 +82,7 @@ public class Generator {
     private List<WeeklySlot> weeklySlots;
     private Map<Integer, Grade> grades;
     private Map<Integer, TeachingProgram> gradePrograms;
-    private List<Subject> subjects = new ArrayList<>();
+    private List<Subject> subjects;
     private Map<SchoolClassValue, SchoolClass> schoolClasses = new LinkedHashMap<>();
     private SchoolYear schoolYear;
     private Term term;
@@ -97,6 +96,7 @@ public class Generator {
         schoolYear = StreamSupport.stream(schoolYearRepository.findAllWithAll().spliterator(), false)
             .findFirst().get();
         term = schoolYear.getTerms().get(0);
+        grades = createGrades();
 
         TeachingProgram program9 = TeachingProgram.create9();
         TeachingProgram program10 = TeachingProgram.create10();
@@ -107,11 +107,15 @@ public class Generator {
         gradePrograms.put(10, program10);
         gradePrograms.put(11, program11);
         gradePrograms.put(12, program12);
+
+        subjects = createSubjects();
+
         Map<SchoolClassValue, TeachingProgram> programs =
             new LinkedHashMap<>();
         for (int grade = 9; grade <= 12; grade++) {
             for (int ordinal = 1; ordinal <= 4; ordinal++) {
-                SchoolClassValue schoolClass = new SchoolClassValue(grade, ordinal);
+                SchoolClassValue schoolClass = new SchoolClassValue(
+                    grade, ordinal, ordinal < 3 ? 1 : 2);
                 programs.put(schoolClass, gradePrograms.get(grade));
             }
         }
@@ -136,15 +140,8 @@ public class Generator {
 
         fixTeacherTimeTables(teacherTimeTables);
 
-        // TODO
-        // fixHolesInSchoolClassTimeTables();
-
-        // TODO fix two subjects in one day
-
-//        printAll();
         checkAll(teacherTimeTables);
 
-        grades = createGrades();
         persistSchoolClasses(schoolClassTimeTables, schoolClassTeachers);
     }
 
@@ -162,6 +159,35 @@ public class Generator {
             }
         }
         return programAll;
+    }
+
+    private List<Subject> createSubjects() {
+        List<Subject> subjects = new ArrayList<>();
+        for (int gradeOrdinal : gradePrograms.keySet()) {
+            for (String subjectName : gradePrograms.get(gradeOrdinal).keySet()) {
+                Subject subject = createSubject(subjectName, gradeOrdinal, subjects);
+                subjects.add(subject);
+            }
+        }
+        return subjects;
+    }
+
+    private Subject createSubject(String name, int grade, List<Subject> subjects) {
+        Optional<Subject> optionalSubject = subjects.stream()
+            .filter(subject -> subject.getName().getValue().equals(name)
+                && subject.getGrade().getName().equals(Integer.toString(grade)))
+            .findAny();
+        if (optionalSubject.isPresent()) {
+            throw new IllegalArgumentException("Subject is already created.");
+        } else {
+            Optional<Subject> subjectWithSameName = subjects.stream()
+                .filter(subject -> subject.getName().getValue().equals(name))
+                .findAny();
+            SubjectName subjectName = subjectWithSameName.map(Subject::getName)
+                .orElseGet(() -> subjectNameRepository.save(new SubjectName(name)));
+            Subject subject = new Subject(subjectName, grades.get(grade));
+            return subjectRepository.save(subject);
+        }
     }
 
     private Map<String, List<Teacher>> createTeachers(TeachingProgram subjectsHours) {
@@ -186,7 +212,9 @@ public class Generator {
     }
 
     private Collection<Subject> getSubjects(String subjectName) {
-        return Collections.emptyList();
+        return subjects.stream()
+            .filter(subject -> subject.getName().getValue().equals(subjectName))
+            .collect(Collectors.toList());
     }
 
     private User createTeacherUser() {
@@ -201,6 +229,24 @@ public class Generator {
         for (DayOfWeek day : timeTable.getDays()) {
             List<WeeklySlot> dailySlots = timeTable.getDailySlots(day);
             for (WeeklySlot dailySlot : dailySlots) {
+                if (!dailySlot.getShift().equals(schoolClass.shift)
+                    || dailySlot.getOrdinal().equals(maxOrdinal)) {
+                    continue;
+                }
+                if (programCopy.size() == 0) {
+                    break;
+                }
+                String subject = pickSubject(programCopy);
+                timeTable.occupy(dailySlot, subject);
+            }
+        }
+        for (DayOfWeek day : timeTable.getDays()) {
+            List<WeeklySlot> dailySlots = timeTable.getDailySlots(day);
+            for (WeeklySlot dailySlot : dailySlots) {
+                if (!dailySlot.getShift().equals(schoolClass.shift)
+                    || !dailySlot.getOrdinal().equals(maxOrdinal)) {
+                    continue;
+                }
                 if (programCopy.size() == 0) {
                     break;
                 }
@@ -325,10 +371,6 @@ public class Generator {
         throw new RuntimeException("cannot find available weekly slot");
     }
 
-    private void fixHolesInSchoolClassTimeTables() {
-
-    }
-
     private Teacher pickTeacher(Map<Teacher, Integer> teachersAvailableLessons, int weeklyLessons) {
         int max = -1;
         Teacher teacher = null;
@@ -377,20 +419,6 @@ public class Generator {
             }
         }
         throw new RuntimeException();
-    }
-
-    private Map<String, Course> createCourses(Iterable<String> subjects, Map<String, Subject> subjectObjects) {
-        Map<String, Course> courses = new HashMap<>();
-        for (String subject : subjects) {
-            Course course = new Course();
-            course.setSubject(subjectObjects.get(subject));
-            courses.put(subject, course);
-        }
-        return courses;
-    }
-
-    private void printAll() {
-
     }
 
     private void checkAll(Map<String, List<TeacherTimeTable>> teacherTimeTables) {
@@ -465,32 +493,22 @@ public class Generator {
     }
 
     private Subject getSubject(String name, int grade) {
-        Optional<Subject> optionalSubject = subjects.stream()
+        return subjects.stream()
             .filter(subject -> subject.getName().getValue().equals(name)
                 && subject.getGrade().getName().equals(Integer.toString(grade)))
-            .findAny();
-        if (optionalSubject.isPresent()) {
-            return optionalSubject.get();
-        } else {
-            Optional<Subject> subjectWithSameName = subjects.stream()
-                .filter(subject -> subject.getName().getValue().equals(name))
-                .findAny();
-            SubjectName subjectName = subjectWithSameName.map(Subject::getName)
-                .orElseGet(() -> subjectNameRepository.save(new SubjectName(name)));
-            Subject subject = new Subject(subjectName, grades.get(grade));;
-            subject = subjectRepository.save(subject);
-            subjects.add(subject);
-            return subject;
-        }
+            .findAny()
+            .orElseThrow(() ->
+                new IllegalArgumentException("Cannot find subject."));
     }
 
     static class SchoolClassValue {
         int grade;
         int ordinal;
-        public SchoolClassValue() {}
-        public SchoolClassValue(int grade, int ordinal) {
+        int shift;
+        public SchoolClassValue(int grade, int ordinal, int shift) {
             this.grade = grade;
             this.ordinal = ordinal;
+            this.shift = shift;
         }
 
         @Override

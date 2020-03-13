@@ -29,6 +29,7 @@ public class WeeklyLessons {
                     return new ArrayList<>();
                 });
             shiftLessons.add(lesson);
+            shiftLessons.sort(Comparator.comparingInt(aLesson -> aLesson.getWeeklySlot().getOrdinal()));
             setMaxOrdinal(shiftLessons.size());
         }
         this.lessons = lessons;

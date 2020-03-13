@@ -83,9 +83,7 @@ public class WeeklySlot implements JournalPersistable {
     }
 
     public int getValue() {
-        return 1000000 * day.getValue() +
-            100000 * shift +
-            begin.toSecondOfDay() / 60;
+        return day.getValue() * 24 * 60 + begin.toSecondOfDay() / 60;
     }
 
     @Override
@@ -93,7 +91,11 @@ public class WeeklySlot implements JournalPersistable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WeeklySlot that = (WeeklySlot) o;
-        return id.equals(that.id);
+        if (id != null && that.id != null) {
+            return id.equals(that.id);
+        } else {
+            return getValue() == that.getValue();
+        }
     }
 
     @Override

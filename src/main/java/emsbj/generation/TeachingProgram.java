@@ -3,7 +3,7 @@ package emsbj.generation;
 import java.util.LinkedHashMap;
 
 class TeachingProgram extends LinkedHashMap<String, Integer> {
-    static final String lit = "Български ези и литература";
+    static final String lit = "Български език и литература";
     static final String ang = "Английски език";
     static final String mat = "Математика";
     static final String it = "Информационни технологии";

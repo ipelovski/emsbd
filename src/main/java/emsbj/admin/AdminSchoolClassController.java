@@ -1,8 +1,11 @@
 package emsbj.admin;
 
+import emsbj.CourseController;
+import emsbj.CourseRepository;
 import emsbj.Extensions;
 import emsbj.Grade;
 import emsbj.GradeRepository;
+import emsbj.Lesson;
 import emsbj.Room;
 import emsbj.RoomRepository;
 import emsbj.SchoolClass;
@@ -11,6 +14,7 @@ import emsbj.SchoolYear;
 import emsbj.SchoolYearRepository;
 import emsbj.Student;
 import emsbj.StudentRepository;
+import emsbj.WeeklyLessons;
 import emsbj.config.WebMvcConfig;
 import emsbj.controller.AuthorizedController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +29,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Controller
 @RequestMapping("/admin/school-classes")
@@ -39,6 +45,8 @@ public class AdminSchoolClassController implements AuthorizedController {
     private RoomRepository roomRepository;
     @Autowired
     private StudentRepository studentRepository;
+    @Autowired
+    private CourseRepository courseRepository;
     @Autowired
     private Extensions extensions;
 
@@ -110,6 +118,24 @@ public class AdminSchoolClassController implements AuthorizedController {
             }
             studentRepository.saveAll(changedStudents);
             return "redirect:" + extensions.getAdminUrls().schoolClass(existingSchoolClass);
+        } else {
+            return "";
+        }
+    }
+
+    @GetMapping(value = WebMvcConfig.objectIdPathParam + "/schedule", name = CourseController.schedule)
+    public String schedule(
+        @PathVariable(WebMvcConfig.objectIdParamName) Long schoolClassId,
+        Model model
+    ) {
+        Optional<SchoolClass> optionalSchoolClass = schoolClassRepository.findById(schoolClassId);
+        if (optionalSchoolClass.isPresent()) {
+            SchoolClass existingSchoolClass = optionalSchoolClass.get();
+            List<Lesson> weeklyLessons = StreamSupport
+                .stream(courseRepository.findAllBySchoolClass(existingSchoolClass).spliterator(), false)
+                .collect(Collectors.toList());
+            model.addAttribute("weeklyLessons", new WeeklyLessons(weeklyLessons));
+            return "admin/school-class-schedule";
         } else {
             return "";
         }

@@ -317,6 +317,10 @@ public class Extensions {
             return getUrl(AdminSchoolClassController.class, WebMvcConfig.detailsName, schoolClass.getId());
         }
 
+        public String schoolClassSchedule(SchoolClass schoolClass) {
+            return getUrl(AdminSchoolClassController.class, CourseController.schedule, schoolClass.getId());
+        }
+
         public String teachers() {
             return getUrl(AdminTeacherController.class, WebMvcConfig.listName);
         }

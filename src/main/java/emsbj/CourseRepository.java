@@ -13,6 +13,10 @@ public interface CourseRepository extends CrudRepository<Course, Long> {
     Iterable<Lesson> findAllByTeacher(Teacher teacher);
     @Query("select new emsbj.Lesson(c, ws) from Course c" +
         " left join c.weeklySlots ws" +
+        " where c.schoolClass = :schoolClass")
+    Iterable<Lesson> findAllBySchoolClass(SchoolClass schoolClass);
+    @Query("select new emsbj.Lesson(c, ws) from Course c" +
+        " left join c.weeklySlots ws" +
         " where c.teacher = :teacher" +
         " and ws.day = :dayOfWeek")
     Iterable<Lesson> findAllByTeacherAndDay(
