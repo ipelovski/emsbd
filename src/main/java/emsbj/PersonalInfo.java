@@ -78,7 +78,7 @@ public class PersonalInfo {
 
     public Optional<Integer> getAge() {
         if (bornAt != null) {
-            return Optional.of(Period.between(LocalDate.now(), bornAt).getYears());
+            return Optional.of(Period.between(bornAt, LocalDate.now()).getYears());
         } else {
             return Optional.empty();
         }

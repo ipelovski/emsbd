@@ -1,15 +1,20 @@
 package emsbj.generation;
 
+import emsbj.Blob;
+import emsbj.BlobRepository;
 import emsbj.Course;
 import emsbj.CourseRepository;
 import emsbj.Grade;
 import emsbj.GradeRepository;
 import emsbj.Room;
 import emsbj.RoomRepository;
+import emsbj.School;
 import emsbj.SchoolClass;
 import emsbj.SchoolClassRepository;
 import emsbj.SchoolYear;
 import emsbj.SchoolYearRepository;
+import emsbj.Student;
+import emsbj.StudentRepository;
 import emsbj.Subject;
 import emsbj.SubjectName;
 import emsbj.SubjectNameRepository;
@@ -17,8 +22,10 @@ import emsbj.SubjectRepository;
 import emsbj.Teacher;
 import emsbj.TeacherRepository;
 import emsbj.Term;
+import emsbj.TermRepository;
 import emsbj.WeeklySlot;
 import emsbj.WeeklySlotRepository;
+import emsbj.mark.Mark;
 import emsbj.user.User;
 import emsbj.user.UserRepository;
 import javafx.util.Pair;
@@ -26,7 +33,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.DayOfWeek;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -37,12 +50,13 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Component
 public class Generator {
     private static final int teacherLessonsPerWeek = 34;
     private static final int maxOrdinal = 7;
+    private static final int minStudentAge = 6;
+    private static final int studentsInSchoolClass = 26;
     static class TeacherTimeTable extends TimeTable<Teacher, CourseValue> {
         TeacherTimeTable(Teacher owner, List<WeeklySlot> weeklySlots) {
             super(owner, weeklySlots);
@@ -63,6 +77,8 @@ public class Generator {
     @Autowired
     private TeacherRepository teacherRepository;
     @Autowired
+    private StudentRepository studentRepository;
+    @Autowired
     private GradeRepository gradeRepository;
     @Autowired
     private SchoolClassRepository schoolClassRepository;
@@ -77,7 +93,11 @@ public class Generator {
     @Autowired
     private SchoolYearRepository schoolYearRepository;
     @Autowired
+    private TermRepository termRepository;
+    @Autowired
     private CourseRepository courseRepository;
+    @Autowired
+    private BlobRepository blobRepository;
 
     private List<WeeklySlot> weeklySlots;
     private Map<Integer, Grade> grades;
@@ -89,14 +109,14 @@ public class Generator {
     private Random random = new Random(0);
 
     public void generate() {
-        weeklySlots = StreamSupport
-            .stream(weeklySlotRepository.findAll().spliterator(), false)
-            .collect(Collectors.toList());
-
-        schoolYear = StreamSupport.stream(schoolYearRepository.findAllWithAll().spliterator(), false)
-            .findFirst().get();
-        term = schoolYear.getTerms().get(0);
+        createAdmin();
+        createPrincipal();
+        schoolYear = createSchoolYear();
+        weeklySlots = createWeeklySlots();
         grades = createGrades();
+
+        School.getInstance().reset();
+        term = School.getInstance().getTerm();
 
         TeachingProgram program9 = TeachingProgram.create9();
         TeachingProgram program10 = TeachingProgram.create10();
@@ -143,6 +163,87 @@ public class Generator {
         checkAll(teacherTimeTables);
 
         persistSchoolClasses(schoolClassTimeTables, schoolClassTeachers);
+    }
+
+    private void createAdmin() {
+        User admin = new User("admin");
+        admin.setRole(User.Role.admin);
+        admin.setPassword(passwordEncoder.encode("admin"));
+        admin.setEmail("admin@admin.admin");
+        Blob adminPicture = new Blob();
+        byte[] byteArray = readFile("sokka-small.png");
+        adminPicture.setData(byteArray);
+        adminPicture.setMimeType("image/png");
+        blobRepository.save(adminPicture);
+        admin.getPersonalInfo().setPicture(adminPicture);
+        userRepository.save(admin);
+    }
+
+    private byte[] readFile(String fileName) {
+        try (InputStream inputStream = getClass().getClassLoader()
+            .getResourceAsStream(fileName)) {
+            if (inputStream == null) {
+                throw new IllegalArgumentException("Cannot load file " + fileName);
+            }
+            byte[] byteArray = new byte[inputStream.available()];
+            int bytesRead = inputStream.read(byteArray, 0, byteArray.length);
+            if (bytesRead != byteArray.length) {
+                throw new RuntimeException("Could not read the whole file.");
+            }
+            return byteArray;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private SchoolYear createSchoolYear() {
+        LocalDate now = LocalDate.now();
+        int beginYear = now.getYear()
+            - (now.isBefore(LocalDate.of(now.getYear(), Month.JULY, 1)) ? 1 : 0);
+        SchoolYear schoolYear = new SchoolYear(beginYear, beginYear + 1);
+        schoolYearRepository.save(schoolYear);
+        Term firstTerm = new Term(schoolYear, "I");
+        firstTerm.setBegin(LocalDate.of(schoolYear.getBeginYear(), Month.JULY, 1));
+        firstTerm.setEnd(LocalDate.of(schoolYear.getBeginYear(), Month.DECEMBER, 31));
+        termRepository.save(firstTerm);
+        Term secondTerm = new Term(schoolYear, "II");
+        secondTerm.setBegin(LocalDate.of(schoolYear.getEndYear(), Month.JANUARY, 1));
+        secondTerm.setEnd(LocalDate.of(schoolYear.getEndYear(), Month.JUNE, 30));
+        termRepository.save(secondTerm);
+        return schoolYearRepository.save(schoolYear);
+    }
+
+    private List<WeeklySlot> createWeeklySlots() {
+        Duration lessonDuration = Duration.ofMinutes(40);
+        Duration breakDuration = Duration.ofMinutes(10);
+        Duration longBreakDuration = Duration.ofMinutes(20);
+        int lessonsBeforeLongBreak = 2;
+        LocalTime[] shiftsBegin = {LocalTime.of(7, 30), LocalTime.of(13, 30)};
+        List<WeeklySlot> weeklySlots = new ArrayList<>(5 * 2 * 7);
+        for (int day = 1; day <= 5; day++) {
+            for (int shift = 1; shift <= 2; shift++) {
+                LocalTime begin = shiftsBegin[shift - 1];
+                LocalTime end = begin.plus(lessonDuration);
+                for (int ordinal = 1; ordinal <= 7; ordinal++) {
+                    WeeklySlot weeklySlot = new WeeklySlot(
+                        DayOfWeek.of(day), shift, ordinal, begin, end);
+                    weeklySlots.add(weeklySlot);
+                    if (ordinal == lessonsBeforeLongBreak) {
+                        begin = end.plus(longBreakDuration);
+                    }
+                    else {
+                        begin = end.plus(breakDuration);
+                    }
+                    end = begin.plus(lessonDuration);
+                }
+            }
+        }
+        weeklySlotRepository.saveAll(weeklySlots);
+        return weeklySlots;
+    }
+
+    private void createPrincipal() {
+        userGenerator.createUser(User.Role.principal,40, 60);
     }
 
     private TeachingProgram mergePrograms(TeachingProgram... programs) {
@@ -436,6 +537,7 @@ public class Generator {
         Map<Integer, Grade> grades = new LinkedHashMap<>();
         for (int i = 9; i <= 12; i++) {
             Grade grade = new Grade(i);
+            grade.setOrdinal(i);
             grade = gradeRepository.save(grade);
             grades.put(i, grade);
         }
@@ -462,8 +564,31 @@ public class Generator {
         room.setFloor(1);
         room.setName(schoolClass.getGrade().getOrdinal() + " " + schoolClass.getName());
         schoolClass.setClassRoom(roomRepository.save(room));
+        schoolClass.setStudents(createStudents(schoolClassValue.grade));
         schoolClass = schoolClassRepository.save(schoolClass);
         schoolClasses.put(schoolClassValue, schoolClass);
+    }
+
+    private List<Student> createStudents(int grade) {
+        List<Student> students = new ArrayList<>(studentsInSchoolClass);
+        int age = minStudentAge + grade;
+        for (int i = 0; i < studentsInSchoolClass; i++) {
+            students.add(createStudent(age));
+        }
+        studentRepository.saveAll(students);
+        return students;
+    }
+
+    private Student createStudent(int age) {
+        User studentUser = userGenerator.createUser(User.Role.student, age, age);
+        Student student = new Student();
+        student.setUser(studentUser);
+        setMarks(student);
+        return student;
+    }
+
+    private void setMarks(Student student) {
+        student.getMarks().add(new Mark(student, subjects.get(0), randomInt(2, 7) * 100));
     }
 
     private void persistTimeTable(
@@ -501,6 +626,10 @@ public class Generator {
                 new IllegalArgumentException("Cannot find subject."));
     }
 
+    private int randomInt(int min, int max) {
+        return random.nextInt(max - min) + min;
+    }
+
     static class SchoolClassValue {
         int grade;
         int ordinal;
@@ -521,7 +650,7 @@ public class Generator {
 
         @Override
         public int hashCode() {
-            return Objects.hashCode(100 * grade + ordinal);
+            return Objects.hash(grade, ordinal);
         }
     }
     static class CourseValue {

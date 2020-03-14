@@ -50,19 +50,6 @@ public class Application {
         return messageSource;
     }
 
-    @Bean
-    public DataSourceInitializer dataSourceInitializer(DataSource dataSource) {
-        ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator();
-        resourceDatabasePopulator.addScript(new InMemoryResource(
-            "CREATE TRIGGER GRADE_INSERT AFTER INSERT ON GRADE " +
-                "FOR EACH ROW CALL \"emsbj.sql.GradeTrigger\""
-        ));
-        DataSourceInitializer dataSourceInitializer = new DataSourceInitializer();
-        dataSourceInitializer.setDataSource(dataSource);
-        dataSourceInitializer.setDatabasePopulator(resourceDatabasePopulator);
-        return dataSourceInitializer;
-    }
-
     @Bean(initMethod = "start", destroyMethod = "stop")
     public Server h2WebConsole() throws SQLException {
         return Server.createWebServer(

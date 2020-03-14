@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class SchoolClass implements JournalPersistable {
@@ -19,16 +20,13 @@ public class SchoolClass implements JournalPersistable {
     @ManyToOne
     private Grade beginningGrade;
     @ManyToOne
-    private SchoolYear currentSchoolYear;
-    @ManyToOne
-    private Grade currentGrade;
-    @ManyToOne
     private Teacher formMaster;
     @ManyToOne
     private Room classRoom;
     @OneToMany(mappedBy = "schoolClass")
     private List<Student> students;
-    private Integer shift;
+    @OneToMany(mappedBy = "schoolClass")
+    private List<SchoolClassTermShift> shifts;
 
     @Override
     public Long getId() {
@@ -63,22 +61,6 @@ public class SchoolClass implements JournalPersistable {
         this.beginningGrade = beginningGrade;
     }
 
-    public SchoolYear getCurrentSchoolYear() {
-        return currentSchoolYear;
-    }
-
-    public void setCurrentSchoolYear(SchoolYear currentSchoolYear) {
-        this.currentSchoolYear = currentSchoolYear;
-    }
-
-    public Grade getCurrentGrade() {
-        return currentGrade;
-    }
-
-    public void setCurrentGrade(Grade currentGrade) {
-        this.currentGrade = currentGrade;
-    }
-
     public Teacher getFormMaster() {
         return formMaster;
     }
@@ -103,19 +85,28 @@ public class SchoolClass implements JournalPersistable {
         this.students = students;
     }
 
-    public Integer getShift() {
-        return shift;
+    public List<SchoolClassTermShift> getShifts() {
+        return shifts;
     }
 
-    public void setShift(Integer shift) {
-        this.shift = shift;
+    public void setShifts(List<SchoolClassTermShift> shifts) {
+        this.shifts = shifts;
+    }
+
+    public int getShift() {
+        School school = School.getInstance();
+        return getShifts().stream()
+            .filter(schoolClassTermShift ->
+                Objects.equals(schoolClassTermShift.getTerm().getId(), school.getTerm().getId()))
+            .findAny()
+            .orElseThrow(() -> new RuntimeException("no shift found"))
+            .getShift();
     }
 
     public Grade getGrade() {
-        if (currentGrade != null) {
-            return currentGrade;
-        } else {
-            return beginningGrade;
-        }
+        School school = School.getInstance();
+        int offset = school.getSchoolYear().getBeginYear()
+            - beginningSchoolYear.getBeginYear();
+        return school.getGrades().get(beginningGrade.getOrdinal() + offset);
     }
 }

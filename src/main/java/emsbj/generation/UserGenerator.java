@@ -163,7 +163,7 @@ class UserGenerator {
 
     User createUser(User.Role role, int minAge, int maxAge) {
         PersonalInfo.Gender gender = PersonalInfo.Gender.values()[randomInt(0, 2)];
-        return createUser(role, gender, minAge, maxAge);
+        return createUser(role, gender, minAge, maxAge + 1);
     }
 
     User createUser(User.Role role, PersonalInfo.Gender gender, int minAge, int maxAge) {
