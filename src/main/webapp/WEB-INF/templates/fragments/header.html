@@ -12,7 +12,7 @@
     </div>
     <div data-th-fragment="greetings(activeUser)">
         <span data-th-text="#{greetingMessageBegin}"></span>
-        <span data-th-if="${activeUser.isAnonymous()}" data-th-text="${activeUser.username}"></span>
+        <span data-th-if="${activeUser.isAnonymous()}" data-th-text="#{guestName}"></span>
         <a data-th-if="${!activeUser.isAnonymous()}" data-th-href="@{${x.u().profile()}}" data-th-text="${activeUser.username}"></a>
         <span data-th-text="#{greetingMessageEnd}"></span>
         <span data-th-if="${activeUser.isAnonymous()}">

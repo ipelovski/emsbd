@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="layout.html">
+<head>
+    <meta charset="UTF-8">
+    <title>Notes</title>
+</head>
+<body>
+    <div data-layout-fragment="content">
+        <h4 class="center">
+            <span data-th-text="|Notes of ${student.user.personalInfo.getName()} for ${course.subject.name.value}|"></span>
+            <span data-th-if="${lesson != null}" data-th-text="| in ${lesson}|"></span>
+        </h4>
+        <a data-th-href="${x.u().addNote(student, course, lesson)}" data-th-text="Add"></a>
+        <ul class="list">
+            <li class="flex flex-wrap">
+                <div class="col col-3" data-th-text="'Added on'"></div>
+                <div class="col col-9" data-th-text="'Content'"></div>
+            </li>
+            <li class="flex flex-wrap" data-th-each="note : ${notes}">
+                <div class="col col-3" data-th-text="${#dates.format(note.createdOn, 'dd.MM.yyyy HH:mm')}"></div>
+                <div class="col col-9" data-th-text="${note.text}"></div>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

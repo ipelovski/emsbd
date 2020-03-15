@@ -5,7 +5,7 @@
 </head>
 <body>
     <div data-layout-fragment="content">
-        <h3 class="center" data-th-text="|${course.subject.name.value} ${course.schoolClass.name} #{class}|"></h3>
+        <h3 class="center" data-th-text="|${course.subject.name.value} ${course.schoolClass.getFullName()} #{class}|"></h3>
         <ul>
             <li class="flex flex-wrap">
                 <div class="col col-1" data-th-text="'Number'"></div>
@@ -36,7 +36,7 @@
                 <div class="col col-2" data-th-text="|${courseStudent.averageMark != null ? courseStudent.averageMark : '-'} (${courseStudent.marks.size()})|"></div>
                 <div class="col col-2">
                     <a class="addNote" href="#" data-th-attr="data-object-id = ${courseStudent.id}">+</a>
-                    <span data-th-text="${courseStudent.notes}"></span>
+                    <a data-th-href="${x.u().notes(courseStudent, courseStudent.course)}" data-th-text="|View (${courseStudent.notes.size()})|"></a>
                 </div>
                 <div class="col col-2" data-th-text="${courseStudent.absences}"></div>
             </li>

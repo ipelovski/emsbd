@@ -5,11 +5,10 @@ import emsbj.controller.AuthorizedController;
 import emsbj.controller.SecuredController;
 import emsbj.user.User;
 import emsbj.user.UserRepository;
+import emsbj.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -32,6 +32,8 @@ public class HomeController implements SecuredController, AuthorizedController {
     private CourseRepository courseRepository;
     @Autowired
     private TeacherRepository teacherRepository;
+    @Autowired
+    private UserService userService;
 
     @Override
     public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {
@@ -43,9 +45,9 @@ public class HomeController implements SecuredController, AuthorizedController {
 
     @GetMapping
     public String index(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.getPrincipal() instanceof User) {
-            User user = (User) authentication.getPrincipal();
+        Optional<User> optionalUser = userService.getCurrentUser();
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
             if (user.getRole() == User.Role.student) {
                 model.addAttribute("lessons", new Object[]{
                     new Object() {

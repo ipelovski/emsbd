@@ -31,9 +31,15 @@ public class Student implements JournalPersistable {
         cascade = { CascadeType.PERSIST, CascadeType.REMOVE },
         mappedBy = "student")
     private List<Mark> marks;
+    @OneToMany(
+        fetch = FetchType.LAZY,
+        cascade = { CascadeType.PERSIST, CascadeType.REMOVE },
+        mappedBy = "student")
+    private List<Note> notes;
 
     public Student() {
         this.marks = new ArrayList<>();
+        this.notes = new ArrayList<>();
     }
 
     public Student(User user) {
@@ -76,5 +82,13 @@ public class Student implements JournalPersistable {
 
     public void setMarks(List<Mark> marks) {
         this.marks = marks;
+    }
+
+    public List<Note> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
     }
 }

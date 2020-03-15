@@ -132,10 +132,11 @@ public class Generator {
 
         Map<SchoolClassValue, TeachingProgram> programs =
             new LinkedHashMap<>();
+        String[] schoolClassNames = "АБВГ".split("");
         for (int grade = 9; grade <= 12; grade++) {
-            for (int ordinal = 1; ordinal <= 4; ordinal++) {
+            for (int i = 0; i < 4; i++) {
                 SchoolClassValue schoolClass = new SchoolClassValue(
-                    grade, ordinal, ordinal < 3 ? 1 : 2);
+                    grade, schoolClassNames[i], i < 2 ? 1 : 2);
                 programs.put(schoolClass, gradePrograms.get(grade));
             }
         }
@@ -557,32 +558,33 @@ public class Generator {
 
     private void persistSchoolClass(SchoolClassValue schoolClassValue) {
         SchoolClass schoolClass = new SchoolClass();
-        schoolClass.setName(schoolClassValue.ordinal + "");
+        schoolClass.setName(schoolClassValue.name);
         schoolClass.setBeginningGrade(grades.get(schoolClassValue.grade));
         schoolClass.setBeginningSchoolYear(schoolYear);
         Room room = new Room();
         room.setFloor(1);
         room.setName(schoolClass.getGrade().getOrdinal() + " " + schoolClass.getName());
         schoolClass.setClassRoom(roomRepository.save(room));
-        schoolClass.setStudents(createStudents(schoolClassValue.grade));
         schoolClass = schoolClassRepository.save(schoolClass);
+        schoolClass.setStudents(createStudents(schoolClass));
         schoolClasses.put(schoolClassValue, schoolClass);
     }
 
-    private List<Student> createStudents(int grade) {
+    private List<Student> createStudents(SchoolClass schoolClass) {
         List<Student> students = new ArrayList<>(studentsInSchoolClass);
-        int age = minStudentAge + grade;
+        int age = minStudentAge + schoolClass.getGrade().getOrdinal();
         for (int i = 0; i < studentsInSchoolClass; i++) {
-            students.add(createStudent(age));
+            students.add(createStudent(schoolClass, age));
         }
         studentRepository.saveAll(students);
         return students;
     }
 
-    private Student createStudent(int age) {
+    private Student createStudent(SchoolClass schoolClass, int age) {
         User studentUser = userGenerator.createUser(User.Role.student, age, age);
         Student student = new Student();
         student.setUser(studentUser);
+        student.setSchoolClass(schoolClass);
         setMarks(student);
         return student;
     }
@@ -632,11 +634,11 @@ public class Generator {
 
     static class SchoolClassValue {
         int grade;
-        int ordinal;
+        String name;
         int shift;
-        public SchoolClassValue(int grade, int ordinal, int shift) {
+        public SchoolClassValue(int grade, String name, int shift) {
             this.grade = grade;
-            this.ordinal = ordinal;
+            this.name = name;
             this.shift = shift;
         }
 
@@ -645,12 +647,12 @@ public class Generator {
             if (this == obj) return true;
             if (obj == null || getClass() != obj.getClass()) return false;
             SchoolClassValue that = (SchoolClassValue) obj;
-            return grade == that.grade && ordinal == that.ordinal;
+            return grade == that.grade && name == that.name;
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(grade, ordinal);
+            return Objects.hash(grade, name);
         }
     }
     static class CourseValue {

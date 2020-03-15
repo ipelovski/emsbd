@@ -46,11 +46,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class Extensions {
@@ -243,6 +244,31 @@ public class Extensions {
         public String startLesson() {
             return getUrl(LessonController.class, LessonController.start);
         }
+
+        public String notes(CourseController.CourseStudent student, Course course) {
+            return new UrlBuilder(NoteController.class, WebMvcConfig.listName)
+                .queryParam(NoteController.studentQueryParam, student.getId())
+                .queryParam(NoteController.courseQueryParam, course.getId())
+                .build();
+        }
+
+        public String notes(Student student, Course course, Lesson lesson) {
+            return new UrlBuilder(NoteController.class, WebMvcConfig.listName)
+                .queryParam(NoteController.studentQueryParam, student.getId())
+                .queryParam(NoteController.courseQueryParam, course.getId())
+                .queryParam(NoteController.lessonQueryParam, lesson,
+                    Lesson::getId, Objects::nonNull)
+                .build();
+        }
+
+        public String addNote(Student student, Course course, Lesson lesson) {
+            return new UrlBuilder(NoteController.class, WebMvcConfig.addName)
+                .queryParam(NoteController.studentQueryParam, student.getId())
+                .queryParam(NoteController.courseQueryParam, course.getId())
+                .queryParam(NoteController.lessonQueryParam, lesson,
+                    Lesson::getId, Objects::nonNull)
+                .build();
+        }
     }
 
     public class AdminUrls {
@@ -393,6 +419,19 @@ public class Extensions {
                 .map(value -> value != null ? value.toString() : null)
                 .collect(Collectors.toList());
             queryParams.put(name, paramValues);
+            return this;
+        }
+
+        public <T> UrlBuilder queryParam(
+            String name, T object, Function<T, ?> mapper,
+            Predicate<T> predicate
+        ) {
+            if (predicate.test(object)) {
+                List<String> paramValues = Stream.of(mapper.apply(object))
+                    .map(value -> value != null ? value.toString() : null)
+                    .collect(Collectors.toList());
+                queryParams.put(name, paramValues);
+            }
             return this;
         }
 

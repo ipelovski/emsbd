@@ -42,6 +42,8 @@ public class UserController implements SecuredController, LocalizedController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private RedirectingAuthenticationSuccessHandler successHandler;
+    @Autowired
+    private UserService userService;
 
     @Override
     public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {
@@ -118,15 +120,10 @@ public class UserController implements SecuredController, LocalizedController {
 
     @GetMapping(value = "/profile", name = profile)
     public String profile(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.getPrincipal() instanceof User) {
-            User authenticationPrincipal = (User) authentication.getPrincipal();
-            User user = userRepository.findById(authenticationPrincipal.getId()).get();
-            model.addAttribute("user", user);
-        } else {
-            throw new IllegalStateException("Unknown principal type "
-                + authentication.getPrincipal().getClass().getCanonicalName());
-        }
+        User currentUser = userService.getCurrentUser()
+            .orElseThrow(() -> new IllegalStateException("no current user."));
+        User user = userRepository.findById(currentUser.getId()).get();
+        model.addAttribute("user", user);
         return "profile";
     }
 

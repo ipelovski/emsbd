@@ -112,6 +112,7 @@ public class CourseController implements AuthorizedController, SecuredController
         private String averageMark;
         private List<String> notes;
         private List<String> absences;
+        private Course course;
 
         public CourseStudent(Course course, Student student) {
             this.id = student.getId();
@@ -130,8 +131,11 @@ public class CourseController implements AuthorizedController, SecuredController
             } else {
                 this.averageMark = null;
             }
-            this.notes = new ArrayList<>();
+            this.notes = student.getNotes().stream()
+                .map(Note::getText)
+                .collect(Collectors.toList());
             this.absences = new ArrayList<>();
+            this.course = course;
         }
 
         public Long getId() {
@@ -160,6 +164,10 @@ public class CourseController implements AuthorizedController, SecuredController
 
         public List<String> getAbsences() {
             return absences;
+        }
+
+        public Course getCourse() {
+            return course;
         }
     }
 }

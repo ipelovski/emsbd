@@ -6,6 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,7 +15,7 @@ public class SchoolClass implements JournalPersistable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String Name;
+    private String name;
     @ManyToOne
     private SchoolYear beginningSchoolYear;
     @ManyToOne
@@ -27,6 +28,8 @@ public class SchoolClass implements JournalPersistable {
     private List<Student> students;
     @OneToMany(mappedBy = "schoolClass")
     private List<SchoolClassTermShift> shifts;
+    @Transient
+    private Grade currentGrade;
 
     @Override
     public Long getId() {
@@ -38,11 +41,11 @@ public class SchoolClass implements JournalPersistable {
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public SchoolYear getBeginningSchoolYear() {
@@ -103,10 +106,17 @@ public class SchoolClass implements JournalPersistable {
             .getShift();
     }
 
-    public Grade getGrade() {
-        School school = School.getInstance();
-        int offset = school.getSchoolYear().getBeginYear()
-            - beginningSchoolYear.getBeginYear();
-        return school.getGrades().get(beginningGrade.getOrdinal() + offset);
+    public synchronized Grade getGrade() {
+        if (currentGrade == null) {
+            School school = School.getInstance();
+            int offset = school.getSchoolYear().getBeginYear()
+                - beginningSchoolYear.getBeginYear();
+            currentGrade = school.getGrades().get(beginningGrade.getOrdinal() + offset);
+        }
+        return currentGrade;
+    }
+
+    public String getFullName() {
+        return getGrade().getName() + " " + name;
     }
 }

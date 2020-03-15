@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
     <title>Add Note</title>
 </head>
 <body>
-    <div data-th-fragment="addNote(note)">
-        <form data-th-object="${note}">
+    <div data-layout-fragment="content">
+        <form data-th-object="${note}" data-th-action="${x.u().addNote()}" method="post">
             <input type="hidden" data-th-field="*{student}">
+            <input type="hidden" data-th-field="*{lesson}">
             <input type="hidden" data-th-field="*{course}">
             <textarea data-th-field="*{text}"></textarea>
             <input type="submit" data-th-value="'Add'">

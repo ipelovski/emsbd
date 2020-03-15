@@ -33,6 +33,8 @@ public class Note implements JournalPersistable {
     private Student student;
     @ManyToOne
     private Lesson lesson;
+    @ManyToOne
+    private Course course;
     @Size(max = 200)
     private String text;
 
@@ -91,6 +93,14 @@ public class Note implements JournalPersistable {
 
     public void setLesson(Lesson lesson) {
         this.lesson = lesson;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
     }
 
     public String getText() {
