@@ -269,6 +269,14 @@ public class Extensions {
                     Lesson::getId, Objects::nonNull)
                 .build();
         }
+
+        public String editNote(Note note) {
+            return getUrl(NoteController.class, WebMvcConfig.editName, note.getId());
+        }
+
+        public String removeNote(Note note) {
+            return getUrl(NoteController.class, WebMvcConfig.removeName, note.getId());
+        }
     }
 
     public class AdminUrls {

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="layout.html">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Note</title>
+</head>
+<body>
+    <div data-layout-fragment="content">
+        <form data-th-object="${note}" data-th-action="${x.u().editNote(note)}" method="post">
+            <textarea data-th-field="*{text}"></textarea>
+            <input type="submit" data-th-value="'Save'">
+            <a data-th-href="${x.u().notes(note.student, note.course, note.lesson)}"
+               data-th-text="'Cancel'"></a>
+        </form>
+    </div>
+</body>
+</html>

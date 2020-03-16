@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configurers.Expression
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -117,6 +118,55 @@ public class NoteController implements SecuredController, AuthorizedController {
         } else {
             return "redirect:" + extensions.getUrls()
                 .notes(note.getStudent(), note.getCourse(), note.getLesson());
+        }
+    }
+
+    @GetMapping(value = WebMvcConfig.objectIdPathParam + WebMvcConfig.editPath, name = WebMvcConfig.editName)
+    public String edit(
+        @PathVariable(WebMvcConfig.objectIdParamName) Long noteId,
+        Model model
+    ) {
+        Optional<Note> optionalNote = noteRepository.findById(noteId);
+        if (optionalNote.isPresent()) {
+            model.addAttribute("note", optionalNote.get());
+            return "edit-note";
+        } else {
+            return "";
+        }
+    }
+
+    @PostMapping(value = WebMvcConfig.objectIdPathParam + WebMvcConfig.editPath, name = WebMvcConfig.editName)
+    public String editSubmit(
+        @PathVariable(WebMvcConfig.objectIdParamName) Long noteId,
+        Note note, Model model
+    ) {
+        Optional<Note> optionalNote = noteRepository.findById(noteId);
+        if (optionalNote.isPresent()) {
+            Note existingNote = optionalNote.get();
+            existingNote.setText(note.getText());
+            noteRepository.save(existingNote);
+            return "redirect:" + extensions.getUrls().notes(
+                existingNote.getStudent(), existingNote.getCourse(), existingNote.getLesson());
+        } else {
+            return "";
+        }
+    }
+
+    @PostMapping(WebMvcConfig.objectIdPathParam + WebMvcConfig.removePath)
+    public String remove(
+        @PathVariable(WebMvcConfig.objectIdParamName) Long noteId,
+        Model model
+    ) {
+        Optional<Note> optionalNote = noteRepository.findById(noteId);
+        if (optionalNote.isPresent()) {
+            Note existingNote = optionalNote.get();
+            Student student = existingNote.getStudent();
+            Course course = existingNote.getCourse();
+            Lesson lesson = existingNote.getLesson();
+            noteRepository.delete(existingNote);
+            return "redirect:" + extensions.getUrls().notes(student, course, lesson);
+        } else {
+            return "";
         }
     }
 }

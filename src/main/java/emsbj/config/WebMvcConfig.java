@@ -46,9 +46,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public static final String objectIdPathParam = "/{id:\\d+}";
     public static final String objectIdParamName = "id";
     public static final String addPath = "/add";
+    public static final String editPath = "/edit";
+    public static final String removePath = "/remove";
     public static final String indexName = "index";
     public static final String listName = "list";
     public static final String addName = "add";
+    public static final String editName = "edit";
+    public static final String removeName = "remove";
     public static final String detailsName = "details";
     public static final String noProfilePicture = "/img/blank-user.png";
     public static final Map<String, Predicate<Class<?>>> pathPrefixes;
