@@ -2,7 +2,7 @@
 <html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
-    <title data-th-text="${user == null ? x.l('userNotFound') : !user.isNew() ? x.l('detailsAbout', user.username) : x.l('createUser')}">Details</title>
+    <title data-th-text="${!user.isNew() ? x.l('detailsAbout', user.username) : x.l('createUser')}">Details</title>
     <link data-th-href="@{/css/basscss.min.css}" rel="stylesheet">
 </head>
 <body>

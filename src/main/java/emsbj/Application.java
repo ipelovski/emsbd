@@ -16,6 +16,7 @@ import org.springframework.web.servlet.LocaleResolver;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
@@ -54,5 +55,10 @@ public class Application {
     public Server h2WebConsole() throws SQLException {
         return Server.createWebServer(
             "-web", "-webAllowOthers", "-webDaemon", "-webPort", "8082");
+    }
+
+    @Bean
+    public DecimalFormat scoreFormatter() {
+        return new DecimalFormat("#.00");
     }
 }

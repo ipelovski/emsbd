@@ -36,6 +36,8 @@ import org.thymeleaf.util.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -245,7 +247,17 @@ public class Extensions {
             return getUrl(LessonController.class, LessonController.start);
         }
 
-        public String notes(CourseController.CourseStudent student, Course course) {
+        public String lessonsPerWeek(LocalDate date) {
+            return new UrlBuilder(LessonController.class, WebMvcConfig.listName)
+                .queryParam(LessonController.date, date.format(DateTimeFormatter.ISO_LOCAL_DATE))
+                .build();
+        }
+
+        public String setPresence() {
+            return getUrl(LessonController.class, LessonController.setPresence);
+        }
+
+        public String notes(CourseStudent student, Course course) {
             return new UrlBuilder(NoteController.class, WebMvcConfig.listName)
                 .queryParam(NoteController.studentQueryParam, student.getId())
                 .queryParam(NoteController.courseQueryParam, course.getId())

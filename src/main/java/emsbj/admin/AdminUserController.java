@@ -52,8 +52,12 @@ public class AdminUserController implements AuthorizedController {
         @PathVariable(WebMvcConfig.objectIdParamName) Long userId, Model model
     ) {
         Optional<User> user = userRepository.findById(userId);
-        model.addAttribute("user", user.orElse(null));
-        return "/admin/user-details.html";
+        if (user.isPresent()) {
+            model.addAttribute("user", user.get());
+            return "/admin/user-details";
+        } else {
+            return "";
+        }
     }
 
     @PostMapping(WebMvcConfig.objectIdPathParam)

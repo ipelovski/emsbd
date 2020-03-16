@@ -98,3 +98,9 @@ body {
 .sequence > li:not(:last-of-type):after {
     content: ',';
 }
+select.being-late {
+    background-color: yellow;
+}
+select.absent {
+    background-color: orangered;
+}

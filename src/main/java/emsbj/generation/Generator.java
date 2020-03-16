@@ -6,6 +6,8 @@ import emsbj.Course;
 import emsbj.CourseRepository;
 import emsbj.Grade;
 import emsbj.GradeRepository;
+import emsbj.Lesson;
+import emsbj.LessonRepository;
 import emsbj.Room;
 import emsbj.RoomRepository;
 import emsbj.School;
@@ -38,6 +40,7 @@ import java.io.InputStream;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.ArrayList;
@@ -97,6 +100,8 @@ public class Generator {
     @Autowired
     private CourseRepository courseRepository;
     @Autowired
+    private LessonRepository lessonRepository;
+    @Autowired
     private BlobRepository blobRepository;
 
     private List<WeeklySlot> weeklySlots;
@@ -104,6 +109,8 @@ public class Generator {
     private Map<Integer, TeachingProgram> gradePrograms;
     private List<Subject> subjects;
     private Map<SchoolClassValue, SchoolClass> schoolClasses = new LinkedHashMap<>();
+    private Map<CourseValue, Course> courses = new HashMap<>();
+    private Map<String, List<TeacherTimeTable>> teacherTimeTables;
     private SchoolYear schoolYear;
     private Term term;
     private Random random = new Random(0);
@@ -146,7 +153,7 @@ public class Generator {
             programAll = mergePrograms(programAll, programs.get(schoolClass));
         }
         Map<String, List<Teacher>> teachers = createTeachers(programAll);
-        Map<String, List<TeacherTimeTable>> teacherTimeTables = createTeacherTimeTables(teachers);
+        teacherTimeTables = createTeacherTimeTables(teachers);
         Map<SchoolClassValue, Map<String, Teacher>> schoolClassTeachers =
             computeSchoolClassesTeachers(programs, teachers);
 
@@ -164,6 +171,8 @@ public class Generator {
         checkAll(teacherTimeTables);
 
         persistSchoolClasses(schoolClassTimeTables, schoolClassTeachers);
+
+        createLessons();
     }
 
     private void createAdmin() {
@@ -414,9 +423,7 @@ public class Generator {
                     TeacherTimeTable timeTable = timeTables.stream()
                         .filter(tt -> tt.getOwner().equals(teacher))
                         .findAny().orElseThrow(() -> new RuntimeException("no time table found"));
-                    CourseValue course = new CourseValue();
-                    course.subject = subject;
-                    course.schoolClass = schoolClass;
+                    CourseValue course = new CourseValue(schoolClass, subject);
                     timeTable.occupy(weeklySlot, course);
                 }
             }
@@ -615,7 +622,8 @@ public class Generator {
             course.setTeacher(schoolClassTeachers.get(schoolClass).get(subjectName));
             course.setTerm(term);
             course.setRoom(course.getSchoolClass().getClassRoom());
-            courseRepository.save(course);
+            course = courseRepository.save(course);
+            courses.put(new CourseValue(schoolClass, subjectName), course);
         }
     }
 
@@ -626,6 +634,58 @@ public class Generator {
             .findAny()
             .orElseThrow(() ->
                 new IllegalArgumentException("Cannot find subject."));
+    }
+
+    private void createLessons() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDate startOfWeek = now.toLocalDate().minusDays(now.getDayOfWeek().ordinal());
+        createLessonsForThisWeek(now, startOfWeek);
+        startOfWeek = startOfWeek.minusWeeks(1);
+        while (term.getBegin().isBefore(startOfWeek)) {
+            createLessonsForWeek(startOfWeek);
+            startOfWeek = startOfWeek.minusWeeks(1);
+        }
+    }
+
+    private void createLessonsForThisWeek(LocalDateTime now, LocalDate startOfWeek) {
+        for (String subjectName : teacherTimeTables.keySet()) {
+            for (TeacherTimeTable teacherTimeTable : teacherTimeTables.get(subjectName)) {
+                for (WeeklySlot weeklySlot : teacherTimeTable.getWeeklySlots()) {
+                    if (weeklySlot.getDay().ordinal() <= now.getDayOfWeek().ordinal()
+                            && weeklySlot.getEnd().isBefore(now.toLocalTime())
+                            && teacherTimeTable.isOccupied(weeklySlot)
+                    ) {
+                        Course course = courses.get(teacherTimeTable.getSlotContent(weeklySlot).get(0));
+                        Lesson lesson = new Lesson();
+                        lesson.setCourse(course);
+                        lesson.setWeeklySlot(weeklySlot);
+                        LocalDate date = startOfWeek.plusDays(weeklySlot.getDay().ordinal());
+                        LocalDateTime begin = LocalDateTime.of(date, weeklySlot.getBegin());
+                        lesson.setBegin(begin);
+                        lessonRepository.save(lesson);
+                    }
+                }
+            }
+        }
+    }
+
+    private void createLessonsForWeek(LocalDate startOfWeek) {
+        for (String subjectName : teacherTimeTables.keySet()) {
+            for (TeacherTimeTable teacherTimeTable : teacherTimeTables.get(subjectName)) {
+                for (WeeklySlot weeklySlot : teacherTimeTable.getWeeklySlots()) {
+                    if (teacherTimeTable.isOccupied(weeklySlot)) {
+                        Course course = courses.get(teacherTimeTable.getSlotContent(weeklySlot).get(0));
+                        Lesson lesson = new Lesson();
+                        lesson.setCourse(course);
+                        lesson.setWeeklySlot(weeklySlot);
+                        LocalDate date = startOfWeek.plusDays(weeklySlot.getDay().ordinal());
+                        LocalDateTime begin = LocalDateTime.of(date, weeklySlot.getBegin());
+                        lesson.setBegin(begin);
+                        lessonRepository.save(lesson);
+                    }
+                }
+            }
+        }
     }
 
     private int randomInt(int min, int max) {
@@ -658,5 +718,24 @@ public class Generator {
     static class CourseValue {
         SchoolClassValue schoolClass;
         String subject;
+
+        public CourseValue(SchoolClassValue schoolClass, String subject) {
+            this.schoolClass = schoolClass;
+            this.subject = subject;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            CourseValue that = (CourseValue) o;
+            return schoolClass.equals(that.schoolClass) &&
+                subject.equals(that.subject);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(schoolClass, subject);
+        }
     }
 }

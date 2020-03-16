@@ -15,6 +15,7 @@ public class Absence implements JournalPersistable {
     private Lesson lesson;
     @ManyToOne
     private Student student;
+    private double value;
 
     @Override
     public Long getId() {
@@ -39,5 +40,13 @@ public class Absence implements JournalPersistable {
 
     public void setStudent(Student student) {
         this.student = student;
+    }
+
+    public double getValue() {
+        return value;
+    }
+
+    public void setValue(double value) {
+        this.value = value;
     }
 }
