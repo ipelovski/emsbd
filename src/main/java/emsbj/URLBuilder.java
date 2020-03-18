@@ -1,6 +1,7 @@
 package emsbj;
 
 import emsbj.config.WebMvcConfig;
+import javafx.util.Pair;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.CollectionUtils;
@@ -11,14 +12,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -27,34 +28,29 @@ import java.util.stream.Stream;
 
 public class URLBuilder {
     private static final Map<String, Method> methods = new HashMap<>();
-    private final Optional<HttpServletRequest> request;
     private final Class<?> controllerType;
     private final String requestMappingName;
     private List<Object> uriParams;
+    private Map<String, Object> namedURIParams;
     private Map<String, List<String>> queryParams;
+    private HttpServletRequest request;
 
     public URLBuilder(Class<?> controllerType, String requestMappingName) {
-        this(null, controllerType, requestMappingName);
-    }
-
-    public URLBuilder(HttpServletRequest request, Class<?> controllerType, String requestMappingName) {
-        this.request = Optional.ofNullable(request);
         Objects.requireNonNull(controllerType);
         Objects.requireNonNull(requestMappingName);
         this.controllerType = controllerType;
         this.requestMappingName = requestMappingName;
-        this.uriParams = buildUriVariableValues(controllerType);
+        this.uriParams = new LinkedList<>();
+        this.namedURIParams = new LinkedHashMap<>();
         this.queryParams = new HashMap<>(0);
     }
 
     public static String get(Class<?> controllerType, String requestMappingName, Object... uriVariableValues) {
         return new URLBuilder(controllerType, requestMappingName)
-            .uriParams(uriVariableValues).build();
-    }
-
-    public static String get(HttpServletRequest request, Class<?> controllerType, String requestMappingName, Object... uriVariableValues) {
-        return new URLBuilder(request, controllerType, requestMappingName)
-            .uriParams(uriVariableValues).build();
+            .gatherNamedURIParams()
+            .namedURIParams(valuesToMap(uriVariableValues))
+//            .uriParams(uriVariableValues)
+            .build();
     }
 
     public URLBuilder queryParam(String name, Object... values) {
@@ -83,13 +79,35 @@ public class URLBuilder {
         return this;
     }
 
+    public URLBuilder namedURIParams(Map<String, Object> values) {
+        namedURIParams.putAll(values);
+        return this;
+    }
+
+    public URLBuilder namedURIParams(String key, Object value, Object... rest) {
+        namedURIParams.put(key, value);
+        return namedURIParams(valuesToMap(rest));
+    }
+
+    public URLBuilder gatherNamedURIParams() {
+        buildUriVariableValues(controllerType);
+        return this;
+    }
+
+    public URLBuilder setRequest(HttpServletRequest request) {
+        this.request = request;
+        return this;
+    }
+
     public String build() {
         Method method = getMethod(controllerType, requestMappingName);
         UriComponentsBuilder uriComponentsBuilder = fromMethod(controllerType, method);
         Object[] uriVariableValues = uriParams.toArray();
         return uriComponentsBuilder
             .queryParams(CollectionUtils.toMultiValueMap(queryParams))
-            .buildAndExpand(uriVariableValues)
+            .build()
+            .expand(namedURIParams)
+            .expand(uriVariableValues)
             .toUriString();
     }
 
@@ -140,8 +158,8 @@ public class URLBuilder {
     }
 
     private UriComponentsBuilder fromRequest() {
-        if (request.isPresent()) {
-            return ServletUriComponentsBuilder.fromRequest(request.get());
+        if (request != null) {
+            return ServletUriComponentsBuilder.fromServletMapping(request);
         } else {
             return ServletUriComponentsBuilder.fromCurrentServletMapping();
         }
@@ -166,16 +184,25 @@ public class URLBuilder {
         }
     }
 
-    private List<Object> buildUriVariableValues(Class<?> controllerType, Object... methodUriVariableValues) {
-        List<Object> uriVariableValues = new ArrayList<>(
-            methodUriVariableValues.length + WebMvcConfig.pathPrefixValueSuppliers.size());
-        for (Map.Entry<Predicate<Class<?>>, Supplier<Optional<?>>> entry :
-            WebMvcConfig.pathPrefixValueSuppliers.entrySet()) {
+    private void buildUriVariableValues(Class<?> controllerType) {
+        for (Map.Entry<Predicate<Class<?>>, Supplier<Pair<String, Object>>> entry :
+            WebMvcConfig.pathPrefixValueSuppliers.entrySet()
+        ) {
             if (entry.getKey().test(controllerType)) {
-                entry.getValue().get().ifPresent(uriVariableValues::add);
+                Pair<String, Object> uriVariable = entry.getValue().get();
+                namedURIParams.put(uriVariable.getKey(), uriVariable.getValue());
             }
         }
-        Collections.addAll(uriVariableValues, methodUriVariableValues);
-        return uriVariableValues;
+    }
+
+    private static Map<String, Object> valuesToMap(Object... values) {
+        if (values.length % 2 != 0) {
+            throw new IllegalArgumentException("values must be even");
+        }
+        Map<String, Object> valuesMap = new LinkedHashMap<>(values.length / 2);
+        for (int i = 0; i < values.length; i += 2) {
+            valuesMap.put(values[i].toString(), values[i + 1]);
+        }
+        return valuesMap;
     }
 }

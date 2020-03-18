@@ -6,10 +6,10 @@
 </head>
 <body>
     <div data-layout-fragment="content">
-        <form data-th-object="${note}" data-th-action="${x.u().editNote(note)}" method="post">
+        <form data-th-object="${note}" data-th-action="${x.u().notes().editNote(note)}" method="post">
             <textarea data-th-field="*{text}"></textarea>
             <input type="submit" data-th-value="'Save'">
-            <a data-th-href="${x.u().notes(note.student, note.course, note.lesson)}"
+            <a data-th-href="${x.u().notes().notes(note.student, note.course, note.lesson)}"
                data-th-text="'Cancel'"></a>
         </form>
     </div>

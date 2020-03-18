@@ -21,7 +21,7 @@
                 <div class="col col-3" data-th-text="${lesson.course != null ? lesson.course.subject.name.value : '- - -'}"></div>
                 <div class="col col-3">
                     <span>
-                        <a data-th-if="${lesson.course != null}" data-th-href="${x.u().course(lesson.course)}"
+                        <a data-th-if="${lesson.course != null}" data-th-href="${x.u().courses().course(lesson.course)}"
                            data-th-text="${lesson.course.schoolClass.name}"></a>
                     </span>
                     <span data-th-if="${lesson.course == null}"
@@ -50,10 +50,10 @@
                     <span data-th-if="${lesson != null}">
                         <span data-th-text="|${lesson.weeklySlot.ordinal} (${lesson.weeklySlot.begin})|"></span>
                         <span data-th-if="${lesson.id == null && lesson.course != null}">
-                            <a data-th-href="${x.u().course(lesson.course)}" data-th-text="${lesson.course.subject.name.value}"></a>
+                            <a data-th-href="${x.u().courses().course(lesson.course)}" data-th-text="${lesson.course.subject.name.value}"></a>
                         </span>
                         <span data-th-if="${lesson.id != null && lesson.course != null}">
-                            <a data-th-href="${x.u().lesson(lesson)}" data-th-text="${lesson.course.subject.name.value}"></a>
+                            <a data-th-href="${x.u().lessons().lesson(lesson)}" data-th-text="${lesson.course.subject.name.value}"></a>
                         </span>
                         <span data-th-if="${lesson.course == null}"
                              data-th-text="'- - -'"></span>

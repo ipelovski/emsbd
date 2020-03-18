@@ -81,7 +81,7 @@ public class CourseController implements AuthorizedController, SecuredController
             int rawScore = (int) Math.round(score * 100);
             Mark mark = new Mark(student, course.getSubject(), rawScore);
             markRepository.save(mark);
-            return "redirect:" + extensions.getURLs().course(course);
+            return "redirect:" + extensions.getURLs().courses().course(course);
         } else {
             return "";
         }

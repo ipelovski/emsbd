@@ -7,11 +7,11 @@
 </head>
 <body>
     <p>
-        If not registered then <a data-th-href="${x.u().signUp()}">sign up</a>.
+        If not registered then <a data-th-href="${x.u().users().signUp()}">sign up</a>.
     </p>
     <h3>Sign in</h3>
     <h4>As a specific user</h4>
-    <form data-th-action="@{${x.u().signIn()}(requested=${requested})}" method="post">
+    <form data-th-action="@{${x.u().users().signIn()}(requested=${requested})}" method="post">
         <p data-th-if="${error != null}" data-th-text="${error}"></p>
         <p data-th-if="${logout != null}" data-th-text="${logout}"></p>
         <p>
@@ -26,15 +26,15 @@
     </form>
     <h4>Or sign in as a user with role</h4>
     <div class="flex flex-wrap">
-        <form class="col col-1" data-th-action="@{${x.u().signInRole()}(requested=${requested})}" method="post">
+        <form class="col col-1" data-th-action="@{${x.u().users().signInRole()}(requested=${requested})}" method="post">
             <input type="hidden" name="role" value="student">
             <input type="submit" value="Student">
         </form>
-        <form class="col col-1" data-th-action="@{${x.u().signInRole()}(requested=${requested})}" method="post">
+        <form class="col col-1" data-th-action="@{${x.u().users().signInRole()}(requested=${requested})}" method="post">
             <input type="hidden" name="role" value="teacher">
             <input type="submit" value="Teacher">
         </form>
-        <form class="col col-1" data-th-action="@{${x.u().signInRole()}(requested=${requested})}" method="post">
+        <form class="col col-1" data-th-action="@{${x.u().users().signInRole()}(requested=${requested})}" method="post">
             <input type="hidden" name="role" value="principal">
             <input type="submit" value="Principal">
         </form>

@@ -127,7 +127,7 @@ public class LessonController implements AuthorizedController, SecuredController
 
     public Breadcrumb detailsBreadCrumb(Lesson lesson) {
         return new Breadcrumb(
-            extensions.u().lesson(lesson),
+            extensions.u().lessons().lesson(lesson),
             "Lesson in " + lesson.getCourse().getSubject().getName().getValue(),
             homeController.indexBreadcrumb()
         );
@@ -139,7 +139,7 @@ public class LessonController implements AuthorizedController, SecuredController
         Lesson lesson = new Lesson(course, weeklySlot);
         lesson.setBegin(LocalDateTime.now());
         lessonRepository.save(lesson);
-        return "redirect:" + extensions.getURLs().lesson(lesson);
+        return "redirect:" + extensions.getURLs().lessons().lesson(lesson);
     }
 
     @PostMapping(value = "/set-presence", name = setPresence)
@@ -160,7 +160,7 @@ public class LessonController implements AuthorizedController, SecuredController
             }
             absence.setValue(value);
             absenceRepository.save(absence);
-            return "redirect:" + extensions.getURLs().lesson(lesson);
+            return "redirect:" + extensions.getURLs().lessons().lesson(lesson);
         } else {
             return "";
         }

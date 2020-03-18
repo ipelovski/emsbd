@@ -33,6 +33,7 @@ public class UserController implements SecuredController, LocalizedController {
     public static final String signIn = "signIn";
     public static final String signInRole = "signInRole";
     public static final String signUp = "signUp";
+    public static final String signOut = "signOut";
     public static final String profile = "profile";
     @Autowired
     private UserRepository userRepository;
@@ -116,6 +117,11 @@ public class UserController implements SecuredController, LocalizedController {
             signUpForm.setError(e.getMessage());
             return "sign-up";
         }
+    }
+
+    @GetMapping("/sign-out")
+    public String signOut() {
+        return "";
     }
 
     @GetMapping(value = "/profile", name = profile)

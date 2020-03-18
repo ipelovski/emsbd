@@ -8,7 +8,7 @@
 <body>
     <div class="pt4">
         <div data-th-replace="~{fragments/profile-picture::profilePicture(
-        imageSrc=@{${x.u().profilePicture(user)}},
+        imageSrc=@{${x.u().blobs().profilePicture(user)}},
         imageSize=128,id='profilePicture')}">
         </div>
         <script>
@@ -19,7 +19,7 @@ window.onProfilePictureUpdated = function (newSrc) {
         </script>
     </div>
     <div data-th-insert="~{fragments/file-upload(id='profilePicture',
-        target=@{${x.u().uploadProfilePicture(user)}},
+        target=@{${x.u().blobs().uploadProfilePicture(user)}},
         accept='image/png, image/jpeg',
         onSuccess='onProfilePictureUpdated')}"></div>
     <div class="flex flex-wrap" data-th-object="${user}">

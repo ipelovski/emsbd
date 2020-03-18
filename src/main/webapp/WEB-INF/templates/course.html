@@ -5,6 +5,7 @@
 </head>
 <body>
     <div data-layout-fragment="content">
+        <div data-th-replace="~{fragments/breadcrumbs :: breadcrumbs(${breadcrumbs})}"></div>
         <h3 class="center" data-th-text="|${course.subject.name.value} ${course.schoolClass.getFullName()} #{class}|"></h3>
         <ul>
             <li class="flex flex-wrap">
@@ -24,7 +25,7 @@
                         <span>, </span>
                     </span>
                     <a class="addMark" href="#" data-th-attr="data-object-id = ${courseStudent.id}">+</a>
-                    <form data-th-action="${x.u().course(course)}" method="post"
+                    <form data-th-action="${x.u().courses().course(course)}" method="post"
                           data-th-attr="id = 'mark-form-' + ${courseStudent.id}"
                           class="display-none" tabindex="0">
                         <input type="reset" data-th-value="'X'">
@@ -35,11 +36,11 @@
                 </div>
                 <div class="col col-2" data-th-text="|${courseStudent.averageMark != null ? @scoreFormatter.format(courseStudent.averageMark) : '-'} (${courseStudent.marks.size()})|"></div>
                 <div class="col col-2">
-                    <a class="addNote" href="#" data-th-attr="data-object-id = ${courseStudent.id}">+</a>
-                    <a data-th-href="${x.u().notes(courseStudent, courseStudent.course)}" data-th-text="|View (${courseStudent.notes.size()})|"></a>
+                    <a class="addNote" data-th-href="${x.u().notes().addNote(courseStudent, course, lesson)}">+</a>
+                    <a data-th-href="${x.u().notes().notes(courseStudent, courseStudent.course)}" data-th-text="|View (${courseStudent.notes.size()})|"></a>
                 </div>
                 <div class="col col-2">
-                    <form data-th-action="${x.u().setPresence()}" method="post">
+                    <form data-th-if="${lesson != null}" data-th-action="${x.u().lessons().setPresence()}" method="post">
                         <input type="hidden" name="lessonId" data-th-value="${lesson.id}">
                         <input type="hidden" name="studentId" data-th-value="${courseStudent.id}">
                         <select name="value" onchange="this.form.submit()"
@@ -89,25 +90,6 @@ function hideLastFocusedForm() {
 }
 function hideForm(form) {
     form.classList.toggle('display-none', true);
-}
-
-let addNoteButtons = document.querySelectorAll('.addNote');
-for (let addNoteButton of addNoteButtons) {
-    addNoteButton.addEventListener('click', addNoteClicked, false);
-}
-let addNoteFragment = new Fragment({
-    elementId: dialog.contentElementId,
-    controllerURL: [[${x.u().addNote()}]],
-    search: {}
-});
-function addNoteClicked(e) {
-    let objectId = e.target.getAttribute('data-object-id');
-    addNoteFragment.load({
-        studentId: objectId,
-        courseId: [[${course.id}]]
-    });
-    dialog.show();
-    e.preventDefault();
 }
         </script>
     </div>

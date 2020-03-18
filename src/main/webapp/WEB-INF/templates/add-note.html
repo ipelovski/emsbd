@@ -6,7 +6,7 @@
 </head>
 <body>
     <div data-layout-fragment="content">
-        <form data-th-object="${note}" data-th-action="${x.u().addNote()}" method="post">
+        <form data-th-object="${note}" data-th-action="${x.u().notes().addNote()}" method="post">
             <input type="hidden" data-th-field="*{student}">
             <input type="hidden" data-th-field="*{lesson}">
             <input type="hidden" data-th-field="*{course}">

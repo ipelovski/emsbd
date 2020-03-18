@@ -16,7 +16,7 @@
 
         <div data-th-if="${user != null}" data-th-object="${user}">
             <div>
-                <img id="profile-picture" data-th-src="@{${x.u().profilePicture(user)}}">
+                <img id="profile-picture" data-th-src="@{${x.u().blobs().profilePicture(user)}}">
                 <script>
 window.onProfilePictureUpdated = function (newSrc) {
     let profilePicture = document.getElementById('profile-picture');
@@ -26,7 +26,7 @@ window.onProfilePictureUpdated = function (newSrc) {
             </div>
             <div>
                 <div data-th-insert="~{fragments/file-upload(id='profile-picture',
-                    target=@{${x.u().uploadProfilePicture(user)}},
+                    target=@{${x.u().blobs().uploadProfilePicture(user)}},
                     accept='image/png, image/jpeg',
                     onSuccess='onProfilePictureUpdated')}"></div>
                 <form>

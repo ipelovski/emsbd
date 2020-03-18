@@ -10,7 +10,7 @@
             <span data-th-text="|Notes of ${student.user.personalInfo.getName()} for ${course.subject.name.value}|"></span>
             <span data-th-if="${lesson != null}" data-th-text="| in lesson from ${lesson.begin}|"></span>
         </h4>
-        <a data-th-href="${x.u().addNote(student, course, lesson)}" data-th-text="Add"></a>
+        <a data-th-href="${x.u().notes().addNote(student, course, lesson)}" data-th-text="Add"></a>
         <ul class="list">
             <li class="flex flex-wrap">
                 <div class="col col-2" data-th-text="'Added on'"></div>
@@ -22,10 +22,10 @@
                 <div class="col col-2" data-th-text="${#dates.format(note.createdOn, 'dd.MM.yyyy HH:mm')}"></div>
                 <div class="col col-8" data-th-text="${note.text}"></div>
                 <div class="col col-1">
-                    <a data-th-href="${x.u().editNote(note)}" data-th-text="'Edit'"></a>
+                    <a data-th-href="${x.u().notes().editNote(note)}" data-th-text="'Edit'"></a>
                 </div>
                 <div class="col col-1">
-                    <form data-th-action="${x.u().removeNote(note)}" method="post">
+                    <form data-th-action="${x.u().notes().removeNote(note)}" method="post">
                         <input type="submit" data-th-value="'Remove'">
                     </form>
                 </div>

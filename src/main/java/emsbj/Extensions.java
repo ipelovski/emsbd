@@ -14,7 +14,7 @@ import emsbj.admin.AdminTermController;
 import emsbj.admin.AdminUserController;
 import emsbj.config.WebMvcConfig;
 import emsbj.user.User;
-import emsbj.user.UserController;
+import emsbj.user.UserURLs;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -44,6 +44,16 @@ public class Extensions {
     private WebApplicationContext webApplicationContext;
     @Autowired
     private HomeURLs homeURLs;
+    @Autowired
+    private UserURLs userURLs;
+    @Autowired
+    private BlobURLs blobURLs;
+    @Autowired
+    private CourseURLs courseURLs;
+    @Autowired
+    private LessonURLs lessonURLs;
+    @Autowired
+    private NoteURLs noteURLs;
     private Urls urls;
     private AdminUrls adminUrls;
 
@@ -75,25 +85,6 @@ public class Extensions {
     public String localize(String label, String... args) {
         Locale locale = LocaleContextHolder.getLocale();
         return messageSource.getMessage(label, args, locale);
-    }
-
-    public String lu(String url) {
-        return localizedUrl(url);
-    }
-
-    public String localizedUrl(String url) {
-        Locale locale = LocaleContextHolder.getLocale();
-        return localizedUrl(url, locale);
-    }
-
-    public String localizedUrl(String url, Locale locale) {
-        if (Strings.isBlank(url)) {
-            throw new IllegalArgumentException("url should not be blank");
-        }
-        if (url.charAt(0) != '/') {
-            throw new IllegalArgumentException("non absolute urls are not supported");
-        }
-        return "/" + locale.toLanguageTag() + url;
     }
 
     public String localizeCurrentRequestURL(Locale locale) {
@@ -150,120 +141,24 @@ public class Extensions {
             return homeURLs;
         }
 
-        public String blob(Blob blob) {
-            return URLBuilder.get(BlobController.class, WebMvcConfig.detailsName, blob.getId());
+        public UserURLs users() {
+            return userURLs;
         }
 
-        public String profilePicture(User user) {
-            if (user.getPersonalInfo().getPicture() != null) {
-                return blob(user.getPersonalInfo().getPicture());
-            } else {
-                return WebMvcConfig.noProfilePicture;
-            }
+        public BlobURLs blobs() {
+            return blobURLs;
         }
 
-        public String uploadProfilePicture(User user) {
-            return URLBuilder.get(BlobController.class, BlobController.uploadProfilePicture, user.getId());
+        public CourseURLs courses() {
+            return courseURLs;
         }
 
-        public String signIn() {
-            return URLBuilder.get(UserController.class, UserController.signIn);
+        public LessonURLs lessons() {
+            return lessonURLs;
         }
 
-        public String signIn(Locale locale) {
-            return localizedUrl("/sign-in", locale);
-        }
-
-        public String signInRole() {
-            return URLBuilder.get(UserController.class, UserController.signInRole);
-        }
-
-        public String signUp() {
-            return URLBuilder.get(UserController.class, UserController.signUp);
-        }
-
-        public String signOut() {
-            return localizedUrl("/sign-out");
-        }
-
-        public String profile() {
-            return URLBuilder.get(UserController.class, UserController.profile);
-        }
-
-        public String course(Course course) {
-            return URLBuilder.get(CourseController.class, WebMvcConfig.detailsName, course.getId());
-        }
-
-        public String addNote() {
-            return URLBuilder.get(NoteController.class, WebMvcConfig.addName);
-        }
-
-        public String schedule() {
-            return URLBuilder.get(CourseController.class, CourseController.schedule);
-        }
-
-        public String lessons() {
-            return URLBuilder.get(LessonController.class, WebMvcConfig.listName);
-        }
-
-        public String lesson(Lesson lesson) {
-            return URLBuilder.get(LessonController.class, WebMvcConfig.detailsName, lesson.getId());
-        }
-
-        public String startLesson() {
-            return URLBuilder.get(LessonController.class, LessonController.start);
-        }
-
-        public String lessonsPerWeek(LocalDate date) {
-            return new URLBuilder(LessonController.class, WebMvcConfig.listName)
-                .queryParam(LessonController.date, date.format(DateTimeFormatter.ISO_LOCAL_DATE))
-                .build();
-        }
-
-        public String setPresence() {
-            return URLBuilder.get(LessonController.class, LessonController.setPresence);
-        }
-
-        public String notes(CourseStudent student, Course course) {
-            return new URLBuilder(NoteController.class, WebMvcConfig.listName)
-                .queryParam(NoteController.studentQueryParam, student.getId())
-                .queryParam(NoteController.courseQueryParam, course.getId())
-                .build();
-        }
-
-        public String notes(Student student, Course course, Lesson lesson) {
-            return new URLBuilder(NoteController.class, WebMvcConfig.listName)
-                .queryParam(NoteController.studentQueryParam, student.getId())
-                .queryParam(NoteController.courseQueryParam, course.getId())
-                .queryParam(NoteController.lessonQueryParam, lesson,
-                    Lesson::getId, Objects::nonNull)
-                .build();
-        }
-
-        public String addNote(CourseStudent student, Course course, Lesson lesson) {
-            return new URLBuilder(NoteController.class, WebMvcConfig.addName)
-                .queryParam(NoteController.studentQueryParam, student.getId())
-                .queryParam(NoteController.courseQueryParam, course.getId())
-                .queryParam(NoteController.lessonQueryParam, lesson,
-                    Lesson::getId, Objects::nonNull)
-                .build();
-        }
-
-        public String addNote(Student student, Course course, Lesson lesson) {
-            return new URLBuilder(NoteController.class, WebMvcConfig.addName)
-                .queryParam(NoteController.studentQueryParam, student.getId())
-                .queryParam(NoteController.courseQueryParam, course.getId())
-                .queryParam(NoteController.lessonQueryParam, lesson,
-                    Lesson::getId, Objects::nonNull)
-                .build();
-        }
-
-        public String editNote(Note note) {
-            return URLBuilder.get(NoteController.class, WebMvcConfig.editName, note.getId());
-        }
-
-        public String removeNote(Note note) {
-            return URLBuilder.get(NoteController.class, WebMvcConfig.removeName, note.getId());
+        public NoteURLs notes() {
+            return noteURLs;
         }
     }
 
@@ -287,6 +182,7 @@ public class Extensions {
 
         public String termsBySchoolYear(SchoolYear schoolYear) {
             return new URLBuilder(AdminTermController.class, WebMvcConfig.listName)
+                .gatherNamedURIParams()
                 .queryParam(AdminTermController.schoolYearQueryParam, schoolYear.getId())
                 .build();
         }

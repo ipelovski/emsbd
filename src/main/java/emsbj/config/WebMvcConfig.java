@@ -3,6 +3,7 @@ package emsbj.config;
 import emsbj.UrlLocaleInterceptor;
 import emsbj.admin.AdminGradeController;
 import emsbj.controller.LocalizedController;
+import javafx.util.Pair;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -41,6 +42,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public static final Collection<String> supportedLocales = Arrays.asList(supportedLocalesArray);
     public static final Locale defaultLocale = Locale.forLanguageTag(supportedLocalesArray[0]);
     public static final String defaultLocalePath = "/" + defaultLocale.toLanguageTag();
+    public static final String localePathName = "locale";
     public static final String localePathParam = "/{locale:en|bg}";
     public static final Pattern localePathPattern = Pattern.compile("/(en|bg)");
     public static final String objectIdPathParam = "/{id:\\d+}";
@@ -56,7 +58,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public static final String detailsName = "details";
     public static final String noProfilePicture = "/img/blank-user.png";
     public static final Map<String, Predicate<Class<?>>> pathPrefixes;
-    public static final Map<Predicate<Class<?>>, Supplier<Optional<?>>> pathPrefixValueSuppliers;
+    public static final Map<Predicate<Class<?>>, Supplier<Pair<String, Object>>> pathPrefixValueSuppliers;
     static {
         Predicate<Class<?>> isLocalizedController =
             LocalizedController.class::isAssignableFrom;
@@ -66,7 +68,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
         pathPrefixValueSuppliers = new LinkedHashMap<>();
         pathPrefixValueSuppliers.put(isLocalizedController, () ->
-            Optional.of(LocaleContextHolder.getLocale().toLanguageTag()));
+            new Pair<>(localePathName, LocaleContextHolder.getLocale().toLanguageTag()));
     }
 
     @Override

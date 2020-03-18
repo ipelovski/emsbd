@@ -1,9 +1,9 @@
 package emsbj;
 
 import emsbj.config.WebMvcConfig;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class HomeURLs extends ViewInfo {
     private HomeController homeController;
 

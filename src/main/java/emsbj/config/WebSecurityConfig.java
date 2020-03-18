@@ -79,8 +79,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessHandler(new ForwardLogoutSuccessHandler("/") {
                     @Override
                     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-                        Locale locale = new UrlLocaleResolver().resolveLocale(request);
-                        String targetUrl = extensions.getURLs().signIn(locale);
+                        String targetUrl = extensions.getURLs().users().signIn(request);
                         response.sendRedirect(targetUrl);
                     }
                 })

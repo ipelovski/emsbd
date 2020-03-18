@@ -5,6 +5,7 @@
     <title>Lesson</title>
 </head>
 <body>
+change or delete
     <div data-layout-fragment="content">
         <ul class="list">
             <li class="flex flex-wrap">
@@ -20,7 +21,7 @@
                 <div class="col col-3" data-th-text="${lesson.course != null ? lesson.course.subject.name.value : '- - -'}"></div>
                 <div class="col col-3">
                     <span>
-                        <a data-th-if="${lesson.course != null}" data-th-href="${x.u().course(lesson.course)}"
+                        <a data-th-if="${lesson.course != null}" data-th-href="${x.u().courses().course(lesson.course)}"
                            data-th-text="${lesson.course.schoolClass.name}"></a>
                     </span>
                     <span data-th-if="${lesson.course == null}"
