@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 @NamedEntityGraph(name="SchoolYear.all", includeAllAttributes = true)
-public class SchoolYear implements JournalPersistable {
+public class SchoolYear extends JournalPersistable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

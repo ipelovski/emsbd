@@ -2,9 +2,9 @@ package emsbj;
 
 import org.springframework.data.domain.Persistable;
 
-public interface JournalPersistable extends Persistable<Long> {
+public abstract class JournalPersistable implements Persistable<Long> {
     @Override
-    default boolean isNew() {
+    public boolean isNew() {
         return getId() == null;
     }
 }

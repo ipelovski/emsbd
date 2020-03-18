@@ -49,10 +49,10 @@
                      data-th-with="lesson = ${weeklyLessons.getLesson(day, shift, ordinal)}">
                     <span data-th-if="${lesson != null}">
                         <span data-th-text="|${lesson.weeklySlot.ordinal} (${lesson.weeklySlot.begin})|"></span>
-                        <span data-th-if="${lesson.id == null && lesson.course != null}">
+                        <span data-th-if="${lesson.isNew() && lesson.course != null}">
                             <a data-th-href="${x.u().courses().course(lesson.course)}" data-th-text="${lesson.course.subject.name.value}"></a>
                         </span>
-                        <span data-th-if="${lesson.id != null && lesson.course != null}">
+                        <span data-th-if="${!lesson.isNew() && lesson.course != null}">
                             <a data-th-href="${x.u().lessons().lesson(lesson)}" data-th-text="${lesson.course.subject.name.value}"></a>
                         </span>
                         <span data-th-if="${lesson.course == null}"

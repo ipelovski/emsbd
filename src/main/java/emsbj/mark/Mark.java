@@ -17,7 +17,7 @@ import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 
 @Entity
-public class Mark implements JournalPersistable {
+public class Mark extends JournalPersistable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -35,6 +35,8 @@ public class Mark implements JournalPersistable {
     @Min(200)
     @Max(600)
     private short rawScore;
+    // TODO
+    private boolean isFinal;
 
     protected Mark() {
 

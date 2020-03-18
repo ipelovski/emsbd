@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 import java.time.Instant;
 
 @Entity
-public class Note implements JournalPersistable {
+public class Note extends JournalPersistable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

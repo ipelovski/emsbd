@@ -11,7 +11,7 @@ import java.net.URLEncoder;
 import java.util.Base64;
 
 @Entity
-public class Blob implements JournalPersistable {
+public class Blob extends JournalPersistable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

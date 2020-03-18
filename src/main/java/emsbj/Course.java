@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 import java.util.List;
 
 @Entity
-public class Course implements JournalPersistable {
+public class Course extends JournalPersistable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

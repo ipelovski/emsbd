@@ -8,7 +8,7 @@ import javax.persistence.OneToMany;
 import java.util.List;
 
 @Entity
-public class Room implements JournalPersistable {
+public class Room extends JournalPersistable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
