@@ -101,11 +101,17 @@ screens
         home
             lessons for today
         lessons
-            current lesson
-        ? schedule this week
-            schedules for other weeks
+            this week, other weeks
+            lesson
+                home > lessons for given week > lesson
+                go to course, keep lesson in url
+                    home > lessons for given week > lesson > course
+        schedule
+            course
+                view past lessons
         courses this term
             course
+                schedule for a given course: on the schedule mark the weekly slots for the given schedule bolded and green for example
                 students, marks, absences, and notes
         search student
             student (if in a course led by the teacher)

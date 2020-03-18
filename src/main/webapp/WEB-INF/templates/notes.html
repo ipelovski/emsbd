@@ -8,7 +8,7 @@
     <div data-layout-fragment="content">
         <h4 class="center">
             <span data-th-text="|Notes of ${student.user.personalInfo.getName()} for ${course.subject.name.value}|"></span>
-            <span data-th-if="${lesson != null}" data-th-text="| in ${lesson}|"></span>
+            <span data-th-if="${lesson != null}" data-th-text="| in lesson from ${lesson.begin}|"></span>
         </h4>
         <a data-th-href="${x.u().addNote(student, course, lesson)}" data-th-text="Add"></a>
         <ul class="list">

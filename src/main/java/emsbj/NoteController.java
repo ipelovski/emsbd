@@ -116,7 +116,7 @@ public class NoteController implements SecuredController, AuthorizedController {
         if (redirect != null) {
             return "redirect:" + redirect;
         } else {
-            return "redirect:" + extensions.getUrls()
+            return "redirect:" + extensions.getURLs()
                 .notes(note.getStudent(), note.getCourse(), note.getLesson());
         }
     }
@@ -145,7 +145,7 @@ public class NoteController implements SecuredController, AuthorizedController {
             Note existingNote = optionalNote.get();
             existingNote.setText(note.getText());
             noteRepository.save(existingNote);
-            return "redirect:" + extensions.getUrls().notes(
+            return "redirect:" + extensions.getURLs().notes(
                 existingNote.getStudent(), existingNote.getCourse(), existingNote.getLesson());
         } else {
             return "";
@@ -164,7 +164,7 @@ public class NoteController implements SecuredController, AuthorizedController {
             Course course = existingNote.getCourse();
             Lesson lesson = existingNote.getLesson();
             noteRepository.delete(existingNote);
-            return "redirect:" + extensions.getUrls().notes(student, course, lesson);
+            return "redirect:" + extensions.getURLs().notes(student, course, lesson);
         } else {
             return "";
         }

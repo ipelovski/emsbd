@@ -79,7 +79,7 @@ public class BlobController {
 
             Map<String, String> response = new HashMap<>(2);
             response.put("message", "You successfully uploaded " + file.getOriginalFilename() + "!");
-            response.put("path", extensions.getUrls().blob(blob));
+            response.put("path", extensions.getURLs().blob(blob));
             return ResponseEntity
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON_UTF8)

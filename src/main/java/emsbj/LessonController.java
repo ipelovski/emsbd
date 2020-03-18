@@ -40,6 +40,8 @@ public class LessonController implements AuthorizedController, SecuredController
     private TeacherService teacherService;
     @Autowired
     private Extensions extensions;
+    @Autowired
+    private HomeController homeController;
 
     @Override
     public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {
@@ -116,18 +118,28 @@ public class LessonController implements AuthorizedController, SecuredController
             model.addAttribute("lesson", lesson);
             model.addAttribute("course", course);
             model.addAttribute("courseStudents", lessonStudents);
+            model.addAttribute("breadcrumbs", detailsBreadCrumb(lesson).build());
             return "course";
         } else {
             return "";
         }
     }
 
+    public Breadcrumb detailsBreadCrumb(Lesson lesson) {
+        return new Breadcrumb(
+            extensions.u().lesson(lesson),
+            "Lesson in " + lesson.getCourse().getSubject().getName().getValue(),
+            homeController.indexBreadcrumb()
+        );
+    }
+
     @PostMapping(value = "/start", name = start)
     public String start(Course course, WeeklySlot weeklySlot) {
+        // TODO check if not started already that is a lesson already exists
         Lesson lesson = new Lesson(course, weeklySlot);
         lesson.setBegin(LocalDateTime.now());
         lessonRepository.save(lesson);
-        return "redirect:" + extensions.getUrls().lesson(lesson);
+        return "redirect:" + extensions.getURLs().lesson(lesson);
     }
 
     @PostMapping(value = "/set-presence", name = setPresence)
@@ -148,7 +160,7 @@ public class LessonController implements AuthorizedController, SecuredController
             }
             absence.setValue(value);
             absenceRepository.save(absence);
-            return "redirect:" + extensions.getUrls().lesson(lesson);
+            return "redirect:" + extensions.getURLs().lesson(lesson);
         } else {
             return "";
         }

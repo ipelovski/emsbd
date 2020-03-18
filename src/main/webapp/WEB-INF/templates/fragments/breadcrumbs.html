@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Breadcrumbs</title>
+</head>
+<body>
+    <div data-th-fragment="breadcrumbs(breadcrumbs)">
+        <ul class="sequence">
+            <li data-th-each="breadcrumb : ${breadcrumbs}">
+                <a data-th-unless="${breadcrumb.isLast()}"
+                   data-th-href="${breadcrumb.getUrl()}"
+                   data-th-text="${breadcrumb.getLabel()}"></a>
+                <span data-th-if="${breadcrumb.isLast()}"
+                   data-th-text="${breadcrumb.getLabel()}"></span>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

@@ -45,6 +45,8 @@ import java.time.LocalTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -582,6 +584,17 @@ public class Generator {
         int age = minStudentAge + schoolClass.getGrade().getOrdinal();
         for (int i = 0; i < studentsInSchoolClass; i++) {
             students.add(createStudent(schoolClass, age));
+        }
+        students.sort(
+            Comparator
+                .comparing((Student student) ->
+                    student.getUser().getPersonalInfo().getFirstName())
+                .thenComparing((Student student) ->
+                    student.getUser().getPersonalInfo().getMiddleName())
+                .thenComparing((Student student) ->
+                    student.getUser().getPersonalInfo().getLastName()));
+        for (int i = 0; i < students.size(); i++) {
+            students.get(i).setNumber(i + 1);
         }
         studentRepository.saveAll(students);
         return students;

@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -83,7 +81,7 @@ public class CourseController implements AuthorizedController, SecuredController
             int rawScore = (int) Math.round(score * 100);
             Mark mark = new Mark(student, course.getSubject(), rawScore);
             markRepository.save(mark);
-            return "redirect:" + extensions.getUrls().course(course);
+            return "redirect:" + extensions.getURLs().course(course);
         } else {
             return "";
         }

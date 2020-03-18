@@ -7,6 +7,7 @@ import emsbj.user.User;
 import emsbj.user.UserRepository;
 import emsbj.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,8 @@ import java.util.stream.StreamSupport;
 public class HomeController implements SecuredController, AuthorizedController {
     @Autowired
     private Extensions extensions;
+    @Autowired
+    private MessageSource messageSource;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -90,6 +93,7 @@ public class HomeController implements SecuredController, AuthorizedController {
                 model.addAttribute("nextLessons", nextLessons);
                 model.addAttribute("currentLessons", currentLessons);
                 if (currentLessons.size() > 0) {
+                    // TODO here too
                     model.addAttribute("currentLesson", currentLessons.get(0));
                 }
                 return "teacher-home";
@@ -101,5 +105,9 @@ public class HomeController implements SecuredController, AuthorizedController {
         } else {
             return "home";
         }
+    }
+
+    public Breadcrumb indexBreadcrumb() {
+        return new Breadcrumb(extensions.getURLs().home(), extensions.capitalize("home"));
     }
 }

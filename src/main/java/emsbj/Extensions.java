@@ -19,41 +19,22 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.util.AntPathMatcher;
 import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.springframework.web.util.UriComponentsBuilder;
 import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class Extensions {
@@ -61,6 +42,8 @@ public class Extensions {
     private MessageSource messageSource;
     @Autowired
     private WebApplicationContext webApplicationContext;
+    @Autowired
+    private HomeURLs homeURLs;
     private Urls urls;
     private AdminUrls adminUrls;
 
@@ -130,10 +113,10 @@ public class Extensions {
     }
 
     public Urls u() {
-        return getUrls();
+        return getURLs();
     }
 
-    public Urls getUrls() {
+    public Urls getURLs() {
         if(urls == null) {
             urls = new Urls();
         }
@@ -151,16 +134,6 @@ public class Extensions {
         return adminUrls;
     }
 
-    private String getUrl(Class<?> controllerType, String requestMappingName, Object... uriVariableValues) {
-        return new UrlBuilder(controllerType, requestMappingName)
-            .uriParams(uriVariableValues).build();
-    }
-
-    private String getUrl(HttpServletRequest request, Class<?> controllerType, String requestMappingName, Object... uriVariableValues) {
-        return new UrlBuilder(request, controllerType, requestMappingName)
-            .uriParams(uriVariableValues).build();
-    }
-
     // from ServletUriComponentsBuilder.getCurrentRequest
     private HttpServletRequest getCurrentRequest() {
         RequestAttributes attrs = RequestContextHolder.getRequestAttributes();
@@ -169,22 +142,16 @@ public class Extensions {
     }
 
     public class Urls {
-        private HttpServletRequest request;
 
-        public Urls() {
-            this.request = null;
+        private Urls() {
         }
 
-        public Urls(HttpServletRequest request) {
-            this.request = request;
-        }
-
-        public String home() {
-            return getUrl(HomeController.class, WebMvcConfig.indexName);
+        public HomeURLs home() {
+            return homeURLs;
         }
 
         public String blob(Blob blob) {
-            return getUrl(BlobController.class, WebMvcConfig.detailsName, blob.getId());
+            return URLBuilder.get(BlobController.class, WebMvcConfig.detailsName, blob.getId());
         }
 
         public String profilePicture(User user) {
@@ -196,11 +163,11 @@ public class Extensions {
         }
 
         public String uploadProfilePicture(User user) {
-            return getUrl(BlobController.class, BlobController.uploadProfilePicture, user.getId());
+            return URLBuilder.get(BlobController.class, BlobController.uploadProfilePicture, user.getId());
         }
 
         public String signIn() {
-            return getUrl(request, UserController.class, UserController.signIn);
+            return URLBuilder.get(UserController.class, UserController.signIn);
         }
 
         public String signIn(Locale locale) {
@@ -208,11 +175,11 @@ public class Extensions {
         }
 
         public String signInRole() {
-            return getUrl(UserController.class, UserController.signInRole);
+            return URLBuilder.get(UserController.class, UserController.signInRole);
         }
 
         public String signUp() {
-            return getUrl(UserController.class, UserController.signUp);
+            return URLBuilder.get(UserController.class, UserController.signUp);
         }
 
         public String signOut() {
@@ -220,52 +187,61 @@ public class Extensions {
         }
 
         public String profile() {
-            return getUrl(UserController.class, UserController.profile);
+            return URLBuilder.get(UserController.class, UserController.profile);
         }
 
         public String course(Course course) {
-            return getUrl(CourseController.class, WebMvcConfig.detailsName, course.getId());
+            return URLBuilder.get(CourseController.class, WebMvcConfig.detailsName, course.getId());
         }
 
         public String addNote() {
-            return getUrl(NoteController.class, WebMvcConfig.addName);
+            return URLBuilder.get(NoteController.class, WebMvcConfig.addName);
         }
 
         public String schedule() {
-            return getUrl(CourseController.class, CourseController.schedule);
+            return URLBuilder.get(CourseController.class, CourseController.schedule);
         }
 
         public String lessons() {
-            return getUrl(LessonController.class, WebMvcConfig.listName);
+            return URLBuilder.get(LessonController.class, WebMvcConfig.listName);
         }
 
         public String lesson(Lesson lesson) {
-            return getUrl(LessonController.class, WebMvcConfig.detailsName, lesson.getId());
+            return URLBuilder.get(LessonController.class, WebMvcConfig.detailsName, lesson.getId());
         }
 
         public String startLesson() {
-            return getUrl(LessonController.class, LessonController.start);
+            return URLBuilder.get(LessonController.class, LessonController.start);
         }
 
         public String lessonsPerWeek(LocalDate date) {
-            return new UrlBuilder(LessonController.class, WebMvcConfig.listName)
+            return new URLBuilder(LessonController.class, WebMvcConfig.listName)
                 .queryParam(LessonController.date, date.format(DateTimeFormatter.ISO_LOCAL_DATE))
                 .build();
         }
 
         public String setPresence() {
-            return getUrl(LessonController.class, LessonController.setPresence);
+            return URLBuilder.get(LessonController.class, LessonController.setPresence);
         }
 
         public String notes(CourseStudent student, Course course) {
-            return new UrlBuilder(NoteController.class, WebMvcConfig.listName)
+            return new URLBuilder(NoteController.class, WebMvcConfig.listName)
                 .queryParam(NoteController.studentQueryParam, student.getId())
                 .queryParam(NoteController.courseQueryParam, course.getId())
                 .build();
         }
 
         public String notes(Student student, Course course, Lesson lesson) {
-            return new UrlBuilder(NoteController.class, WebMvcConfig.listName)
+            return new URLBuilder(NoteController.class, WebMvcConfig.listName)
+                .queryParam(NoteController.studentQueryParam, student.getId())
+                .queryParam(NoteController.courseQueryParam, course.getId())
+                .queryParam(NoteController.lessonQueryParam, lesson,
+                    Lesson::getId, Objects::nonNull)
+                .build();
+        }
+
+        public String addNote(CourseStudent student, Course course, Lesson lesson) {
+            return new URLBuilder(NoteController.class, WebMvcConfig.addName)
                 .queryParam(NoteController.studentQueryParam, student.getId())
                 .queryParam(NoteController.courseQueryParam, course.getId())
                 .queryParam(NoteController.lessonQueryParam, lesson,
@@ -274,7 +250,7 @@ public class Extensions {
         }
 
         public String addNote(Student student, Course course, Lesson lesson) {
-            return new UrlBuilder(NoteController.class, WebMvcConfig.addName)
+            return new URLBuilder(NoteController.class, WebMvcConfig.addName)
                 .queryParam(NoteController.studentQueryParam, student.getId())
                 .queryParam(NoteController.courseQueryParam, course.getId())
                 .queryParam(NoteController.lessonQueryParam, lesson,
@@ -283,277 +259,132 @@ public class Extensions {
         }
 
         public String editNote(Note note) {
-            return getUrl(NoteController.class, WebMvcConfig.editName, note.getId());
+            return URLBuilder.get(NoteController.class, WebMvcConfig.editName, note.getId());
         }
 
         public String removeNote(Note note) {
-            return getUrl(NoteController.class, WebMvcConfig.removeName, note.getId());
+            return URLBuilder.get(NoteController.class, WebMvcConfig.removeName, note.getId());
         }
     }
 
     public class AdminUrls {
 
         public String adminIndex() {
-            return getUrl(AdminController.class, WebMvcConfig.indexName);
+            return URLBuilder.get(AdminController.class, WebMvcConfig.indexName);
         }
 
         public String schoolYears() {
-            return getUrl(AdminSchoolYearController.class, WebMvcConfig.listName);
+            return URLBuilder.get(AdminSchoolYearController.class, WebMvcConfig.listName);
         }
 
         public String addSchoolYear() {
-            return getUrl(AdminSchoolYearController.class, WebMvcConfig.addName);
+            return URLBuilder.get(AdminSchoolYearController.class, WebMvcConfig.addName);
         }
 
         public String terms() {
-            return getUrl(AdminTermController.class, WebMvcConfig.listName);
+            return URLBuilder.get(AdminTermController.class, WebMvcConfig.listName);
         }
 
         public String termsBySchoolYear(SchoolYear schoolYear) {
-            return new UrlBuilder(AdminTermController.class, WebMvcConfig.listName)
+            return new URLBuilder(AdminTermController.class, WebMvcConfig.listName)
                 .queryParam(AdminTermController.schoolYearQueryParam, schoolYear.getId())
                 .build();
         }
 
         public String term(Term term) {
-            return getUrl(AdminTermController.class, WebMvcConfig.detailsName, term.getId());
+            return URLBuilder.get(AdminTermController.class, WebMvcConfig.detailsName, term.getId());
         }
 
         public String addTermWithSchoolYear(SchoolYear schoolYear) {
-            return getUrl(AdminTermController.class, WebMvcConfig.addName, schoolYear.getId());
+            return URLBuilder.get(AdminTermController.class, WebMvcConfig.addName, schoolYear.getId());
         }
 
         public String subjects() {
-            return getUrl(AdminSubjectController.class, WebMvcConfig.listName);
+            return URLBuilder.get(AdminSubjectController.class, WebMvcConfig.listName);
         }
 
         public String addSubject() {
-            return getUrl(AdminSubjectController.class, WebMvcConfig.addName);
+            return URLBuilder.get(AdminSubjectController.class, WebMvcConfig.addName);
         }
 
         public String users() {
-            return getUrl(AdminUserController.class, WebMvcConfig.listName);
+            return URLBuilder.get(AdminUserController.class, WebMvcConfig.listName);
         }
 
         public String addUser() {
-            return getUrl(AdminUserController.class, WebMvcConfig.addName);
+            return URLBuilder.get(AdminUserController.class, WebMvcConfig.addName);
         }
 
         public String user(User user) {
-            return getUrl(AdminUserController.class, WebMvcConfig.detailsName, user.getId());
+            return URLBuilder.get(AdminUserController.class, WebMvcConfig.detailsName, user.getId());
         }
 
         public String grades() {
-            return getUrl(AdminGradeController.class, WebMvcConfig.listName);
+            return URLBuilder.get(AdminGradeController.class, WebMvcConfig.listName);
         }
 
         public String addGrade() {
-            return getUrl(AdminGradeController.class, WebMvcConfig.addName);
+            return URLBuilder.get(AdminGradeController.class, WebMvcConfig.addName);
         }
 
         public String schoolClasses() {
-            return getUrl(AdminSchoolClassController.class, WebMvcConfig.listName);
+            return URLBuilder.get(AdminSchoolClassController.class, WebMvcConfig.listName);
         }
 
         public String addSchoolClass() {
-            return getUrl(AdminSchoolClassController.class, WebMvcConfig.addName);
+            return URLBuilder.get(AdminSchoolClassController.class, WebMvcConfig.addName);
         }
 
         public String schoolClass(SchoolClass schoolClass) {
-            return getUrl(AdminSchoolClassController.class, WebMvcConfig.detailsName, schoolClass.getId());
+            return URLBuilder.get(AdminSchoolClassController.class, WebMvcConfig.detailsName, schoolClass.getId());
         }
 
         public String schoolClassSchedule(SchoolClass schoolClass) {
-            return getUrl(AdminSchoolClassController.class, CourseController.schedule, schoolClass.getId());
+            return URLBuilder.get(AdminSchoolClassController.class, CourseController.schedule, schoolClass.getId());
         }
 
         public String teachers() {
-            return getUrl(AdminTeacherController.class, WebMvcConfig.listName);
+            return URLBuilder.get(AdminTeacherController.class, WebMvcConfig.listName);
         }
 
         public String teacher(Teacher teacher) {
-            return getUrl(AdminTeacherController.class, WebMvcConfig.detailsName, teacher.getId());
+            return URLBuilder.get(AdminTeacherController.class, WebMvcConfig.detailsName, teacher.getId());
         }
 
         public String selectFormMasterFragment() {
-            return getUrl(AdminTeacherController.class, AdminTeacherController.selectFormMasterFragment);
+            return URLBuilder.get(AdminTeacherController.class, AdminTeacherController.selectFormMasterFragment);
         }
 
         public String teacherList() {
-            return getUrl(AdminTeacherController.class, AdminTeacherController.teacherList);
+            return URLBuilder.get(AdminTeacherController.class, AdminTeacherController.teacherList);
         }
 
         public String students() {
-            return getUrl(AdminStudentController.class, WebMvcConfig.listName);
+            return URLBuilder.get(AdminStudentController.class, WebMvcConfig.listName);
         }
 
         public String student(Student student) {
-            return getUrl(AdminStudentController.class, WebMvcConfig.detailsName, student.getId());
+            return URLBuilder.get(AdminStudentController.class, WebMvcConfig.detailsName, student.getId());
         }
 
         public String studentList() {
-            return getUrl(AdminStudentController.class, AdminStudentController.studentList);
+            return URLBuilder.get(AdminStudentController.class, AdminStudentController.studentList);
         }
 
         public String weeklySlots() {
-            return getUrl(AdminScheduleController.class, AdminScheduleController.weeklySlotsList);
+            return URLBuilder.get(AdminScheduleController.class, AdminScheduleController.weeklySlotsList);
         }
 
         public String rooms() {
-            return getUrl(AdminRoomController.class, WebMvcConfig.listName);
+            return URLBuilder.get(AdminRoomController.class, WebMvcConfig.listName);
         }
 
         public String addRoom() {
-            return getUrl(AdminRoomController.class, WebMvcConfig.addName);
+            return URLBuilder.get(AdminRoomController.class, WebMvcConfig.addName);
         }
 
         public String courses() {
-            return getUrl(AdminCourseController.class, WebMvcConfig.listName);
-        }
-    }
-
-    private static class UrlBuilder {
-        private static final Map<String, Method> methods = new HashMap<>();
-        private final Optional<HttpServletRequest> request;
-        private final Class<?> controllerType;
-        private final String requestMappingName;
-        private List<Object> uriParams;
-        private Map<String, List<String>> queryParams;
-
-        public UrlBuilder(Class<?> controllerType, String requestMappingName) {
-            this(null, controllerType, requestMappingName);
-        }
-
-        public UrlBuilder(HttpServletRequest request, Class<?> controllerType, String requestMappingName) {
-            this.request = Optional.ofNullable(request);
-            Objects.requireNonNull(controllerType);
-            Objects.requireNonNull(requestMappingName);
-            this.controllerType = controllerType;
-            this.requestMappingName = requestMappingName;
-            this.uriParams = buildUriVariableValues(controllerType);
-            this.queryParams = new HashMap<>(0);
-        }
-
-        public UrlBuilder queryParam(String name, Object... values) {
-            List<String> paramValues = Arrays.stream(values)
-                .map(value -> value != null ? value.toString() : null)
-                .collect(Collectors.toList());
-            queryParams.put(name, paramValues);
-            return this;
-        }
-
-        public <T> UrlBuilder queryParam(
-            String name, T object, Function<T, ?> mapper,
-            Predicate<T> predicate
-        ) {
-            if (predicate.test(object)) {
-                List<String> paramValues = Stream.of(mapper.apply(object))
-                    .map(value -> value != null ? value.toString() : null)
-                    .collect(Collectors.toList());
-                queryParams.put(name, paramValues);
-            }
-            return this;
-        }
-
-        public UrlBuilder uriParams(Object... values) {
-            Collections.addAll(uriParams, values);
-            return this;
-        }
-
-        public String build() {
-            Method method = getMethod(controllerType, requestMappingName);
-            UriComponentsBuilder uriComponentsBuilder = fromMethod(controllerType, method);
-            Object[] uriVariableValues = uriParams.toArray();
-            return uriComponentsBuilder
-                .queryParams(CollectionUtils.toMultiValueMap(queryParams))
-                .buildAndExpand(uriVariableValues)
-                .toUriString();
-        }
-
-        private Method getMethod(Class<?> controllerType, String requestMappingName) {
-            String key = getKey(controllerType, requestMappingName);
-            return methods.computeIfAbsent(key, s -> findMethod(controllerType, requestMappingName));
-        }
-
-        private Method findMethod(Class<?> controllerType, String requestMappingName) {
-            Method[] methods = controllerType.getDeclaredMethods();
-            RequestMapping[] methodRequestMappings = new RequestMapping[methods.length];
-            for (int i = 0; i < methods.length; i++) {
-                Method method = methods[i];
-                RequestMapping requestMapping =
-                    AnnotatedElementUtils.findMergedAnnotation(method, RequestMapping.class);
-                if (requestMapping != null
-                    && requestMapping.name().equals(requestMappingName)) {
-                    return method;
-                }
-                methodRequestMappings[i] = requestMapping;
-            }
-            for (int i = 0; i < methods.length; i++) {
-                Method method = methods[i];
-                if (method.getName().equals(requestMappingName)
-                    && methodRequestMappings[i] != null) {
-                    return method;
-                }
-            }
-            throw new RuntimeException(String.format(
-                "Cannot find method in %s with name %s",
-                controllerType.getSimpleName(), requestMappingName));
-        }
-
-        private String getKey(Class<?> aClass, String requestMappingName) {
-            return aClass.getSimpleName() + "::" + requestMappingName;
-        }
-
-        // based on MvcUriComponentsBuilder.fromMethodInternal
-        private UriComponentsBuilder fromMethod(Class<?> controllerType, Method method) {
-            UriComponentsBuilder builder = fromRequest();
-            String prefix = getPathPrefix(controllerType);
-            builder.path(prefix);
-            String typePath = getRequestMappingPath(controllerType);
-            String methodPath = getRequestMappingPath(method);
-            String path = new AntPathMatcher().combine(typePath, methodPath);
-            builder.path(path);
-            return builder;
-        }
-
-        private UriComponentsBuilder fromRequest() {
-            if (request.isPresent()) {
-                return ServletUriComponentsBuilder.fromRequest(request.get());
-            } else {
-                return ServletUriComponentsBuilder.fromCurrentServletMapping();
-            }
-        }
-
-        private String getPathPrefix(Class<?> controllerType) {
-            for (Map.Entry<String, Predicate<Class<?>>> entry : WebMvcConfig.pathPrefixes.entrySet()) {
-                if (entry.getValue().test(controllerType)) {
-                    return entry.getKey();
-                }
-            }
-            return "";
-        }
-
-        private String getRequestMappingPath(AnnotatedElement annotatedElement) {
-            RequestMapping requestMapping = AnnotatedElementUtils.
-                findMergedAnnotation(annotatedElement, RequestMapping.class);
-            if (requestMapping != null && requestMapping.path().length > 0) {
-                return requestMapping.path()[0];
-            } else {
-                return "";
-            }
-        }
-
-        private List<Object> buildUriVariableValues(Class<?> controllerType, Object... methodUriVariableValues) {
-            List<Object> uriVariableValues = new ArrayList<>(
-                methodUriVariableValues.length + WebMvcConfig.pathPrefixValueSuppliers.size());
-            for (Map.Entry<Predicate<Class<?>>, Supplier<Optional<?>>> entry :
-                WebMvcConfig.pathPrefixValueSuppliers.entrySet()) {
-                if (entry.getKey().test(controllerType)) {
-                    entry.getValue().get().ifPresent(uriVariableValues::add);
-                }
-            }
-            Collections.addAll(uriVariableValues, methodUriVariableValues);
-            return uriVariableValues;
+            return URLBuilder.get(AdminCourseController.class, WebMvcConfig.listName);
         }
     }
 }
