@@ -1,7 +1,7 @@
 package emsbj.admin;
 
-import emsbj.Grade;
-import emsbj.GradeRepository;
+import emsbj.grade.Grade;
+import emsbj.grade.GradeRepository;
 import emsbj.config.WebMvcConfig;
 import emsbj.controller.AuthorizedController;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package emsbj.admin;
 
-import emsbj.WeeklySlot;
-import emsbj.WeeklySlotRepository;
+import emsbj.weeklyslot.WeeklySlot;
+import emsbj.weeklyslot.WeeklySlotRepository;
 import emsbj.controller.AuthorizedController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

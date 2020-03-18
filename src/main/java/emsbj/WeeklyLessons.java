@@ -1,5 +1,7 @@
 package emsbj;
 
+import emsbj.lesson.Lesson;
+
 import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.Collections;

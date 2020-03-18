@@ -1,5 +1,8 @@
 package emsbj;
 
+import emsbj.schoolclass.SchoolClass;
+import emsbj.term.Term;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

@@ -1,6 +1,6 @@
 package emsbj.generation;
 
-import emsbj.WeeklySlot;
+import emsbj.weeklyslot.WeeklySlot;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;

@@ -1,7 +1,6 @@
 package emsbj.user;
 
 import emsbj.JournalPersistable;
-import emsbj.PersonalInfo;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.GrantedAuthority;

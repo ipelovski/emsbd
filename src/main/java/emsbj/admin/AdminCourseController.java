@@ -1,7 +1,7 @@
 package emsbj.admin;
 
-import emsbj.Course;
-import emsbj.CourseRepository;
+import emsbj.course.Course;
+import emsbj.course.CourseRepository;
 import emsbj.Extensions;
 import emsbj.controller.AuthorizedController;
 import org.springframework.beans.factory.annotation.Autowired;

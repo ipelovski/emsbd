@@ -1,7 +1,7 @@
 package emsbj;
 
-import emsbj.config.WebMvcConfig;
 import emsbj.controller.SecuredController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.stereotype.Controller;
@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping
 public class LandingController implements SecuredController {
+    @Autowired
+    private Extensions extensions;
+
     @Override
     public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {
         registry
@@ -20,6 +23,6 @@ public class LandingController implements SecuredController {
 
     @GetMapping("/")
     public String redirectToHome() {
-        return "redirect:" + WebMvcConfig.defaultLocalePath;
+        return "redirect:" + extensions.getURLs().home();
     }
 }

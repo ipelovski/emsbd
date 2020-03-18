@@ -1,6 +1,6 @@
 package emsbj.generation;
 
-import emsbj.PersonalInfo;
+import emsbj.user.PersonalInfo;
 import emsbj.user.User;
 import emsbj.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

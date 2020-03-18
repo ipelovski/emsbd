@@ -1,10 +1,10 @@
 package emsbj.mark;
 
 import emsbj.JournalPersistable;
-import emsbj.Lesson;
-import emsbj.Student;
-import emsbj.Subject;
-import emsbj.Teacher;
+import emsbj.lesson.Lesson;
+import emsbj.student.Student;
+import emsbj.subject.Subject;
+import emsbj.teacher.Teacher;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Entity;

@@ -1,7 +1,7 @@
 package emsbj.mark;
 
-import emsbj.SchoolClass;
-import emsbj.Subject;
+import emsbj.schoolclass.SchoolClass;
+import emsbj.subject.Subject;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

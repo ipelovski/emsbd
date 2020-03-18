@@ -1,7 +1,7 @@
 package emsbj.user;
 
-import emsbj.URLBuilder;
-import emsbj.UrlLocaleResolver;
+import emsbj.web.URLBuilder;
+import emsbj.web.UrlLocaleResolver;
 import emsbj.config.WebMvcConfig;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;

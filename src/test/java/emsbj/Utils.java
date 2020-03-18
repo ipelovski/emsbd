@@ -1,5 +1,7 @@
 package emsbj;
 
+import emsbj.grade.Grade;
+import emsbj.student.Student;
 import emsbj.user.User;
 import org.junit.Assert;
 

@@ -1,7 +1,20 @@
 package emsbj;
 
+import emsbj.grade.Grade;
+import emsbj.grade.GradeRepository;
 import emsbj.mark.Mark;
 import emsbj.mark.MarkController;
+import emsbj.schoolclass.SchoolClass;
+import emsbj.schoolclass.SchoolClassRepository;
+import emsbj.schoolyear.SchoolYear;
+import emsbj.schoolyear.SchoolYearRepository;
+import emsbj.student.Student;
+import emsbj.student.StudentRepository;
+import emsbj.subject.Subject;
+import emsbj.subject.SubjectRepository;
+import emsbj.subject.SubjectService;
+import emsbj.term.Term;
+import emsbj.term.TermRepository;
 import emsbj.user.UserRepository;
 import org.junit.After;
 import org.junit.Assert;

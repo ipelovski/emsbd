@@ -1,14 +1,14 @@
 package emsbj.mark;
 
-import emsbj.GradeRepository;
-import emsbj.SchoolClass;
-import emsbj.SchoolClassRepository;
-import emsbj.SchoolYear;
-import emsbj.SchoolYearRepository;
-import emsbj.Subject;
-import emsbj.SubjectRepository;
-import emsbj.Term;
-import emsbj.TermRepository;
+import emsbj.grade.GradeRepository;
+import emsbj.schoolclass.SchoolClass;
+import emsbj.schoolclass.SchoolClassRepository;
+import emsbj.schoolyear.SchoolYear;
+import emsbj.schoolyear.SchoolYearRepository;
+import emsbj.subject.Subject;
+import emsbj.subject.SubjectRepository;
+import emsbj.term.Term;
+import emsbj.term.TermRepository;
 import emsbj.controller.LocalizedController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

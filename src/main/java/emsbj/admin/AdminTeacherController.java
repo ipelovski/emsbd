@@ -1,9 +1,9 @@
 package emsbj.admin;
 
 import emsbj.Extensions;
-import emsbj.Teacher;
-import emsbj.FormMaster;
-import emsbj.TeacherRepository;
+import emsbj.teacher.Teacher;
+import emsbj.teacher.FormMaster;
+import emsbj.teacher.TeacherRepository;
 import emsbj.config.WebMvcConfig;
 import emsbj.controller.AuthorizedController;
 import org.springframework.beans.factory.annotation.Autowired;

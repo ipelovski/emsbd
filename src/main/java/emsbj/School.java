@@ -1,5 +1,10 @@
 package emsbj;
 
+import emsbj.grade.Grade;
+import emsbj.grade.GradeRepository;
+import emsbj.schoolyear.SchoolYear;
+import emsbj.schoolyear.SchoolYearRepository;
+import emsbj.term.Term;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

@@ -1,6 +1,6 @@
 package emsbj.user;
 
-import emsbj.RedirectingAuthenticationSuccessHandler;
+import emsbj.web.RedirectingAuthenticationSuccessHandler;
 import emsbj.config.WebMvcConfig;
 import emsbj.controller.LocalizedController;
 import emsbj.controller.SecuredController;
@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

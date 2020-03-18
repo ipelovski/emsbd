@@ -1,7 +1,7 @@
 package emsbj.admin;
 
-import emsbj.Student;
-import emsbj.StudentRepository;
+import emsbj.student.Student;
+import emsbj.student.StudentRepository;
 import emsbj.config.WebMvcConfig;
 import emsbj.controller.AuthorizedController;
 import org.springframework.beans.factory.annotation.Autowired;

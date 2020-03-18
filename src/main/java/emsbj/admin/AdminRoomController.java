@@ -1,8 +1,8 @@
 package emsbj.admin;
 
 import emsbj.Extensions;
-import emsbj.Room;
-import emsbj.RoomRepository;
+import emsbj.room.Room;
+import emsbj.room.RoomRepository;
 import emsbj.config.WebMvcConfig;
 import emsbj.controller.AuthorizedController;
 import org.springframework.beans.factory.annotation.Autowired;

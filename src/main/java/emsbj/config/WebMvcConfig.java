@@ -1,6 +1,6 @@
 package emsbj.config;
 
-import emsbj.UrlLocaleInterceptor;
+import emsbj.web.UrlLocaleInterceptor;
 import emsbj.admin.AdminGradeController;
 import emsbj.controller.LocalizedController;
 import javafx.util.Pair;
@@ -29,7 +29,6 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;

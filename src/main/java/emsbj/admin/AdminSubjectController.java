@@ -1,10 +1,10 @@
 package emsbj.admin;
 
-import emsbj.Grade;
-import emsbj.GradeRepository;
-import emsbj.Subject;
-import emsbj.SubjectRepository;
-import emsbj.SubjectService;
+import emsbj.grade.Grade;
+import emsbj.grade.GradeRepository;
+import emsbj.subject.Subject;
+import emsbj.subject.SubjectRepository;
+import emsbj.subject.SubjectService;
 import emsbj.config.WebMvcConfig;
 import emsbj.controller.AuthorizedController;
 import org.springframework.beans.factory.annotation.Autowired;

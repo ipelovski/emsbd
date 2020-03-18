@@ -1,5 +1,15 @@
 package emsbj;
 
+import emsbj.grade.Grade;
+import emsbj.grade.GradeRepository;
+import emsbj.schoolyear.SchoolYear;
+import emsbj.schoolyear.SchoolYearRepository;
+import emsbj.subject.Subject;
+import emsbj.subject.SubjectName;
+import emsbj.subject.SubjectNameRepository;
+import emsbj.subject.SubjectRepository;
+import emsbj.term.Term;
+import emsbj.term.TermRepository;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

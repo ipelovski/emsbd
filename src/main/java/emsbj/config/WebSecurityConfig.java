@@ -1,9 +1,8 @@
 package emsbj.config;
 
 import emsbj.Extensions;
-import emsbj.RedirectingAuthenticationSuccessHandler;
-import emsbj.RedirectingLoginUrlAuthenticationEntryPoint;
-import emsbj.UrlLocaleResolver;
+import emsbj.web.RedirectingAuthenticationSuccessHandler;
+import emsbj.web.RedirectingLoginUrlAuthenticationEntryPoint;
 import emsbj.controller.SecuredController;
 import emsbj.user.JournalUserDetailsService;
 import emsbj.user.User;
@@ -29,7 +28,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Locale;
 import java.util.Map;
 
 @Configuration

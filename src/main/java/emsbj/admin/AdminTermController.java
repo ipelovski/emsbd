@@ -1,9 +1,9 @@
 package emsbj.admin;
 
-import emsbj.SchoolYear;
-import emsbj.SchoolYearRepository;
-import emsbj.Term;
-import emsbj.TermRepository;
+import emsbj.schoolyear.SchoolYear;
+import emsbj.schoolyear.SchoolYearRepository;
+import emsbj.term.Term;
+import emsbj.term.TermRepository;
 import emsbj.config.WebMvcConfig;
 import emsbj.controller.AuthorizedController;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,5 +1,9 @@
 package emsbj;
 
+import emsbj.grade.Grade;
+import emsbj.grade.GradeRepository;
+import emsbj.schoolyear.SchoolYear;
+import emsbj.schoolyear.SchoolYearRepository;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

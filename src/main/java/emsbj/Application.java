@@ -1,25 +1,19 @@
 package emsbj;
 
 import emsbj.user.JournalUserDetailsService;
+import emsbj.web.UrlLocaleResolver;
 import org.h2.tools.Server;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.jdbc.datasource.init.DataSourceInitializer;
-import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.util.InMemoryResource;
 import org.springframework.web.servlet.LocaleResolver;
 
-import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Locale;
 
 @SpringBootApplication
 public class Application {
