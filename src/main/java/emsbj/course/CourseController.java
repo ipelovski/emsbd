@@ -1,6 +1,6 @@
 package emsbj.course;
 
-import emsbj.Extensions;
+import emsbj.School;
 import emsbj.lesson.Lesson;
 import emsbj.student.Student;
 import emsbj.student.StudentRepository;
@@ -45,7 +45,9 @@ public class CourseController implements AuthorizedController, SecuredController
     @Autowired
     private TeacherService teacherService;
     @Autowired
-    private Extensions extensions;
+    private CourseURLs courseURLs;
+    @Autowired
+    private School school;
 
     @Override
     public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {
@@ -68,6 +70,7 @@ public class CourseController implements AuthorizedController, SecuredController
                 .collect(Collectors.toList());
             model.addAttribute("course", course);
             model.addAttribute("courseStudents", courseStudents);
+            model.addAttribute("breadcrumbs", courseURLs.courseBreadcrumb(course).build());
             return "course";
         } else {
             return "";
@@ -89,7 +92,7 @@ public class CourseController implements AuthorizedController, SecuredController
             int rawScore = (int) Math.round(score * 100);
             Mark mark = new Mark(student, course.getSubject(), rawScore);
             markRepository.save(mark);
-            return "redirect:" + extensions.getURLs().courses().course(course);
+            return "redirect:" + courseURLs.course(course);
         } else {
             return "";
         }
@@ -100,12 +103,13 @@ public class CourseController implements AuthorizedController, SecuredController
         Optional<Teacher> optionalTeacher = teacherService.getCurrentTeacher();
         if (optionalTeacher.isPresent()) {
             Teacher teacher = optionalTeacher.get();
-            Iterable<Lesson> lessons = courseRepository.findAllByTeacher(teacher);
+            Iterable<Lesson> lessons = courseRepository.findAllByTeacher(teacher, school.getTerm());
             model.addAttribute("lessons", lessons);
             model.addAttribute("weeklyLessons", new WeeklyLessons(
                 StreamSupport.stream(lessons.spliterator(), false)
                 .collect(Collectors.toList())
             ));
+            model.addAttribute("breadcrumbs", courseURLs.scheduleBreadcrumb().build());
         }
         return "schedule";
     }

@@ -5,7 +5,6 @@
 </head>
 <body>
     <div data-layout-fragment="content">
-        <div data-th-replace="~{fragments/breadcrumbs :: breadcrumbs(${breadcrumbs})}"></div>
         <h3 class="center" data-th-text="|${course.subject.name.value} ${course.schoolClass.getFullName()} #{class}|"></h3>
         <ul>
             <li class="flex flex-wrap">

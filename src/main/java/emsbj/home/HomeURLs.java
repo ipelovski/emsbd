@@ -1,17 +1,20 @@
 package emsbj.home;
 
+import emsbj.Breadcrumb;
+import emsbj.Util;
 import emsbj.config.WebMvcConfig;
 import emsbj.web.URLBuilder;
 import emsbj.web.ViewInfo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class HomeURLs extends ViewInfo {
-    private HomeController homeController;
+    @Autowired
+    private Util util;
 
-    public HomeURLs(HomeController homeController) {
-        this.homeController = homeController;
-        breadcrumbSupplier = homeController::indexBreadcrumb;
+    public HomeURLs() {
+        breadcrumbSupplier = this::indexBreadcrumb;
     }
 
     @Override
@@ -21,5 +24,9 @@ public class HomeURLs extends ViewInfo {
 
     public String home() {
         return URLBuilder.get(HomeController.class, WebMvcConfig.indexName);
+    }
+
+    public Breadcrumb indexBreadcrumb() {
+        return new Breadcrumb(home(), util.capitalize("home"));
     }
 }

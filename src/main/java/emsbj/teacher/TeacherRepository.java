@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
 
 public interface TeacherRepository extends CrudRepository<Teacher, Long> {
-    @Query("select new emsbj.FormMaster(t, COUNT(sc.id) as schoolClasses," +
+    @Query("select new emsbj.teacher.FormMaster(t, COUNT(sc.id) as schoolClasses," +
         " u.personalInfo.firstName as firstName," +
         " u.personalInfo.middleName as middleName," +
         " u.personalInfo.lastName as lastName)" +

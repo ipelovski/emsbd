@@ -1,7 +1,12 @@
 package emsbj.lesson;
 
+import emsbj.Breadcrumb;
+import emsbj.Util;
+import emsbj.home.HomeURLs;
 import emsbj.web.URLBuilder;
 import emsbj.config.WebMvcConfig;
+import emsbj.web.ViewInfo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -9,6 +14,11 @@ import java.time.format.DateTimeFormatter;
 
 @Service
 public class LessonURLs {
+    @Autowired
+    private Util util;
+    @Autowired
+    private HomeURLs homeURLs;
+
     public String lessons() {
         return URLBuilder.get(LessonController.class, WebMvcConfig.listName);
     }
@@ -31,5 +41,19 @@ public class LessonURLs {
 
     public String setPresence() {
         return URLBuilder.get(LessonController.class, LessonController.setPresence);
+    }
+
+    public Breadcrumb lessonsPerWeekBreadcrumb(LocalDate startDate) {
+        String label = util.localize("lessonsPerWeek", startDate.toString(), startDate.plusDays(6).toString());
+        return new Breadcrumb(lessonsPerWeek(startDate), label, homeURLs.indexBreadcrumb());
+    }
+
+    public Breadcrumb detailsBreadcrumb(Lesson lesson) {
+        LocalDate startOfWeek = util.getStartOfWeek(lesson.getBegin());
+        return new Breadcrumb(
+            lesson(lesson),
+            "Lesson in " + lesson.getCourse().getSubject().getName().getValue(),
+            lessonsPerWeekBreadcrumb(startOfWeek)
+        );
     }
 }

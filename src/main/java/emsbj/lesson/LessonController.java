@@ -1,8 +1,9 @@
 package emsbj.lesson;
 
+import emsbj.Breadcrumb;
+import emsbj.Breadcrumbs;
 import emsbj.absence.Absence;
 import emsbj.absence.AbsenceRepository;
-import emsbj.Breadcrumb;
 import emsbj.Extensions;
 import emsbj.home.HomeController;
 import emsbj.student.Student;
@@ -55,6 +56,8 @@ public class LessonController implements AuthorizedController, SecuredController
     private Extensions extensions;
     @Autowired
     private HomeController homeController;
+    @Autowired
+    private LessonURLs lessonURLs;
 
     @Override
     public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {
@@ -109,6 +112,8 @@ public class LessonController implements AuthorizedController, SecuredController
                 .collect(Collectors.toList());
             model.addAttribute("lessons", lessons);
             model.addAttribute("weeklyLessons", new WeeklyLessons(lessons));
+            Breadcrumbs breadcrumbs = lessonURLs.lessonsPerWeekBreadcrumb(startDate).build();
+            model.addAttribute("breadcrumbs", breadcrumbs);
             return "lessons";
         } else {
             return "";
@@ -131,19 +136,11 @@ public class LessonController implements AuthorizedController, SecuredController
             model.addAttribute("lesson", lesson);
             model.addAttribute("course", course);
             model.addAttribute("courseStudents", lessonStudents);
-            model.addAttribute("breadcrumbs", detailsBreadCrumb(lesson).build());
+            model.addAttribute("breadcrumbs", lessonURLs.detailsBreadcrumb(lesson).build());
             return "course";
         } else {
             return "";
         }
-    }
-
-    public Breadcrumb detailsBreadCrumb(Lesson lesson) {
-        return new Breadcrumb(
-            extensions.u().lessons().lesson(lesson),
-            "Lesson in " + lesson.getCourse().getSubject().getName().getValue(),
-            homeController.indexBreadcrumb()
-        );
     }
 
     @PostMapping(value = "/start", name = start)

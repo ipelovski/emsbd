@@ -1,5 +1,6 @@
 package emsbj.generation;
 
+import emsbj.Util;
 import emsbj.blob.Blob;
 import emsbj.blob.BlobRepository;
 import emsbj.course.Course;
@@ -33,7 +34,7 @@ import emsbj.user.UserRepository;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,7 +56,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-@Component
+@Service
 public class Generator {
     private static final int teacherLessonsPerWeek = 34;
     private static final int maxOrdinal = 7;
@@ -104,6 +105,8 @@ public class Generator {
     private LessonRepository lessonRepository;
     @Autowired
     private BlobRepository blobRepository;
+    @Autowired
+    private Util util;
 
     private List<WeeklySlot> weeklySlots;
     private Map<Integer, Grade> grades;
@@ -650,7 +653,7 @@ public class Generator {
 
     private void createLessons() {
         LocalDateTime now = LocalDateTime.now();
-        LocalDate startOfWeek = now.toLocalDate().minusDays(now.getDayOfWeek().ordinal());
+        LocalDate startOfWeek = util.getStartOfWeek(now);
         createLessonsForThisWeek(now, startOfWeek);
         startOfWeek = startOfWeek.minusWeeks(1);
         while (term.getBegin().isBefore(startOfWeek)) {

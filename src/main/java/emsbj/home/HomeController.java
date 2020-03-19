@@ -1,7 +1,7 @@
 package emsbj.home;
 
-import emsbj.Breadcrumb;
 import emsbj.Extensions;
+import emsbj.School;
 import emsbj.config.WebMvcConfig;
 import emsbj.controller.AuthorizedController;
 import emsbj.controller.SecuredController;
@@ -43,6 +43,8 @@ public class HomeController implements SecuredController, AuthorizedController {
     private TeacherRepository teacherRepository;
     @Autowired
     private UserService userService;
+    @Autowired
+    private School school;
 
     @Override
     public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {
@@ -78,7 +80,7 @@ public class HomeController implements SecuredController, AuthorizedController {
                 LocalDate currentDate = LocalDate.now();
                 Teacher teacher = teacherRepository.findByUserId(user.getId()).get();
                 Iterable<Lesson> lessonsToday = courseRepository
-                    .findAllByTeacherAndDay(teacher, currentDate.getDayOfWeek());
+                    .findAllByTeacherAndDay(teacher, currentDate.getDayOfWeek(), school.getTerm());
                 LocalTime currentTime = LocalTime.now();
                 List<Lesson> previousLessons = StreamSupport
                     .stream(lessonsToday.spliterator(), false)
@@ -111,9 +113,5 @@ public class HomeController implements SecuredController, AuthorizedController {
         } else {
             return "home";
         }
-    }
-
-    public Breadcrumb indexBreadcrumb() {
-        return new Breadcrumb(extensions.getURLs().home(), extensions.capitalize("home"));
     }
 }
