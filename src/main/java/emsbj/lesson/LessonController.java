@@ -113,7 +113,7 @@ public class LessonController implements AuthorizedController, SecuredController
             model.addAttribute("lessons", lessons);
             model.addAttribute("weeklyLessons", new WeeklyLessons(lessons));
             Breadcrumbs breadcrumbs = lessonURLs.lessonsPerWeekBreadcrumb(startDate).build();
-            model.addAttribute("breadcrumbs", breadcrumbs);
+            model.addAttribute(Breadcrumbs.modelAttributeName, breadcrumbs);
             return "lessons";
         } else {
             return "";
@@ -136,7 +136,7 @@ public class LessonController implements AuthorizedController, SecuredController
             model.addAttribute("lesson", lesson);
             model.addAttribute("course", course);
             model.addAttribute("courseStudents", lessonStudents);
-            model.addAttribute("breadcrumbs", lessonURLs.detailsBreadcrumb(lesson).build());
+            model.addAttribute(Breadcrumbs.modelAttributeName, lessonURLs.detailsBreadcrumb(lesson).build());
             return "course";
         } else {
             return "";

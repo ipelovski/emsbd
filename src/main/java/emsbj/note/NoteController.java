@@ -1,5 +1,6 @@
 package emsbj.note;
 
+import emsbj.Breadcrumbs;
 import emsbj.course.Course;
 import emsbj.course.CourseRepository;
 import emsbj.Extensions;
@@ -44,6 +45,8 @@ public class NoteController implements SecuredController, AuthorizedController {
     private UserService userService;
     @Autowired
     private Extensions extensions;
+    @Autowired
+    private NoteURLs noteURLs;
 
     @Override
     public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {
@@ -72,17 +75,19 @@ public class NoteController implements SecuredController, AuthorizedController {
             return "";
         }
         Iterable<Note> notes;
+        Lesson lesson = null;
         if (lessonId != null) {
-            Lesson lesson = lessonRepository.findById(lessonId).get();
+            lesson = lessonRepository.findById(lessonId).get();
             notes = noteRepository.findByStudentAndCourseAndLesson(
                 student, course, lesson);
-            model.addAttribute("lesson", lesson);
         } else {
             notes = noteRepository.findByStudentAndCourse(student, course);
         }
         model.addAttribute("student", student);
         model.addAttribute("course", course);
+        model.addAttribute("lesson", lesson);
         model.addAttribute("notes", notes);
+        model.addAttribute(Breadcrumbs.modelAttributeName, noteURLs.listBreadcrumb(student, course, lesson).build());
         return "notes";
     }
 
@@ -101,12 +106,14 @@ public class NoteController implements SecuredController, AuthorizedController {
             // TODO
             Course course = courseRepository.findById(courseId).get();
             note.setCourse(course);
+            Lesson lesson = null;
             if (lessonId != null) {
                 // TODO
-                Lesson lesson = lessonRepository.findById(lessonId).get();
+                lesson = lessonRepository.findById(lessonId).get();
                 note.setLesson(lesson);
             }
             model.addAttribute("note", note);
+            model.addAttribute(Breadcrumbs.modelAttributeName, noteURLs.addNoteBreadcrumb(student, course, lesson).build());
             return "add-note";
         } else {
             return "";
@@ -135,7 +142,9 @@ public class NoteController implements SecuredController, AuthorizedController {
     ) {
         Optional<Note> optionalNote = noteRepository.findById(noteId);
         if (optionalNote.isPresent()) {
-            model.addAttribute("note", optionalNote.get());
+            Note note = optionalNote.get();
+            model.addAttribute("note", note);
+            model.addAttribute(Breadcrumbs.modelAttributeName, noteURLs.editNoteBreadcrumb(note).build());
             return "edit-note";
         } else {
             return "";

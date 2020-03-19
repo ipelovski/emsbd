@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Breadcrumbs extends AbstractCollection<Breadcrumb> {
+    public static final String modelAttributeName = "breadcrumbs";
     private List<Breadcrumb> breadcrumbs = new LinkedList<>();
 
     public Breadcrumbs(Breadcrumb breadCrumb) {

@@ -18,6 +18,7 @@ public class CourseStudent {
     private List<String> notes;
     private double absences;
     private Course course;
+    private Student student;
 
     public CourseStudent(Course course, Student student) {
         this.id = student.getId();
@@ -43,6 +44,7 @@ public class CourseStudent {
             .map(Absence::getValue)
             .reduce(0.0, Double::sum);
         this.course = course;
+        this.student = student;
     }
 
     public Long getId() {
@@ -75,5 +77,9 @@ public class CourseStudent {
 
     public Course getCourse() {
         return course;
+    }
+
+    public Student getStudent() {
+        return student;
     }
 }

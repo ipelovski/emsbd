@@ -1,5 +1,6 @@
 package emsbj.course;
 
+import emsbj.Breadcrumbs;
 import emsbj.School;
 import emsbj.lesson.Lesson;
 import emsbj.student.Student;
@@ -70,7 +71,7 @@ public class CourseController implements AuthorizedController, SecuredController
                 .collect(Collectors.toList());
             model.addAttribute("course", course);
             model.addAttribute("courseStudents", courseStudents);
-            model.addAttribute("breadcrumbs", courseURLs.courseBreadcrumb(course).build());
+            model.addAttribute(Breadcrumbs.modelAttributeName, courseURLs.courseBreadcrumb(course).build());
             return "course";
         } else {
             return "";
@@ -109,7 +110,7 @@ public class CourseController implements AuthorizedController, SecuredController
                 StreamSupport.stream(lessons.spliterator(), false)
                 .collect(Collectors.toList())
             ));
-            model.addAttribute("breadcrumbs", courseURLs.scheduleBreadcrumb().build());
+            model.addAttribute(Breadcrumbs.modelAttributeName, courseURLs.scheduleBreadcrumb().build());
         }
         return "schedule";
     }

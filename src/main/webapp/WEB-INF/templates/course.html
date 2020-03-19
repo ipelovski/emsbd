@@ -35,8 +35,8 @@
                 </div>
                 <div class="col col-2" data-th-text="|${courseStudent.averageMark != null ? @scoreFormatter.format(courseStudent.averageMark) : '-'} (${courseStudent.marks.size()})|"></div>
                 <div class="col col-2">
-                    <a class="addNote" data-th-href="${x.u().notes().addNote(courseStudent, course, lesson)}">+</a>
-                    <a data-th-href="${x.u().notes().notes(courseStudent, courseStudent.course)}" data-th-text="|View (${courseStudent.notes.size()})|"></a>
+                    <a class="addNote" data-th-href="${x.u().notes().addNote(courseStudent.student, course, lesson)}">+</a>
+                    <a data-th-href="${x.u().notes().notes(courseStudent.student, courseStudent.course)}" data-th-text="|View (${courseStudent.notes.size()})|"></a>
                 </div>
                 <div class="col col-2">
                     <form data-th-if="${lesson != null}" data-th-action="${x.u().lessons().setPresence()}" method="post">
