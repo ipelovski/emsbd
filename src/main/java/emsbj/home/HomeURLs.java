@@ -14,7 +14,7 @@ public class HomeURLs extends ViewInfo {
     private Util util;
 
     public HomeURLs() {
-        breadcrumbSupplier = this::indexBreadcrumb;
+        breadcrumbSupplier = this::homeBreadcrumb;
     }
 
     @Override
@@ -26,7 +26,7 @@ public class HomeURLs extends ViewInfo {
         return URLBuilder.get(HomeController.class, WebMvcConfig.indexName);
     }
 
-    public Breadcrumb indexBreadcrumb() {
+    public Breadcrumb homeBreadcrumb() {
         return new Breadcrumb(home(), util.capitalize("home"));
     }
 }

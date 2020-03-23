@@ -98,6 +98,17 @@ body {
 .sequence > li:not(:last-of-type):after {
     content: ',';
 }
+.breadcrumbs {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 5px 0;
+}
+.breadcrumbs > li {
+    display: inline;
+}
+.breadcrumbs > li:not(:last-of-type):after {
+    content: '>';
+}
 select.being-late {
     background-color: yellow;
 }

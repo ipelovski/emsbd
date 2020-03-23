@@ -6,7 +6,7 @@
 </head>
 <body>
     <div data-th-fragment="breadcrumbs(breadcrumbs)">
-        <ul class="sequence">
+        <ul class="breadcrumbs">
             <li data-th-each="breadcrumb : ${breadcrumbs}">
                 <a data-th-unless="${breadcrumb.isLast()}"
                    data-th-href="${breadcrumb.getUrl()}"

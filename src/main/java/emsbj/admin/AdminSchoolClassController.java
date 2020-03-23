@@ -2,11 +2,11 @@ package emsbj.admin;
 
 import emsbj.School;
 import emsbj.course.CourseController;
-import emsbj.course.CourseRepository;
 import emsbj.Extensions;
 import emsbj.grade.Grade;
 import emsbj.grade.GradeRepository;
 import emsbj.lesson.Lesson;
+import emsbj.lesson.LessonRepository;
 import emsbj.room.Room;
 import emsbj.room.RoomRepository;
 import emsbj.schoolclass.SchoolClass;
@@ -47,7 +47,7 @@ public class AdminSchoolClassController implements AuthorizedController {
     @Autowired
     private StudentRepository studentRepository;
     @Autowired
-    private CourseRepository courseRepository;
+    private LessonRepository lessonRepository;
     @Autowired
     private Extensions extensions;
     @Autowired
@@ -135,7 +135,7 @@ public class AdminSchoolClassController implements AuthorizedController {
         if (optionalSchoolClass.isPresent()) {
             SchoolClass existingSchoolClass = optionalSchoolClass.get();
             List<Lesson> weeklyLessons = StreamSupport
-                .stream(courseRepository.findAllBySchoolClass(existingSchoolClass, school.getTerm()).spliterator(), false)
+                .stream(lessonRepository.findAllBySchoolClass(existingSchoolClass, school.getTerm()).spliterator(), false)
                 .collect(Collectors.toList());
             model.addAttribute("weeklyLessons", new WeeklyLessons(weeklyLessons));
             return "admin/school-class-schedule";

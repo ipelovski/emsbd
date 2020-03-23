@@ -15,6 +15,10 @@ public class CourseURLs {
     @Autowired
     private HomeURLs homeURLs;
 
+    public String list() {
+        return URLBuilder.get(CourseController.class, WebMvcConfig.listName);
+    }
+
     public String course(Course course) {
         return URLBuilder.get(CourseController.class, WebMvcConfig.detailsName,
             WebMvcConfig.objectIdParamName, course.getId());
@@ -24,11 +28,15 @@ public class CourseURLs {
         return URLBuilder.get(CourseController.class, CourseController.schedule);
     }
 
+    public Breadcrumb listBreadcrumb() {
+        return new Breadcrumb(list(), util.capitalize("courses"), homeURLs.homeBreadcrumb());
+    }
+
     public Breadcrumb courseBreadcrumb(Course course) {
         return new Breadcrumb(course(course), course.getSubject().getName().getValue(), scheduleBreadcrumb());
     }
 
     public Breadcrumb scheduleBreadcrumb() {
-        return new Breadcrumb(schedule(), util.capitalize("schedule"), homeURLs.indexBreadcrumb());
+        return new Breadcrumb(schedule(), util.capitalize("schedule"), homeURLs.homeBreadcrumb());
     }
 }

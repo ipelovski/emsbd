@@ -1,6 +1,5 @@
 package emsbj.lesson;
 
-import emsbj.Breadcrumb;
 import emsbj.Breadcrumbs;
 import emsbj.absence.Absence;
 import emsbj.absence.AbsenceRepository;

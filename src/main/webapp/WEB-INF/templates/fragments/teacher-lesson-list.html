@@ -36,7 +36,7 @@
          data-th-with="noLessonsMessage = ${noLessonsMessage} ?: 'No lessons'">
         <ul data-th-each="shift : ${weeklyLessons.getShifts()}" class="listwh">
             <li>
-                <h4 data-th-text="|#{shift} ${shift}|"></h4>
+                <h4 data-th-text="|${x.c('shift')} ${shift}|"></h4>
             </li>
             <li class="flex flex-wrap list-header">
                 <div class="col" data-th-style="${'width:' + 100.0 / weeklyLessons.getTotalDays() + '%'}"

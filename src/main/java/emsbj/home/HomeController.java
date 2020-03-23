@@ -5,8 +5,8 @@ import emsbj.School;
 import emsbj.config.WebMvcConfig;
 import emsbj.controller.AuthorizedController;
 import emsbj.controller.SecuredController;
-import emsbj.course.CourseRepository;
 import emsbj.lesson.Lesson;
+import emsbj.lesson.LessonRepository;
 import emsbj.teacher.Teacher;
 import emsbj.teacher.TeacherRepository;
 import emsbj.user.User;
@@ -38,7 +38,7 @@ public class HomeController implements SecuredController, AuthorizedController {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private CourseRepository courseRepository;
+    private LessonRepository lessonRepository;
     @Autowired
     private TeacherRepository teacherRepository;
     @Autowired
@@ -79,7 +79,7 @@ public class HomeController implements SecuredController, AuthorizedController {
             } else if (user.getRole() == User.Role.teacher) {
                 LocalDate currentDate = LocalDate.now();
                 Teacher teacher = teacherRepository.findByUserId(user.getId()).get();
-                Iterable<Lesson> lessonsToday = courseRepository
+                Iterable<Lesson> lessonsToday = lessonRepository
                     .findAllByTeacherAndDay(teacher, currentDate.getDayOfWeek(), school.getTerm());
                 LocalTime currentTime = LocalTime.now();
                 List<Lesson> previousLessons = StreamSupport

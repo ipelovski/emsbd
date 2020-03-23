@@ -5,7 +5,6 @@ import emsbj.Util;
 import emsbj.home.HomeURLs;
 import emsbj.web.URLBuilder;
 import emsbj.config.WebMvcConfig;
-import emsbj.web.ViewInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +44,7 @@ public class LessonURLs {
 
     public Breadcrumb lessonsPerWeekBreadcrumb(LocalDate startDate) {
         String label = util.localize("lessonsPerWeek", startDate.toString(), startDate.plusDays(6).toString());
-        return new Breadcrumb(lessonsPerWeek(startDate), label, homeURLs.indexBreadcrumb());
+        return new Breadcrumb(lessonsPerWeek(startDate), label, homeURLs.homeBreadcrumb());
     }
 
     public Breadcrumb detailsBreadcrumb(Lesson lesson) {

@@ -94,9 +94,10 @@ screens
     student
         home
             lessons for today
-        profile
-        marks this term for all subjects
-        absences and notes this term for all subjects
+        schedule
+        courses
+            marks this term for all subjects
+            absences and notes this term for all subjects
     teacher
         home
             lessons for today

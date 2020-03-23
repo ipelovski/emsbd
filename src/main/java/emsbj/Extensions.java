@@ -22,6 +22,7 @@ import emsbj.note.NoteURLs;
 import emsbj.schoolclass.SchoolClass;
 import emsbj.schoolyear.SchoolYear;
 import emsbj.student.Student;
+import emsbj.student.StudentURLs;
 import emsbj.teacher.Teacher;
 import emsbj.term.Term;
 import emsbj.user.User;
@@ -44,6 +45,8 @@ public class Extensions {
     private LessonURLs lessonURLs;
     @Autowired
     private NoteURLs noteURLs;
+    @Autowired
+    private StudentURLs studentURLs;
     @Autowired
     private Util util;
     private Urls urls;
@@ -113,6 +116,10 @@ public class Extensions {
 
         public NoteURLs notes() {
             return noteURLs;
+        }
+
+        public StudentURLs students() {
+            return studentURLs;
         }
     }
 

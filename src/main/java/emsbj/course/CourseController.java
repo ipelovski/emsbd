@@ -3,8 +3,10 @@ package emsbj.course;
 import emsbj.Breadcrumbs;
 import emsbj.School;
 import emsbj.lesson.Lesson;
+import emsbj.lesson.LessonRepository;
 import emsbj.student.Student;
 import emsbj.student.StudentRepository;
+import emsbj.student.StudentService;
 import emsbj.teacher.Teacher;
 import emsbj.teacher.TeacherRepository;
 import emsbj.teacher.TeacherService;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,6 +41,8 @@ public class CourseController implements AuthorizedController, SecuredController
     @Autowired
     private CourseRepository courseRepository;
     @Autowired
+    private LessonRepository lessonRepository;
+    @Autowired
     private StudentRepository studentRepository;
     @Autowired
     private MarkRepository markRepository;
@@ -46,6 +51,8 @@ public class CourseController implements AuthorizedController, SecuredController
     @Autowired
     private TeacherService teacherService;
     @Autowired
+    private StudentService studentService;
+    @Autowired
     private CourseURLs courseURLs;
     @Autowired
     private School school;
@@ -53,8 +60,26 @@ public class CourseController implements AuthorizedController, SecuredController
     @Override
     public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {
         registry
+            .antMatchers(WebMvcConfig.localePathParam + "/courses", WebMvcConfig.localePathParam + "/courses/schedule")
+            .hasRole(User.Role.student.name().toUpperCase())
             .antMatchers(WebMvcConfig.localePathParam + "/courses/**")
             .hasRole(User.Role.teacher.name().toUpperCase());
+    }
+
+    @GetMapping
+    public String list(Model model) {
+        Optional<Student> optionalStudent = studentService.getCurrentStudent();
+        if (optionalStudent.isPresent()) {
+            model.addAttribute(
+                "courseStudents",
+                studentService.getStudentCourses(optionalStudent.get()));
+            model.addAttribute(
+                Breadcrumbs.modelAttributeName,
+                courseURLs.listBreadcrumb().build());
+            return "student-courses";
+        } else {
+            return "";
+        }
     }
 
     @GetMapping(WebMvcConfig.objectIdPathParam)
@@ -78,6 +103,7 @@ public class CourseController implements AuthorizedController, SecuredController
         }
     }
 
+    // TODO add lesson to mark
     @PostMapping(WebMvcConfig.objectIdPathParam)
     public String addMark(
         @PathVariable(WebMvcConfig.objectIdParamName) Long courseId,
@@ -104,11 +130,23 @@ public class CourseController implements AuthorizedController, SecuredController
         Optional<Teacher> optionalTeacher = teacherService.getCurrentTeacher();
         if (optionalTeacher.isPresent()) {
             Teacher teacher = optionalTeacher.get();
-            Iterable<Lesson> lessons = courseRepository.findAllByTeacher(teacher, school.getTerm());
+            Iterable<Lesson> lessons = lessonRepository.findAllByTeacher(teacher, school.getTerm());
             model.addAttribute("lessons", lessons);
             model.addAttribute("weeklyLessons", new WeeklyLessons(
                 StreamSupport.stream(lessons.spliterator(), false)
                 .collect(Collectors.toList())
+            ));
+            model.addAttribute(Breadcrumbs.modelAttributeName, courseURLs.scheduleBreadcrumb().build());
+        }
+        Optional<Student> optionalStudent = studentService.getCurrentStudent();
+        if (optionalStudent.isPresent()) {
+            Student student = optionalStudent.get();
+            Iterable<Lesson> lessons = lessonRepository.findAllBySchoolClass(
+                student.getSchoolClass(), school.getTerm());
+            model.addAttribute("lessons", lessons);
+            model.addAttribute("weeklyLessons", new WeeklyLessons(
+                StreamSupport.stream(lessons.spliterator(), false)
+                    .collect(Collectors.toList())
             ));
             model.addAttribute(Breadcrumbs.modelAttributeName, courseURLs.scheduleBreadcrumb().build());
         }
