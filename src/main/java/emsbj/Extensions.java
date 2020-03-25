@@ -133,10 +133,6 @@ public class Extensions {
             return URLBuilder.get(AdminSchoolYearController.class, WebMvcConfig.listName);
         }
 
-        public String addSchoolYear() {
-            return URLBuilder.get(AdminSchoolYearController.class, WebMvcConfig.addName);
-        }
-
         public String terms() {
             return URLBuilder.get(AdminTermController.class, WebMvcConfig.listName);
         }
@@ -149,11 +145,8 @@ public class Extensions {
         }
 
         public String term(Term term) {
-            return URLBuilder.get(AdminTermController.class, WebMvcConfig.detailsName, term.getId());
-        }
-
-        public String addTermWithSchoolYear(SchoolYear schoolYear) {
-            return URLBuilder.get(AdminTermController.class, WebMvcConfig.addName, schoolYear.getId());
+            return URLBuilder.get(AdminTermController.class, WebMvcConfig.detailsName,
+                WebMvcConfig.objectIdParamName, term.getId());
         }
 
         public String subjects() {
@@ -173,7 +166,8 @@ public class Extensions {
         }
 
         public String user(User user) {
-            return URLBuilder.get(AdminUserController.class, WebMvcConfig.detailsName, user.getId());
+            return URLBuilder.get(AdminUserController.class, WebMvcConfig.detailsName,
+                WebMvcConfig.objectIdParamName, user.getId());
         }
 
         public String grades() {
@@ -193,11 +187,13 @@ public class Extensions {
         }
 
         public String schoolClass(SchoolClass schoolClass) {
-            return URLBuilder.get(AdminSchoolClassController.class, WebMvcConfig.detailsName, schoolClass.getId());
+            return URLBuilder.get(AdminSchoolClassController.class, WebMvcConfig.detailsName,
+                WebMvcConfig.objectIdParamName, schoolClass.getId());
         }
 
         public String schoolClassSchedule(SchoolClass schoolClass) {
-            return URLBuilder.get(AdminSchoolClassController.class, CourseController.schedule, schoolClass.getId());
+            return URLBuilder.get(AdminSchoolClassController.class, CourseController.schedule,
+                WebMvcConfig.objectIdParamName, schoolClass.getId());
         }
 
         public String teachers() {
@@ -205,7 +201,8 @@ public class Extensions {
         }
 
         public String teacher(Teacher teacher) {
-            return URLBuilder.get(AdminTeacherController.class, WebMvcConfig.detailsName, teacher.getId());
+            return URLBuilder.get(AdminTeacherController.class, WebMvcConfig.detailsName,
+                WebMvcConfig.objectIdParamName, teacher.getId());
         }
 
         public String selectFormMasterFragment() {
@@ -221,7 +218,8 @@ public class Extensions {
         }
 
         public String student(Student student) {
-            return URLBuilder.get(AdminStudentController.class, WebMvcConfig.detailsName, student.getId());
+            return URLBuilder.get(AdminStudentController.class, WebMvcConfig.detailsName,
+                WebMvcConfig.objectIdParamName, student.getId());
         }
 
         public String studentList() {

@@ -57,7 +57,7 @@ public class AdminSchoolClassController implements AuthorizedController {
     public String list(Model model) {
         Iterable<SchoolClass> schoolClasses = schoolClassRepository.findAll();
         model.addAttribute("schoolClasses", schoolClasses);
-        return "admin/school-classes.html";
+        return "admin/school-classes";
     }
 
     @GetMapping(WebMvcConfig.addPath)
@@ -70,7 +70,7 @@ public class AdminSchoolClassController implements AuthorizedController {
         model.addAttribute("grades", grades);
         Iterable<Room> rooms = roomRepository.findAll();
         model.addAttribute("rooms", rooms);
-        return "admin/school-class-details.html";
+        return "admin/school-class-details";
     }
 
     @PostMapping(WebMvcConfig.addPath)
@@ -86,14 +86,13 @@ public class AdminSchoolClassController implements AuthorizedController {
         Optional<SchoolClass> optionalSchoolClass = schoolClassRepository.findById(schoolClassId);
         if (optionalSchoolClass.isPresent()) {
             model.addAttribute("schoolClass", optionalSchoolClass.get());
-            int currentYear = LocalDate.now().getYear();
-            Iterable<SchoolYear> schoolYears = schoolYearRepository.findByBeginYearGreaterThanEqual(currentYear);
+            Iterable<SchoolYear> schoolYears = schoolYearRepository.findAllWithAll();
             model.addAttribute("schoolYears", schoolYears);
             Iterable<Grade> grades = gradeRepository.findByOrderByOrdinalAsc();
             model.addAttribute("grades", grades);
             Iterable<Room> rooms = roomRepository.findAll();
             model.addAttribute("rooms", rooms);
-            return "admin/school-class-details.html";
+            return "admin/school-class-details";
         } else {
             return "";
         }

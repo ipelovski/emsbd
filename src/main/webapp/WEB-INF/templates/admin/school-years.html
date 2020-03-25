@@ -2,35 +2,26 @@
 <html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
-    <title>School Years</title>
+    <title data-th-text="${x.c('class.schoolYears')}"></title>
 </head>
 <body>
     <div data-layout-fragment="content">
-        <p>
-            <a data-th-href="@{${x.au().adminIndex()}}">Back to administration home</a>
-        </p>
-        <form data-th-action="@{${x.au().addSchoolYear()}}" method="post">
-            <input type="submit" value="Add school year">
-        </form>
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Terms</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr data-th-each="schoolYear : ${schoolYears}">
-                    <td data-th-text="${schoolYear.name()}"></td>
-                    <td>
-                        <a data-th-href="@{${x.au().termsBySchoolYear(schoolYear.id)}}">Terms</a>
-                        <a data-th-each="term : ${schoolYear.terms}"
-                           data-th-href="@{${x.au().term(term)}}"
-                           data-th-text="'Term ' + ${term.name}"></a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <ul class="list">
+            <li class="flex">
+                <div class="col col-6" data-th-text="${x.c('common.name')}"></div>
+                <div class="col col-6" data-th-text="${x.c('class.terms')}"></div>
+            </li>
+            <li class="flex" data-th-each="schoolYear : ${schoolYears}">
+                <div class="col col-6" data-th-text="${schoolYear.name()}"></div>
+                <div class="col col-6">
+                    <a class="mx2" data-th-href="${x.au().termsBySchoolYear(schoolYear.id)}"
+                       data-th-text="${x.c('class.terms')}"></a>
+                    <a class="mx2" data-th-each="term : ${schoolYear.terms}"
+                       data-th-href="@{${x.au().term(term)}}"
+                       data-th-text="${x.c('class.termLabel', term.name)}"></a>
+                </div>
+            </li>
+        </ul>
     </div>
 </body>
 </html>

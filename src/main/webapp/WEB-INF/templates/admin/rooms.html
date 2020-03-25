@@ -2,30 +2,24 @@
 <html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
-    <title>Rooms</title>
+    <title data-th-text="${x.c('class.rooms')}"></title>
 </head>
 <body>
     <div data-layout-fragment="content">
         <p>
-            <a data-th-href="@{${x.au().adminIndex()}}">Back to administration home</a>
+            <a data-th-href="${x.au().addRoom()}"
+               data-th-text="${x.c('class.addRoom')}"></a>
         </p>
-        <p>
-            <a data-th-href="@{${x.au().addRoom()}}">Add new</a>
-        </p>
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Floor</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr data-th-each="room : ${rooms}">
-                    <td data-th-text="${room.name}"></td>
-                    <td data-th-text="${room.floor}"></td>
-                </tr>
-            </tbody>
-        </table>
+        <ul class="list">
+            <li class="flex">
+                <div class="col col-6" data-th-text="${x.c('common.name')}"></div>
+                <div class="col col-6" data-th-text="${x.c('class.floor')}"></div>
+            </li>
+            <li class="flex" data-th-each="room : ${rooms}">
+                <div class="col col-6" data-th-text="${room.name}"></div>
+                <div class="col col-6" data-th-text="${room.floor}"></div>
+            </li>
+        </ul>
     </div>
 </body>
 </html>

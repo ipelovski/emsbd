@@ -2,7 +2,7 @@
 <html th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
+    <title data-th-text="${x.c('home.home')}"></title>
 </head>
 <body>
     <p th:replace="~{fragments/header::greetings(${activeUser})}"></p>

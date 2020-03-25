@@ -26,7 +26,7 @@ public class AdminStudentController implements AuthorizedController {
     public String list(Model model) {
         Iterable<Student> students = studentRepository.findAll();
         model.addAttribute("students", students);
-        return "/admin/students.html";
+        return "admin/students";
     }
 
     @GetMapping(WebMvcConfig.objectIdPathParam)
@@ -36,7 +36,7 @@ public class AdminStudentController implements AuthorizedController {
         Optional<Student> optionalStudent = studentRepository.findById(studentId);
         if (optionalStudent.isPresent()) {
             model.addAttribute("user", optionalStudent.get().getUser());
-            return "admin/user-details.html";
+            return "admin/user-details"; // TODO
         } else {
             return "";
         }

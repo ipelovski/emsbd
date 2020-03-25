@@ -12,7 +12,7 @@
             <li class="flex flex-wrap">
                 <div class="col col-4" data-th-text="Subject"></div>
                 <div class="col col-2" data-th-text="Mark"></div>
-                <div class="col col-4" data-th-text="Notes"></div>
+                <div class="col col-4" data-th-text="${x.c('student.notes')}"></div>
                 <div class="col col-2" data-th-text="Absences"></div>
             </li>
            <li data-th-each="courseStudent : ${courseStudents}" class="flex flex-wrap">

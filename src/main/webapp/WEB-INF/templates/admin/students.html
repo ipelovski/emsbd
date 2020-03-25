@@ -2,46 +2,37 @@
 <html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
-    <title>Students</title>
+    <title data-th-text="${x.c('student.students')}"></title>
 </head>
 <body>
     <div data-layout-fragment="content">
-        <p>
-            <a data-th-href="@{${x.au().adminIndex()}}">Back to administration home</a>
-        </p>
-        <form data-th-action="@{${x.au().addUser()}}" method="post">
-            <input type="submit" value="Add user">
-        </form>
-        <table>
-            <thead>
-                <tr>
-                    <th>First name</th>
-                    <th>Middle name</th>
-                    <th>Last name</th>
-                    <th>Age</th>
-                    <th>Class</th>
-                    <th>Details</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr data-th-each="student : ${students}">
-                    <td data-th-text="${student.user.personalInfo.firstName}"></td>
-                    <td data-th-text="${student.user.personalInfo.middleName}"></td>
-                    <td data-th-text="${student.user.personalInfo.lastName}"></td>
-                    <td>
-                        <span data-th-if="${student.user.personalInfo.getAge().isPresent()}"
-                              data-th-text="${student.user.personalInfo.getAge().get()}"></span>
-                    </td>
-                    <td>
-                        <span data-th-if="${student.schoolClass != null}"
-                              data-th-text="${student.schoolClass.getGrade() + ' ' + student.schoolClass.name}"></span>
-                    </td>
-                    <td>
-                        <a data-th-href="@{${x.au().student(student)}}">Details</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <ul class="list">
+            <li class="flex">
+                <div class="col col-3" data-th-text="${x.c('user.firstName')}"></div>
+                <div class="col col-3" data-th-text="${x.c('user.middleName')}"></div>
+                <div class="col col-3" data-th-text="${x.c('user.lastName')}"></div>
+                <div class="col col-1" data-th-text="${x.c('user.age')}"></div>
+                <div class="col col-1" data-th-text="${x.c('class.class')}"></div>
+                <div class="col col-1" data-th-text="${x.c('common.details')}"></div>
+            </li>
+            <li class="flex" data-th-each="student : ${students}">
+                <div class="col col-3" data-th-text="${student.user.personalInfo.firstName}"></div>
+                <div class="col col-3" data-th-text="${student.user.personalInfo.middleName}"></div>
+                <div class="col col-3" data-th-text="${student.user.personalInfo.lastName}"></div>
+                <div class="col col-1">
+                    <span data-th-if="${student.user.personalInfo.getAge().isPresent()}"
+                          data-th-text="${student.user.personalInfo.getAge().get()}"></span>
+                </div>
+                <div class="col col-1">
+                    <span data-th-if="${student.schoolClass != null}"
+                          data-th-text="${student.schoolClass.getFullName()}"></span>
+                </div>
+                <div class="col col-1">
+                    <a data-th-href="${x.au().student(student)}"
+                       data-th-text="${x.c('common.details')}"></a>
+                </div>
+            </li>
+        </ul>
     </div>
 </body>
 </html>

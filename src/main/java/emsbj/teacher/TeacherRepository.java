@@ -14,7 +14,7 @@ public interface TeacherRepository extends CrudRepository<Teacher, Long> {
         " from Teacher t" +
         " left join User u on t.user = u.id" +
         " left join SchoolClass sc on sc.formMaster = t.id" +
-        " group by sc.formMaster")
+        " group by t.id")
     Iterable<FormMaster> findAllOrderByFormMaster(Sort sort);
 
     Optional<Teacher> findByUserId(Long userId);

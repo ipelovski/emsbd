@@ -20,6 +20,6 @@ public class AdminScheduleController implements AuthorizedController {
     public String weeklySlotsList(Model model) {
         Iterable<WeeklySlot> weeklySlots = weeklySlotRepository.findAll();
         model.addAttribute("weeklySlots", weeklySlots);
-        return "admin/weekly-slots.html";
+        return "admin/weekly-slots";
     }
 }

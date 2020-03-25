@@ -2,18 +2,11 @@
 <html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
-    <title data-th-text="${!user.isNew() ? x.l('detailsAbout', user.username) : x.l('createUser')}">Details</title>
-    <link data-th-href="@{/css/basscss.min.css}" rel="stylesheet">
+    <title data-th-text="${!user.isNew() ? x.l('detailsAbout', user.username) : x.c('user.addUser')}"></title>
 </head>
 <body>
     <div data-layout-fragment="content">
-        <p>
-            <a data-th-href="@{${x.au().users()}}">Back to users</a>
-        </p>
-        <p data-th-if="${user == null}">
-            No user found!
-        </p>
-
+        <p data-th-if="${user == null}" data-th-text="${x.l('user.noUserFound')}"></p>
         <div data-th-if="${user != null}" data-th-object="${user}">
             <div>
                 <img id="profile-picture" data-th-src="@{${x.u().blobs().profilePicture(user)}}">
@@ -30,80 +23,88 @@ window.onProfilePictureUpdated = function (newSrc) {
                     accept='image/png, image/jpeg',
                     onSuccess='onProfilePictureUpdated')}"></div>
                 <form>
-                    <input type="submit" data-th-value="'Remove picture'">
+                    <input type="submit" data-th-value="${x.c('user.removePicture')}">
                 </form>
             </div>
         </div>
     <!--    TODO @{${#httpServletRequest.requestURI}}-->
-        <form data-th-if="${user != null}" data-th-object="${user}"
+        <form data-th-if="${user != null}"
               data-th-action="@{${#httpServletRequest.requestURI}}"
               method="post" class="flex mx-auto">
-            <fieldset class="">
-                <legend data-th-text="Details"></legend>
+            <fieldset data-th-object="${user}">
+                <legend data-th-text="${x.c('common.details')}"></legend>
                 <div class="col col-4">
-                    <label class="label" for="username">Username:</label>
+                    <label class="label" for="username" data-th-text="${x.c('user.username')}"></label>
                 </div>
                 <div class="col col-8">
                     <input class="input" type="text" id="username" data-th-field="*{username}">
                 </div>
                 <div data-th-if="${user.isNew()}">
                     <div class="col col-4">
-                        <label class="label" for="password">Password:</label>
+                        <label class="label" for="password" data-th-text="${x.c('user.password')}"></label>
                     </div>
                     <div class="col col-8">
                         <input class="input" type="text" id="password" data-th-field="*{password}">
                     </div>
                 </div>
                 <div class="col col-4">
-                    <label class="label" for="role">Role:</label>
+                    <label class="label" for="role" data-th-text="${x.c('user.role')}"></label>
                 </div>
                 <div class="col col-8">
                     <select class="select" id="role" data-th-field="*{role}">
-                        <option value="user">Unspecified</option>
-                        <option value="student">Student</option>
-                        <option value="teacher">Teacher</option>
-                        <option value="admin">Admin</option>
-                        <option value="principal">Principal</option>
+                        <option value="user" data-th-text="${x.c('user.role.unspecified')}"></option>
+                        <option value="student" data-th-text="${x.c('user.role.student')}"></option>
+                        <option value="teacher" data-th-text="${x.c('user.role.teacher')}"></option>
+                        <option value="principal" data-th-text="${x.c('user.role.principal')}"></option>
                     </select>
                 </div>
                 <div class="col col-4">
-                    <label class="label" for="email">Email:</label>
+                    <label class="label" for="email" data-th-text="${x.c('user.email')}"></label>
                 </div>
                 <div class="col col-8">
                     <input class="input" type="text" id="email" data-th-field="*{email}">
                 </div>
                 <div class="col col-4">
-                    <label class="label" for="firstName">First name:</label>
+                    <label class="label" for="firstName" data-th-text="${x.c('user.firstName')}"></label>
                 </div>
                 <div class="col col-8">
                     <input class="input" type="text" id="firstName" data-th-field="*{personalInfo.firstName}">
                 </div>
                 <div class="col col-4">
-                    <label class="label" for="middleName">Middle name:</label>
+                    <label class="label" for="middleName" data-th-text="${x.c('user.middleName')}"></label>
                 </div>
                 <div class="col col-8">
                     <input class="input" type="text" id="middleName" data-th-field="*{personalInfo.middleName}">
                 </div>
                 <div class="col col-4">
-                    <label class="label" for="lastName">Last name:</label>
+                    <label class="label" for="lastName" data-th-text="${x.c('user.lastName')}"></label>
                 </div>
                 <div class="col col-8">
                     <input class="input" type="text" id="lastName" data-th-field="*{personalInfo.lastName}">
                 </div>
                 <div class="col col-4">
-                    <label class="label" for="bornAt">Born at:</label>
+                    <label class="label" for="bornAt" data-th-text="${x.c('user.bornAt')}"></label>
                 </div>
                 <div class="col col-8">
                     <input class="input" type="text" id="bornAt" data-th-field="*{personalInfo.bornAt}">
                 </div>
                 <div class="col col-4">
-                    <label class="label" for="address">Address:</label>
+                    <label class="label" for="gender" data-th-text="${x.c('user.gender')}"></label>
+                </div>
+                <div class="col col-8">
+                    <select class="select" id="gender" data-th-field="*{personalInfo.gender}">
+                        <option data-th-each="gender : ${T(emsbj.user.PersonalInfo.Gender).values()}"
+                                data-th-value="${gender}" data-th-text="${x.c('user.gender.' + gender.name().toLowerCase())}"></option>
+                    </select>
+                </div>
+                <div class="col col-4">
+                    <label class="label" for="address" data-th-text="${x.c('user.address')}"></label>
                 </div>
                 <div class="col col-8">
                     <input class="input" type="text" id="address" data-th-field="*{personalInfo.address}">
                 </div>
                 <div class="col-12">
-                    <input class="input" type="submit" data-th-value="${user.isNew() ? 'Create' : 'Update'}">
+                    <input class="input" type="submit" data-th-value="${x.c('common.save')}">
                 </div>
             </fieldset>
         </form>

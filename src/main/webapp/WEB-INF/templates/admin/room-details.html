@@ -2,19 +2,19 @@
 <html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
-    <title data-th-text="${room.isNew() ? 'Adding Room' : 'Editing Room'}"></title>
+    <title data-th-text="${x.c('class.addRoom')}"></title>
 </head>
 <body>
     <div data-layout-fragment="content">
         <form data-th-action="${x.au().addRoom()}" method="post">
             <fieldset data-th-object="${room}">
-                <legend data-th-text="${room.isNew() ? 'Add' : 'Edit'}"></legend>
-                <label for="name" data-th-text="Name"></label>
-                <input type="text" id="name" data-th-field="*{name}">
-                <label for="floor" data-th-text="Floor"></label>
-                <input type="text" id="floor" data-th-field="*{floor}">
+                <legend data-th-text="${x.c('class.newRoom')}"></legend>
+                <label class="label" for="name" data-th-text="${x.c('common.name')}"></label>
+                <input class="input" type="text" id="name" data-th-field="*{name}">
+                <label class="label" for="floor" data-th-text="${x.c('class.floor')}"></label>
+                <input class="input" type="text" id="floor" data-th-field="*{floor}">
+                <input class="btn btn-primary bg-olive" type="submit" data-th-value="${x.c('common.add')}">
             </fieldset>
-            <input type="submit" value="Save">
         </form>
     </div>
 </body>

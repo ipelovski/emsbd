@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,6 +27,7 @@ public class SchoolClass extends JournalPersistable {
     private Long id;
     private String name;
     @ManyToOne
+    @NotNull
     private SchoolYear beginningSchoolYear;
     @ManyToOne
     private Grade beginningGrade;
@@ -119,8 +121,8 @@ public class SchoolClass extends JournalPersistable {
         if (currentGrade == null) {
             School school = School.getInstance();
             int offset = school.getSchoolYear().getBeginYear()
-                - beginningSchoolYear.getBeginYear();
-            currentGrade = school.getGrades().get(beginningGrade.getOrdinal() + offset);
+                - getBeginningSchoolYear().getBeginYear();
+            currentGrade = school.getGrades().get(getBeginningGrade().getOrdinal() + offset);
         }
         return currentGrade;
     }

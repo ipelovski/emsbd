@@ -24,13 +24,13 @@ public class AdminRoomController implements AuthorizedController {
     public String list(Model model) {
         Iterable<Room> rooms = roomRepository.findAll();
         model.addAttribute("rooms", rooms);
-        return "/admin/rooms.html";
+        return "admin/rooms";
     }
 
     @GetMapping(WebMvcConfig.addPath)
     public String add(Model model) {
         model.addAttribute("room", new Room());
-        return "/admin/room-details.html";
+        return "admin/room-details";
     }
 
     @PostMapping(WebMvcConfig.addPath)

@@ -10,9 +10,9 @@
             <li class="flex flex-wrap">
                 <div class="col col-1" data-th-text="'Number'"></div>
                 <div class="col col-3" data-th-text="'Name'"></div>
-                <div class="col col-2" data-th-text="'Marks'"></div>
+                <div class="col col-2" data-th-text="${x.c('student.marks')}"></div>
                 <div class="col col-2" data-th-text="'Average mark (total marks)'"></div>
-                <div class="col col-2" data-th-text="'Notes'"></div>
+                <div class="col col-2" data-th-text="${x.c('student.notes')}"></div>
                 <div class="col col-2" data-th-text="'Presence'"></div>
             </li>
             <li class="flex flex-wrap" data-th-each="courseStudent:${courseStudents}">

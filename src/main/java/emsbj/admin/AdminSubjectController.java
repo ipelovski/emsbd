@@ -1,5 +1,6 @@
 package emsbj.admin;
 
+import emsbj.Extensions;
 import emsbj.grade.Grade;
 import emsbj.grade.GradeRepository;
 import emsbj.subject.Subject;
@@ -25,12 +26,14 @@ public class AdminSubjectController implements AuthorizedController {
     private SubjectService subjectService;
     @Autowired
     private GradeRepository gradeRepository;
+    @Autowired
+    private Extensions extensions;
 
     @GetMapping
     public String list(Model model) {
         Iterable<Subject> subjects = subjectRepository.findAll();
         model.addAttribute("subjects", subjects);
-        return "/admin/subjects.html";
+        return "admin/subjects";
     }
 
     @GetMapping(WebMvcConfig.addPath)
@@ -38,7 +41,7 @@ public class AdminSubjectController implements AuthorizedController {
         model.addAttribute("subject", new SubjectForm());
         Iterable<Grade> grades = gradeRepository.findAll();
         model.addAttribute("grades", grades);
-        return "/admin/subject-details.html";
+        return "admin/subject-details";
     }
 
     @PostMapping(WebMvcConfig.addPath)
@@ -46,10 +49,10 @@ public class AdminSubjectController implements AuthorizedController {
         Optional<Grade> optionalGrade = gradeRepository.findById(subjectForm.gradeId);
         if (optionalGrade.isPresent()) {
             subjectService.create(subjectForm.name, optionalGrade.get());
-            return "redirect:/admin/subjects.html";
+            return "redirect:" + extensions.getAdminUrls().subjects();
         } else {
-            model.addAttribute("error", "");
-            return "/admin/subjects.html";
+            model.addAttribute("error", ""); // TODO
+            return "admin/subjects";
         }
     }
 

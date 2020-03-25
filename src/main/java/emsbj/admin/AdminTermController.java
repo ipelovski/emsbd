@@ -1,5 +1,6 @@
 package emsbj.admin;
 
+import emsbj.Extensions;
 import emsbj.schoolyear.SchoolYear;
 import emsbj.schoolyear.SchoolYearRepository;
 import emsbj.term.Term;
@@ -15,8 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.Optional;
 
 @Controller
@@ -27,6 +26,8 @@ public class AdminTermController implements AuthorizedController {
     private SchoolYearRepository schoolYearRepository;
     @Autowired
     private TermRepository termRepository;
+    @Autowired
+    private Extensions extensions;
 
     @GetMapping
     public String list(@RequestParam(schoolYearQueryParam) Long schoolYearId, Model model) {
@@ -36,26 +37,7 @@ public class AdminTermController implements AuthorizedController {
             Iterable<Term> terms = termRepository.findBySchoolYear(schoolYear);
             model.addAttribute("terms", terms);
             model.addAttribute("schoolYear", schoolYear);
-            return "/admin/terms.html";
-        } else {
-            return "";
-        }
-    }
-
-    @PostMapping(value = WebMvcConfig.addPath, name = WebMvcConfig.addName)
-    public String addSubmit(@RequestParam("school-year") Long schoolYearId) {
-        Optional<SchoolYear> optionalSchoolYear = schoolYearRepository.findById(schoolYearId);
-        if (optionalSchoolYear.isPresent()) {
-            SchoolYear schoolYear = optionalSchoolYear.get();
-            Term firstTerm = new Term(schoolYear, "I");
-            firstTerm.setBegin(LocalDate.of(schoolYear.getBeginYear(), Month.SEPTEMBER, 15));
-            firstTerm.setEnd(LocalDate.of(schoolYear.getEndYear(), Month.JANUARY, 31));
-            termRepository.save(firstTerm);
-            Term secondTerm = new Term(schoolYear, "II");
-            secondTerm.setBegin(LocalDate.of(schoolYear.getEndYear(), Month.FEBRUARY, 1));
-            secondTerm.setEnd(LocalDate.of(schoolYear.getEndYear(), Month.JUNE, 30));
-            termRepository.save(secondTerm);
-            return "redirect:/admin/terms?school-year=" + schoolYearId;
+            return "admin/terms";
         } else {
             return "";
         }
@@ -66,7 +48,25 @@ public class AdminTermController implements AuthorizedController {
         @PathVariable(WebMvcConfig.objectIdParamName) Long termId, Model model
     ) {
         Optional<Term> term = termRepository.findById(termId);
-        model.addAttribute("term", term.orElse(null));
-        return "/admin/term-details.html";
+        model.addAttribute("term", term.orElse(null)); // TODO
+        return "admin/term-details";
+    }
+
+    @PostMapping(value = WebMvcConfig.objectIdPathParam, name = WebMvcConfig.detailsName)
+    public String detailsSubmit(
+        @PathVariable(WebMvcConfig.objectIdParamName) Long termId, Term term
+    ) {
+        Optional<Term> optionalTerm = termRepository.findById(termId);
+        if (optionalTerm.isPresent()) {
+            Term existingTerm = optionalTerm.get();
+            existingTerm.setName(term.getName());
+            existingTerm.setBegin(term.getBegin());
+            existingTerm.setEnd(term.getEnd());
+            termRepository.save(existingTerm);
+            return "redirect:" + extensions.getAdminUrls()
+                .termsBySchoolYear(existingTerm.getSchoolYear());
+        } else {
+            return "";
+        }
     }
 }

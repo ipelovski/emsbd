@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>File upload</title>
 </head>
 <body>
-    <div th:fragment="fileUpload (id, target, accept, onSuccess)">
-        <form th:id="|${id}-form|" th:action="${target}" method="post" enctype="multipart/form-data">
-            <input type="file" id="file" name="file" th:accept="${accept}">
-            <input type="submit" th:value="Upload">
+    <div data-th-fragment="fileUpload (id, target, accept, onSuccess)">
+        <form data-th-id="|${id}-form|" data-th-action="${target}" method="post" enctype="multipart/form-data">
+            <input type="file" id="file" name="file" data-th-accept="${accept}">
+            <input type="submit" data-th-value="${x.c('user.upload')}">
         </form>
-        <div th:id="|${id}-output|"></div>
-        <script th:inline="javascript">
+        <div data-th-id="|${id}-output|"></div>
+        <script data-th-inline="javascript">
 {
     let form = document.getElementById([[${id}]] + '-form');
     form.addEventListener('submit', function(e) {

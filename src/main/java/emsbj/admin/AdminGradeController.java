@@ -1,5 +1,6 @@
 package emsbj.admin;
 
+import emsbj.Extensions;
 import emsbj.grade.Grade;
 import emsbj.grade.GradeRepository;
 import emsbj.config.WebMvcConfig;
@@ -19,13 +20,15 @@ import java.util.Optional;
 public class AdminGradeController implements AuthorizedController {
     @Autowired
     private GradeRepository gradeRepository;
+    @Autowired
+    private Extensions extensions;
 
     @GetMapping
     public String list(Model model) {
         Iterable<Grade> grades = gradeRepository.findByOrderByOrdinalAsc();
         model.addAttribute("grades", grades);
         model.addAttribute("emptyGrade", new Grade((String)null));
-        return "admin/grades.html";
+        return "admin/grades";
     }
 
     @PostMapping(WebMvcConfig.addPath)
@@ -38,6 +41,6 @@ public class AdminGradeController implements AuthorizedController {
             grade.setName(grade.getName().toLowerCase(locale));
             gradeRepository.save(grade);
         }
-        return "redirect:/admin/grades";
+        return "redirect:" + extensions.getAdminUrls().grades();
     }
 }

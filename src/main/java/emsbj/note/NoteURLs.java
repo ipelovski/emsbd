@@ -77,11 +77,11 @@ public class NoteURLs {
 
     public Breadcrumb addNoteBreadcrumb(Student student, Course course, Lesson lesson) {
         return new Breadcrumb(notes(student, course, null),
-            util.capitalize("addNote"), listBreadcrumb(student, course, lesson));
+            util.capitalize("student.addNote"), listBreadcrumb(student, course, lesson));
     }
 
     public Breadcrumb editNoteBreadcrumb(Note note) {
-        return new Breadcrumb(editNote(note), util.capitalize("editNote"),
+        return new Breadcrumb(editNote(note), util.capitalize("student.editNote"),
             listBreadcrumb(note.getStudent(), note.getCourse(), note.getLesson()));
     }
 }

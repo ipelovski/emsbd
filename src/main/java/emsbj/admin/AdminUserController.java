@@ -1,7 +1,9 @@
 package emsbj.admin;
 
+import emsbj.Extensions;
 import emsbj.config.WebMvcConfig;
 import emsbj.controller.AuthorizedController;
+import emsbj.user.PersonalInfo;
 import emsbj.user.User;
 import emsbj.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,18 +25,20 @@ public class AdminUserController implements AuthorizedController {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private Extensions extensions;
 
     @GetMapping
     public String list(Model model) {
         Iterable<User> users = userRepository.findAll();
         model.addAttribute("users", users);
-        return "/admin/users.html";
+        return "admin/users";
     }
 
     @GetMapping(WebMvcConfig.addPath)
     public String add(Model model) {
         model.addAttribute("user", new User());
-        return "/admin/user-details.html";
+        return "admin/user-details";
     }
 
     @PostMapping(WebMvcConfig.addPath)
@@ -44,7 +48,7 @@ public class AdminUserController implements AuthorizedController {
         } else {
             userRepository.save(user);
         }
-        return "redirect:/admin/users";
+        return "redirect:" + extensions.getAdminUrls().users();
     }
 
     @GetMapping(WebMvcConfig.objectIdPathParam)
@@ -54,7 +58,7 @@ public class AdminUserController implements AuthorizedController {
         Optional<User> user = userRepository.findById(userId);
         if (user.isPresent()) {
             model.addAttribute("user", user.get());
-            return "/admin/user-details";
+            return "admin/user-details";
         } else {
             return "";
         }
@@ -69,9 +73,21 @@ public class AdminUserController implements AuthorizedController {
             User existingUser = optionalUser.get();
             existingUser.setEmail(user.getEmail());
             existingUser.setRole(user.getRole());
+            existingUser.getPersonalInfo().setFirstName(
+                user.getPersonalInfo().getFirstName());
+            existingUser.getPersonalInfo().setMiddleName(
+                user.getPersonalInfo().getMiddleName());
+            existingUser.getPersonalInfo().setLastName(
+                user.getPersonalInfo().getLastName());
+            existingUser.getPersonalInfo().setAddress(
+                user.getPersonalInfo().getAddress());
+            existingUser.getPersonalInfo().setBornAt(
+                user.getPersonalInfo().getBornAt());
+            existingUser.getPersonalInfo().setGender(
+                user.getPersonalInfo().getGender());
             userRepository.save(existingUser);
         }
         model.addAttribute("user", optionalUser.orElse(null));
-        return "redirect:/admin/users/" + userId;
+        return "redirect:" + extensions.getAdminUrls().user(user);
     }
 }

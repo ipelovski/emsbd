@@ -27,6 +27,6 @@ public class HomeURLs extends ViewInfo {
     }
 
     public Breadcrumb homeBreadcrumb() {
-        return new Breadcrumb(home(), util.capitalize("home"));
+        return new Breadcrumb(home(), util.capitalize("home.home"));
     }
 }

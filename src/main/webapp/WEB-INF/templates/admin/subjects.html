@@ -2,30 +2,23 @@
 <html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
-    <title>Subjects</title>
+    <title data-th-text="${x.c('course.subjects')}"></title>
 </head>
 <body>
     <div data-layout-fragment="content">
         <p>
-            <a data-th-href="@{${x.au().adminIndex()}}">Back to administration home</a>
+            <a data-th-href="${x.au().addSubject()}" data-th-text="${x.c('course.addSubject')}"></a>
         </p>
-        <p>
-            <a data-th-href="@{${x.au().addSubject()}}">Add new</a>
-        </p>
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Grade</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr data-th-each="subject : ${subjects}">
-                    <td data-th-text="${subject.name.value}"></td>
-                    <td data-th-text="${subject.grade.name}"></td>
-                </tr>
-            </tbody>
-        </table>
+        <ul class="list">
+            <li class="flex">
+                <div class="col col-6" data-th-text="${x.c('common.name')}"></div>
+                <div class="col col-6" data-th-text="${x.c('class.grade')}"></div>
+            </li>
+            <li class="flex" data-th-each="subject : ${subjects}">
+                <div class="col col-6" data-th-text="${subject.name.value}"></div>
+                <div class="col col-6" data-th-text="${subject.grade.name}"></div>
+            </li>
+        </ul>
     </div>
 </body>
 </html>

@@ -11,24 +11,24 @@
         <link data-th-href="@{/css/site-style.css}" rel="stylesheet">
     </div>
     <div data-th-fragment="greetings(activeUser)">
-        <span data-th-text="#{greetingMessageBegin}"></span>
-        <span data-th-if="${activeUser.isAnonymous()}" data-th-text="#{guestName}"></span>
+        <span data-th-text="#{greeting.greetingMessageBegin}"></span>
+        <span data-th-if="${activeUser.isAnonymous()}" data-th-text="#{greeting.guestName}"></span>
         <a data-th-if="${!activeUser.isAnonymous()}" data-th-href="@{${x.u().users().profile()}}" data-th-text="${activeUser.username}"></a>
-        <span data-th-text="#{greetingMessageEnd}"></span>
+        <span data-th-text="#{greeting.greetingMessageEnd}"></span>
         <span data-th-if="${activeUser.isAnonymous()}">
-            <a data-th-href="@{${x.u().users().signIn()}}" data-th-text="${x.c('signIn')}">Sign in</a>
-            <span data-th-text="#{or}">or</span>
-            <a data-th-href="@{${x.u().users().signUp()}}" data-th-text="${x.c('signUp')}">Sign up</a>
+            <a data-th-href="@{${x.u().users().signIn()}}" data-th-text="${x.c('signIn.signIn')}">Sign in</a>
+            <span data-th-text="#{common.or}">or</span>
+            <a data-th-href="@{${x.u().users().signUp()}}" data-th-text="${x.c('signIn.signUp')}">Sign up</a>
         </span>
         <span data-th-if="${!activeUser.isAnonymous()}">
-            <a data-th-href="${x.u().users().signOut()}" data-th-text="${x.c('signOut')}">Sign out</a>
+            <a data-th-href="${x.u().users().signOut()}" data-th-text="${x.c('signIn.signOut')}">Sign out</a>
         </span>
     </div>
     <div data-th-fragment="menu(activeUser)">
         <div data-th-if="${activeUser.role == T(emsbj.user.User.Role).student}" class="flex">
             <a class="col col-4 menu-item" data-th-href="@{${x.u().home()}}">
                 <img class="icon" data-th-src="@{/img/icons/octicons/home.svg}">
-                <span data-th-text="${x.c('home')}"></span>
+                <span data-th-text="${x.c('home.home')}"></span>
             </a>
             <a class="col col-4 menu-item" data-th-href="@{${x.u().courses().schedule()}}">
                 <div class="icon" data-th-insert="~{fragments/icons::octicons-calendar}"></div>
@@ -42,7 +42,7 @@
         <div data-th-if="${activeUser.role == T(emsbj.user.User.Role).teacher}" class="flex">
             <a class="col col-3 menu-item" data-th-href="@{${x.u().home()}}">
                 <img class="icon" data-th-src="@{/img/icons/octicons/home.svg}">
-                <span data-th-text="${x.c('home')}"></span>
+                <span data-th-text="${x.c('home.home')}"></span>
             </a>
             <a class="col col-3 menu-item" data-th-href="@{${x.u().courses().schedule()}}">
                 <div class="icon" data-th-insert="~{fragments/icons::octicons-calendar}"></div>
@@ -54,7 +54,7 @@
             </a>
             <a class="col col-3 menu-item" data-th-href="@{${x.u().users().profile()}}">
                 <div class="icon" data-th-insert="~{fragments/icons::material-design-icons-human-male-female}"></div>
-                <span data-th-text="${x.c('students')}"></span>
+                <span data-th-text="${x.c('student.students')}"></span>
             </a>
         </div>
     </div>

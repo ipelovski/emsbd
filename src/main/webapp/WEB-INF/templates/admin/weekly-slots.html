@@ -2,33 +2,26 @@
 <html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
-    <title>Weekly Slots</title>
+    <title data-th-text="${x.c('class.weeklySlots')}"></title>
 </head>
 <body>
     <div data-layout-fragment="content">
-        <p>
-            <a data-th-href="@{${x.au().adminIndex()}}">Back to administration home</a>
-        </p>
-        <table>
-            <thead>
-                <tr>
-                    <th>Shift</th>
-                    <th>Day</th>
-                    <th>Ordinal</th>
-                    <th>Begins</th>
-                    <th>Ends</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr data-th-each="weeklySlot : ${weeklySlots}">
-                    <td data-th-text="${weeklySlot.shift}"></td>
-                    <td data-th-text="${weeklySlot.day}"></td>
-                    <td data-th-text="${weeklySlot.ordinal}"></td>
-                    <td data-th-text="${weeklySlot.begin}"></td>
-                    <td data-th-text="${weeklySlot.end}"></td>
-                </tr>
-            </tbody>
-        </table>
+        <ul class="list">
+            <li class="flex">
+                <div class="col col-1" data-th-text="${x.c('class.shift')}"></div>
+                <div class="col col-4" data-th-text="${x.c('common.day')}"></div>
+                <div class="col col-1" data-th-text="${x.c('class.ordinal')}"></div>
+                <div class="col col-3" data-th-text="${x.c('class.begins')}"></div>
+                <div class="col col-3" data-th-text="${x.c('class.ends')}"></div>
+            </li>
+            <li class="flex" data-th-each="weeklySlot : ${weeklySlots}">
+                <div class="col col-1" data-th-text="${weeklySlot.shift}"></div>
+                <div class="col col-4" data-th-text="${x.c('weekday.' + weeklySlot.day.name().toLowerCase())}"></div>
+                <div class="col col-1" data-th-text="${weeklySlot.ordinal}"></div>
+                <div class="col col-3" data-th-text="${weeklySlot.begin}"></div>
+                <div class="col col-3" data-th-text="${weeklySlot.end}"></div>
+            </li>
+        </ul>
     </div>
 </body>
 </html>

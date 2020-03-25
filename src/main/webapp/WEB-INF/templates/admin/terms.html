@@ -2,34 +2,25 @@
 <html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
-    <title>Terms</title>
+    <title data-th-text="${x.c('class.terms')}"></title>
 </head>
 <body>
     <div data-layout-fragment="content">
-        <p>
-            <a data-th-href="@{${x.au().adminIndex()}}">Back to administration home</a>
-        </p>
-        <form data-th-action="@{${x.au().addTermWithSchoolYear(schoolYear)}}" method="post">
-            <input type="submit" value="Add two terms">
-        </form>
-        <table>
-            <thead>
-                <tr>
-                    <th>School year</th>
-                    <th>Name</th>
-                    <th>Details</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr data-th-each="term : ${terms}">
-                    <td data-th-text="${term.schoolYear.name()}"></td>
-                    <td data-th-text="${term.name}"></td>
-                    <td>
-                        <a data-th-href="@{${x.au().term(term)}}">Details</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <ul class="list">
+            <li class="flex">
+                <div class="col col-4" data-th-text="${x.c('class.schoolYear')}"></div>
+                <div class="col col-4" data-th-text="${x.c('common.name')}"></div>
+                <div class="col col-4" data-th-text="${x.c('common.details')}"></div>
+            </li>
+            <li class="flex" data-th-each="term : ${terms}">
+                <div class="col col-4" data-th-text="${term.schoolYear.name()}"></div>
+                <div class="col col-4" data-th-text="${term.name}"></div>
+                <div class="col col-4">
+                    <a data-th-href="${x.au().term(term)}"
+                       data-th-text="${x.c('common.details')}"></a>
+                </div>
+            </li>
+        </ul>
     </div>
 </body>
 </html>

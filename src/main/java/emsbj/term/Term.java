@@ -52,6 +52,10 @@ public class Term extends JournalPersistable {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public LocalDate getBegin() {
         return begin;
     }

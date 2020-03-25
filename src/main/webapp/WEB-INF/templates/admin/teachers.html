@@ -2,21 +2,18 @@
 <html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
-    <title>Teachers</title>
+    <title data-th-text="${x.c('student.teachers')}"></title>
 </head>
 <body>
     <div data-layout-fragment="content">
-        <p>
-            <a data-th-href="@{${x.au().adminIndex()}}">Back to administration home</a>
-        </p>
         <ul class="list">
             <li class="flex flex-wrap">
-                <div class="col col-2">First name</div>
-                <div class="col col-2">Middle name</div>
-                <div class="col col-2">Last name</div>
-                <div class="col col-4">Skills</div>
-                <div class="col col-1">Form-master</div>
-                <div class="col col-1">Details</div>
+                <div class="col col-2" data-th-text="${x.c('user.firstName')}"></div>
+                <div class="col col-2" data-th-text="${x.c('user.middleName')}"></div>
+                <div class="col col-2" data-th-text="${x.c('user.lastName')}"></div>
+                <div class="col col-4" data-th-text="${x.c('student.skills')}"></div>
+                <div class="col col-1" data-th-text="${x.c('class.formMaster')}"></div>
+                <div class="col col-1" data-th-text="${x.c('common.details')}"></div>
             </li>
             <li class="flex flex-wrap" data-th-each="teacher : ${teachers}">
                 <div class="col col-2" data-th-text="${teacher.user.personalInfo.firstName}"></div>
@@ -31,10 +28,11 @@
                 </div>
                 <div class="col col-1">
                     <span data-th-each="schoolClass: ${teacher.formMasterOf}"
-                          data-th-text="${schoolClass.getGrade().name} + ' ' + ${schoolClass.name}"></span>
+                          data-th-text="${schoolClass.getFullName()}"></span>
                 </div>
                 <div class="col col-1">
-                    <a data-th-href="@{${x.au().teacher(teacher)}}">Details</a>
+                    <a data-th-href="${x.au().teacher(teacher)}"
+                       data-th-text="${x.c('common.details')}"></a>
                 </div>
             </li>
         </ul>

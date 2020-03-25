@@ -22,6 +22,6 @@ public class AdminCourseController implements AuthorizedController {
     public String list(Model model) {
         Iterable<Course> courses = courseRepository.findAll();
         model.addAttribute("courses", courses);
-        return "/admin/courses.html";
+        return "admin/courses";
     }
 }
