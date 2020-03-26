@@ -1,1 +1,7 @@
 mvn clean package spring-boot:run -DskipTests
+
+heroku deploy:jar target/emsbj-1.0-SNAPSHOT.jar --app ancient-garden-93311
+
+heroku logs --tail --app ancient-garden-93311
+
+heroku open --app ancient-garden-93311
