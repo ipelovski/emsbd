@@ -1,1 +1,1 @@
-web: ./mvnw spring-boot:run
+web: java -Dserver.port=$PORT -jar target/emsbj-1.0-SNAPSHOT.jar
