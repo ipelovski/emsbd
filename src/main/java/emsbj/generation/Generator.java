@@ -33,6 +33,8 @@ import emsbj.mark.Mark;
 import emsbj.user.User;
 import emsbj.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -107,6 +109,8 @@ public class Generator {
     private BlobRepository blobRepository;
     @Autowired
     private Util util;
+    @Autowired
+    private ResourceLoader resourceLoader;
 
     private List<WeeklySlot> weeklySlots;
     private Map<Integer, Grade> grades;
@@ -194,8 +198,8 @@ public class Generator {
     }
 
     private byte[] readFile(String fileName) {
-        try (InputStream inputStream = getClass().getClassLoader()
-            .getResourceAsStream(fileName)) {
+        Resource resource = resourceLoader.getResource("classpath:" + fileName);
+        try (InputStream inputStream = resource.getInputStream()) {
             if (inputStream == null) {
                 throw new IllegalArgumentException("Cannot load file " + fileName);
             }
