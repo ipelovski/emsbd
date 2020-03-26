@@ -79,8 +79,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/**")
-            .addResourceLocations("/WEB-INF/static/");
+        registry.addResourceHandler("/favicon.ico")
+            .addResourceLocations("classpath:/WEB-INF/static/favicon.ico");
+        registry.addResourceHandler("/img/**")
+            .addResourceLocations("classpath:/WEB-INF/static/img/");
+        registry.addResourceHandler("/css/**")
+            .addResourceLocations("classpath:/WEB-INF/static/css/");
+        registry.addResourceHandler("/js/**")
+            .addResourceLocations("classpath:/WEB-INF/static/js/");
     }
 
     @Bean
@@ -89,7 +95,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         // resource resolution infrastructure, which is highly recommended.
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
         templateResolver.setApplicationContext(applicationContext);
-        templateResolver.setPrefix("/WEB-INF/templates/");
+        templateResolver.setPrefix("classpath:/WEB-INF/templates/");
         templateResolver.setSuffix(".html");
         // HTML is the default value, added here for the sake of clarity.
         templateResolver.setTemplateMode(TemplateMode.HTML);
@@ -122,15 +128,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
         }
     }
 
-    @Autowired
-    public void setHandlerMapping(RequestMappingHandlerMapping mapping)
-        throws NoSuchMethodException {
-
-        RequestMappingInfo info = RequestMappingInfo
-            .paths("/admin/grade-names").methods(RequestMethod.GET).build();
-
-        Method method = AdminGradeController.class.getMethod("list", Model.class);
-
-//        mapping.registerMapping(info, "adminGradeController", method);
-    }
+//    @Autowired
+//    public void setHandlerMapping(RequestMappingHandlerMapping mapping)
+//        throws NoSuchMethodException {
+//
+//        RequestMappingInfo info = RequestMappingInfo
+//            .paths("/admin/grade-names").methods(RequestMethod.GET).build();
+//
+//        Method method = AdminGradeController.class.getMethod("list", Model.class);
+//
+////        mapping.registerMapping(info, "adminGradeController", method);
+//    }
 }

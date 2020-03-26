@@ -38,6 +38,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.DayOfWeek;
@@ -200,15 +201,14 @@ public class Generator {
     private byte[] readFile(String fileName) {
         Resource resource = resourceLoader.getResource("classpath:" + fileName);
         try (InputStream inputStream = resource.getInputStream()) {
-            if (inputStream == null) {
-                throw new IllegalArgumentException("Cannot load file " + fileName);
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            int bytesRead;
+            byte[] data = new byte[1024];
+            while ((bytesRead = inputStream.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, bytesRead);
             }
-            byte[] byteArray = new byte[inputStream.available()];
-            int bytesRead = inputStream.read(byteArray, 0, byteArray.length);
-            if (bytesRead != byteArray.length) {
-                throw new RuntimeException("Could not read the whole file.");
-            }
-            return byteArray;
+            buffer.flush();
+            return buffer.toByteArray();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

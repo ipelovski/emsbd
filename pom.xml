@@ -89,7 +89,10 @@
         </plugins>
         <resources>
             <resource>
-                <directory>src/webapp</directory>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>src/main/webapp</directory>
             </resource>
         </resources>
     </build>
