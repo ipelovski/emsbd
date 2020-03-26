@@ -1,7 +1,7 @@
 package emsbj.web;
 
 import emsbj.config.WebMvcConfig;
-import javafx.util.Pair;
+import emsbj.util.Pair;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.CollectionUtils;
@@ -190,7 +190,7 @@ public class URLBuilder {
         ) {
             if (entry.getKey().test(controllerType)) {
                 Pair<String, Object> uriVariable = entry.getValue().get();
-                namedURIParams.put(uriVariable.getKey(), uriVariable.getValue());
+                namedURIParams.put(uriVariable.getFirst(), uriVariable.getSecond());
             }
         }
     }

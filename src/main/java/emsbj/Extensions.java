@@ -27,6 +27,7 @@ import emsbj.teacher.Teacher;
 import emsbj.term.Term;
 import emsbj.user.User;
 import emsbj.user.UserURLs;
+import emsbj.util.Util;
 import emsbj.web.URLBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

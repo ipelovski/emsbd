@@ -1,7 +1,7 @@
 package emsbj.home;
 
 import emsbj.Breadcrumb;
-import emsbj.Util;
+import emsbj.util.Util;
 import emsbj.config.WebMvcConfig;
 import emsbj.web.URLBuilder;
 import emsbj.web.ViewInfo;

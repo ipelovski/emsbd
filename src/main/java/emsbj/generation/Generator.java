@@ -1,6 +1,7 @@
 package emsbj.generation;
 
-import emsbj.Util;
+import emsbj.util.Pair;
+import emsbj.util.Util;
 import emsbj.blob.Blob;
 import emsbj.blob.BlobRepository;
 import emsbj.course.Course;
@@ -31,7 +32,6 @@ import emsbj.weeklyslot.WeeklySlotRepository;
 import emsbj.mark.Mark;
 import emsbj.user.User;
 import emsbj.user.UserRepository;
-import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -459,7 +459,7 @@ public class Generator {
                 Pair<TeacherTimeTable, WeeklySlot> result = findAvailableWeeklySlot(
                     teacherTimeTables, timeTable.getOwner(), weeklySlotWithManyLessons);
                 List<CourseValue> courses = timeTable.getSlotContent(weeklySlotWithManyLessons);
-                result.getKey().occupy(result.getValue(), courses.remove(0));
+                result.getFirst().occupy(result.getSecond(), courses.remove(0));
                 break;
             }
         }
@@ -612,6 +612,7 @@ public class Generator {
     }
 
     private void setMarks(Student student) {
+        // TODO
         student.getMarks().add(new Mark(student, subjects.get(0), randomInt(2, 7) * 100));
     }
 

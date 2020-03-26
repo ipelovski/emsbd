@@ -1,9 +1,9 @@
 package emsbj.config;
 
+import emsbj.util.Pair;
 import emsbj.web.UrlLocaleInterceptor;
 import emsbj.admin.AdminGradeController;
 import emsbj.controller.LocalizedController;
-import javafx.util.Pair;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

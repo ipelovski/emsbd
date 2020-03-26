@@ -1,4 +1,4 @@
-package emsbj;
+package emsbj.util;
 
 import emsbj.config.WebMvcConfig;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package emsbj.note;
 
 import emsbj.Breadcrumb;
-import emsbj.Util;
+import emsbj.util.Util;
 import emsbj.course.Course;
 import emsbj.course.CourseURLs;
 import emsbj.lesson.Lesson;
