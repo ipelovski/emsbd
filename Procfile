@@ -1,1 +1,1 @@
-web: mvn spring-boot:run
+web: ./mvnw spring-boot:run
