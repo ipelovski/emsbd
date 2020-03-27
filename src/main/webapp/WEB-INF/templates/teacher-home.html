@@ -6,25 +6,25 @@
 </head>
 <body>
     <div data-layout-fragment="content">
-        <h3 data-th-text="|Lessons today ${currentDate}|"></h3>
+        <h3 data-th-text="${x.c('class.lessonsTodayDate', currentDate)}"></h3>
         <div data-th-if="${currentLessons.size() > 0}">
-            <h4>Current lesson</h4>
+            <h4 data-th-text="${x.c('class.currentLesson')}"></h4>
             <div data-th-insert="~{fragments/teacher-lesson-list::lessonList(${currentLessons})}"></div>
             <form data-th-action="${x.u().lessons().startLesson()}" method="post" data-th-object="${currentLesson}">
                 <input type="hidden" data-th-field="*{course}">
                 <input type="hidden" data-th-field="*{weeklySlot}">
-                <input type="submit" data-th-value="'Start lesson'">
+                <input type="submit" data-th-value="${x.c('class.startLesson')}">
             </form>
         </div>
         <div data-th-if="${currentLessons.size() == 0}">
-            <h4>No current lesson</h4>
+            <h4 data-th-text="${x.c('class.noCurrentLesson')}"></h4>
         </div>
         <div>
-            <h4>Next lessons</h4>
+            <h4 data-th-text="${x.c('class.nextLessons')}"></h4>
             <div data-th-insert="~{fragments/teacher-lesson-list::lessonList(${nextLessons})}"></div>
         </div>
         <div>
-            <h4>Previous lessons</h4>
+            <h4 data-th-text="${x.c('class.previousLessons')}"></h4>
             <div data-th-insert="~{fragments/teacher-lesson-list::lessonList(${previousLessons})}"></div>
         </div>
     </div>

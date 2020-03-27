@@ -1,8 +1,10 @@
 package emsbj.user;
 
+import emsbj.controller.AuthorizedController;
+import emsbj.home.HomeURLs;
+import emsbj.util.Util;
 import emsbj.web.RedirectingAuthenticationSuccessHandler;
 import emsbj.config.WebMvcConfig;
-import emsbj.controller.LocalizedController;
 import emsbj.controller.SecuredController;
 import org.hibernate.validator.constraints.ScriptAssert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,7 @@ import javax.validation.constraints.Size;
 import java.util.Optional;
 
 @Controller
-public class UserController implements SecuredController, LocalizedController {
+public class UserController implements SecuredController, AuthorizedController {
     public static final String signIn = "signIn";
     public static final String signInRole = "signInRole";
     public static final String signUp = "signUp";
@@ -44,6 +46,12 @@ public class UserController implements SecuredController, LocalizedController {
     private RedirectingAuthenticationSuccessHandler successHandler;
     @Autowired
     private UserService userService;
+    @Autowired
+    private Util util;
+    @Autowired
+    private UserURLs userURLs;
+    @Autowired
+    private HomeURLs homeURLs;
 
     @Override
     public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {
@@ -54,14 +62,19 @@ public class UserController implements SecuredController, LocalizedController {
 
     @GetMapping(value = "/sign-in", name = signIn)
     public String signIn(Model model, String error, String logout, String requested) {
-        if (error != null) {
-            model.addAttribute("error", "Username or password is incorrect.");
+        Optional<User> optionalUser = userService.getCurrentUser();
+        if (optionalUser.isPresent()) {
+            return "redirect:" + homeURLs.home();
+        } else {
+            if (error != null) {
+                model.addAttribute("error", util.localize("user.usernamePasswordIncorrect"));
+            }
+            if (logout != null) {
+                model.addAttribute("logout", util.localize("user.signedOut"));
+            }
+            model.addAttribute("requested", requested);
+            return "sign-in";
         }
-        if (logout != null) {
-            model.addAttribute("logout", "You are now logged out.");
-        }
-        model.addAttribute("requested", requested);
-        return "sign-in";
     }
 
     @PostMapping(value = "/sign-in-role", name = signInRole)
@@ -76,14 +89,20 @@ public class UserController implements SecuredController, LocalizedController {
             String redirectUrl = successHandler.getTargetUrl(request, response);
             return "redirect:" + redirectUrl;
         } else {
-            model.addFlashAttribute("error", "No user with role " + role + " found.");
-            return "redirect:/sign-in";
+            model.addFlashAttribute("error", util.localize("user.noUserFoundWithRole",
+                util.localize("user.role." + role.name().toLowerCase())));
+            return "redirect:" + userURLs.signIn();
         }
     }
 
     @GetMapping(value = "/sign-up", name = signUp)
     public String signUpForm(SignUpForm signUpForm) {
-        return "sign-up";
+        Optional<User> optionalUser = userService.getCurrentUser();
+        if (optionalUser.isPresent()) {
+            return "redirect:" + homeURLs.home();
+        } else {
+            return "sign-up";
+        }
     }
 
     @PostMapping("/sign-up")
@@ -97,7 +116,7 @@ public class UserController implements SecuredController, LocalizedController {
             Optional<User> existingUser = userRepository.findByUsername(username);
             if (existingUser.isPresent()) {
                 bindingResult.rejectValue(
-                    "username", "unique", "This username is already used. Try another one.");
+                    "username", "unique", util.localize("user.usernameTaken"));
                 return "sign-up";
             }
             User user = new User();
@@ -110,7 +129,7 @@ public class UserController implements SecuredController, LocalizedController {
             Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(username, password));
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            return "redirect:/home";
+            return "redirect:" + homeURLs.home();
         } catch(Exception e) {
             e.printStackTrace();
             signUpForm.setError(e.getMessage());
@@ -130,6 +149,11 @@ public class UserController implements SecuredController, LocalizedController {
         User user = userRepository.findById(currentUser.getId()).get();
         model.addAttribute("user", user);
         return "profile";
+    }
+
+    @GetMapping("/change-password")
+    public String changePassword() {
+        return ""; // TODO
     }
 
     @ScriptAssert(lang = "javascript", reportOn = "confirmPassword",

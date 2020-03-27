@@ -29,7 +29,7 @@ public class CourseURLs {
     }
 
     public Breadcrumb listBreadcrumb() {
-        return new Breadcrumb(list(), util.capitalize("courses"), homeURLs.homeBreadcrumb());
+        return new Breadcrumb(list(), util.capitalize("course.courses"), homeURLs.homeBreadcrumb());
     }
 
     public Breadcrumb courseBreadcrumb(Course course) {
@@ -37,6 +37,6 @@ public class CourseURLs {
     }
 
     public Breadcrumb scheduleBreadcrumb() {
-        return new Breadcrumb(schedule(), util.capitalize("schedule"), homeURLs.homeBreadcrumb());
+        return new Breadcrumb(schedule(), util.capitalize("class.schedule"), homeURLs.homeBreadcrumb());
     }
 }

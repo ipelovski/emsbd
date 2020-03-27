@@ -2,7 +2,7 @@
 <html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
-    <title data-th-text="${!user.isNew() ? x.l('detailsAbout', user.username) : x.c('user.addUser')}"></title>
+    <title data-th-text="${!user.isNew() ? x.l('common.detailsAbout', user.username) : x.c('user.addUser')}"></title>
 </head>
 <body>
     <div data-layout-fragment="content">

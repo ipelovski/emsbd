@@ -68,10 +68,10 @@ public class NoteURLs {
     public Breadcrumb listBreadcrumb(Student student, Course course, Lesson lesson) {
         if (lesson != null) {
             return new Breadcrumb(notes(student, course, lesson),
-                util.capitalize("notes"), lessonURLs.detailsBreadcrumb(lesson));
+                util.capitalize("student.notes"), lessonURLs.detailsBreadcrumb(lesson));
         } else {
             return new Breadcrumb(notes(student, course, null),
-                util.capitalize("notes"), courseURLs.courseBreadcrumb(course));
+                util.capitalize("student.notes"), courseURLs.courseBreadcrumb(course));
         }
     }
 

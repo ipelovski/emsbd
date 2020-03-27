@@ -2,7 +2,7 @@
 <html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
-    <title>Add Note</title>
+    <title data-th-text="${x.c('student.addNote')}"></title>
 </head>
 <body>
     <div data-layout-fragment="content">
@@ -11,7 +11,7 @@
             <input type="hidden" data-th-field="*{lesson}">
             <input type="hidden" data-th-field="*{course}">
             <textarea data-th-field="*{text}"></textarea>
-            <input type="submit" data-th-value="'Add'">
+            <input type="submit" data-th-value="${x.c('common.add')}">
         </form>
     </div>
 </body>

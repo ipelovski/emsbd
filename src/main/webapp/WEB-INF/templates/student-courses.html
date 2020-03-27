@@ -2,25 +2,25 @@
 <html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
-    <title>Courses</title>
+    <title data-th-text="${x.c('course.courses')}"></title>
 </head>
 <body>
     <div data-layout-fragment="content">
         <h4 data-th-if="${courseStudent != null}"
-            data-th-text="|Details about ${courseStudent.name}|"></h4>
+            data-th-text="${x.c('common.detailsAbout', courseStudent.name)}"></h4>
         <ul class="list">
             <li class="flex flex-wrap">
-                <div class="col col-4" data-th-text="Subject"></div>
-                <div class="col col-2" data-th-text="Mark"></div>
+                <div class="col col-4" data-th-text="${x.c('course.subject')}"></div>
+                <div class="col col-2" data-th-text="${x.c('student.mark')}"></div>
                 <div class="col col-4" data-th-text="${x.c('student.notes')}"></div>
-                <div class="col col-2" data-th-text="Absences"></div>
+                <div class="col col-2" data-th-text="${x.c('student.absences')}"></div>
             </li>
            <li data-th-each="courseStudent : ${courseStudents}" class="flex flex-wrap">
                <div class="col col-4" data-th-text="${courseStudent.course.subject.name.value}"></div>
                <div class="col col-2" data-th-text="|${courseStudent.averageMark != null ? @scoreFormatter.format(courseStudent.averageMark) : '-'} (${courseStudent.marks.size()})|"></div>
                <div class="col col-4">
                    <a data-th-href="${x.u().notes().notes(courseStudent.student, courseStudent.course)}"
-                      data-th-text="|View (${courseStudent.notes.size()})|"></a>
+                      data-th-text="${x.c('common.viewSomething', courseStudent.notes.size())}"></a>
                 </div>
                <div class="col col-2" data-th-text="${courseStudent.absences}"></div>
            </li>

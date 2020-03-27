@@ -1,43 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
-    <title data-th-text="${x.c('signIn.signIn')}"></title>
-    <link data-th-replace="~{fragments/header :: headResources}">
+    <title data-th-text="${x.c('user.signIn')}"></title>
 </head>
 <body>
-    <p>
-        If not registered then <a data-th-href="${x.u().users().signUp()}">sign up</a>.
-    </p>
-    <h3>Sign in</h3>
-    <h4>As a specific user</h4>
-    <form data-th-action="@{${x.u().users().signIn()}(requested=${requested})}" method="post">
-        <p data-th-if="${error != null}" data-th-text="${error}"></p>
-        <p data-th-if="${logout != null}" data-th-text="${logout}"></p>
+    <div data-layout-fragment="content">
         <p>
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username"/>
+            <span data-th-text="#{user.notRegisteredText}"></span> <a data-th-href="${x.u().users().signUp()}" data-th-text="#{user.signUp}"></a>.
         </p>
-        <p>
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password"/>
-        </p>
-        <input type="submit" value="Sign in">
-    </form>
-    <h4>Or sign in as a user with role</h4>
-    <div class="flex flex-wrap">
-        <form class="col col-1" data-th-action="@{${x.u().users().signInRole()}(requested=${requested})}" method="post">
-            <input type="hidden" name="role" value="student">
-            <input type="submit" value="Student">
+        <h3 data-th-text="${x.c('user.signIn')}"></h3>
+        <h4 data-th-text="#{user.asSpecificUser}"></h4>
+        <form data-th-action="@{${x.u().users().signIn()}(requested=${requested})}" method="post">
+            <p data-th-if="${error != null}" data-th-text="${error}"></p>
+            <p data-th-if="${logout != null}" data-th-text="${logout}"></p>
+            <p>
+                <label class="label" for="username" data-th-text="${x.c('user.username')}"></label>
+                <input class="input" type="text" id="username" name="username"/>
+            </p>
+            <p>
+                <label class="label" for="password" data-th-text="${x.c('user.password')}"></label>
+                <input class="input" type="password" id="password" name="password"/>
+            </p>
+            <input class="btn btn-primary bg-olive" type="submit" data-th-value="${x.c('user.signIn')}">
         </form>
-        <form class="col col-1" data-th-action="@{${x.u().users().signInRole()}(requested=${requested})}" method="post">
-            <input type="hidden" name="role" value="teacher">
-            <input type="submit" value="Teacher">
-        </form>
-        <form class="col col-1" data-th-action="@{${x.u().users().signInRole()}(requested=${requested})}" method="post">
-            <input type="hidden" name="role" value="principal">
-            <input type="submit" value="Principal">
-        </form>
+        <h4 data-th-text="#{user.signInWithRole}"></h4>
+        <div class="flex flex-wrap">
+            <form class="mr1" data-th-action="@{${x.u().users().signInRole()}(requested=${requested})}" method="post">
+                <input type="hidden" name="role" value="student">
+                <input class="btn btn-primary" type="submit" data-th-value="${x.c('user.role.student')}">
+            </form>
+            <form class="mx1" data-th-action="@{${x.u().users().signInRole()}(requested=${requested})}" method="post">
+                <input type="hidden" name="role" value="teacher">
+                <input class="btn btn-primary" type="submit" data-th-value="${x.c('user.role.teacher')}">
+            </form>
+            <form class="ml1" data-th-action="@{${x.u().users().signInRole()}(requested=${requested})}" method="post">
+                <input type="hidden" name="role" value="principal">
+                <input class="btn btn-primary mx" type="submit" data-th-value="${x.c('user.role.principal')}">
+            </form>
+        </div>
     </div>
 </body>
 </html>

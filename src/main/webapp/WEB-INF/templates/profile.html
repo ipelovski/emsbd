@@ -1,94 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
-    <title>Profile</title>
-    <link data-th-replace="~{fragments/header :: headResources}">
+    <title data-th-text="${x.c('user.profile')}"></title>
 </head>
 <body>
-    <div class="pt4">
-        <div data-th-replace="~{fragments/profile-picture::profilePicture(
-        imageSrc=@{${x.u().blobs().profilePicture(user)}},
-        imageSize=128,id='profilePicture')}">
-        </div>
-        <script>
+    <div data-layout-fragment="content">
+        <div class="pt4">
+            <div data-th-replace="~{fragments/profile-picture::profilePicture(
+            imageSrc=@{${x.u().blobs().profilePicture(user)}},
+            imageSize=128,id='profilePicture')}">
+            </div>
+            <script>
 window.onProfilePictureUpdated = function (newSrc) {
     let profilePicture = document.getElementById('profilePicture');
     profilePicture.src = newSrc;
 };
-        </script>
-    </div>
-    <div data-th-insert="~{fragments/file-upload(id='profilePicture',
-        target=@{${x.u().blobs().uploadProfilePicture(user)}},
-        accept='image/png, image/jpeg',
-        onSuccess='onProfilePictureUpdated')}"></div>
-    <div class="flex flex-wrap" data-th-object="${user}">
-        <div class="col col-4">
-            <label class="label" for="username">Username:</label>
+            </script>
         </div>
-        <div class="col col-8">
-            <span id="username" data-th-text="*{username}"></span>
-        </div>
-        <div class="col-12">
-            <a data-th-href="@{/en/change-password}">Change password</a>
-        </div>
-        <div class="col col-4">
-            <label class="label" for="role">Role:</label>
-        </div>
-        <div class="col col-8">
-            <span id="role" data-th-text="*{role}"></span>
-        </div>
-        <div class="col col-4">
-            <label class="label" for="email">Email:</label>
-        </div>
-        <div class="col col-8">
-            <span id="email" data-th-text="*{email}"></span>
-        </div>
-        <div class="col col-4">
-            <label class="label" for="firstName">First name:</label>
-        </div>
-        <div class="col col-8">
-            <span id="firstName" data-th-text="*{personalInfo.firstName}"></span>
-        </div>
-        <div class="col col-4">
-            <label class="label" for="middleName">Middle name:</label>
-        </div>
-        <div class="col col-8">
-            <span id="middleName" data-th-text="*{personalInfo.middleName}"></span>
-        </div>
-        <div class="col col-4">
-            <label class="label" for="lastName">Last name:</label>
-        </div>
-        <div class="col col-8">
-            <span id="lastName" data-th-text="*{personalInfo.lastName}"></span>
-        </div>
-        <div class="col col-4">
-            <label class="label" for="gender">Gender:</label>
-        </div>
-        <div class="col col-8">
-            <span id="gender" data-th-text="#{*{personalInfo.gender.name()}}"></span>
-        </div>
-<!--        <p>-->
-<!--            <label for="gender">Gender</label>-->
-<!--            <select id="gender" data-th-field="*{gender}">-->
-<!--                <option data-th-each="gender = ${T(emsbj.PersonalInfo.Gender).values()}"-->
-<!--                        data-th-value="${gender}" data-th-text="#{${gender.name()}}"></option>-->
-<!--            </select>-->
-<!--            <span data-th-if="${#fields.hasErrors('email')}" data-th-each="error : ${#fields.detailedErrors('email')}">-->
-<!--                <span data-th-text="${error.message}"></span>-->
-<!--            </span>-->
-<!--        </p>-->
-        <div class="col col-4">
-            <label class="label" for="bornAt">Born at:</label>
-        </div>
-        <div class="col col-8">
-            <span id="bornAt" data-th-text="*{personalInfo.bornAt}"></span>
-        </div>
-        <div class="col col-4">
-            <label class="label" for="address">Address:</label>
-        </div>
-        <div class="col col-8">
-            <span id="address" data-th-text="*{personalInfo.address}"></span>
+        <div data-th-insert="~{fragments/file-upload(id='profilePicture',
+            target=@{${x.u().blobs().uploadProfilePicture(user)}},
+            accept='image/png, image/jpeg',
+            onSuccess='onProfilePictureUpdated')}"></div>
+        <div class="flex flex-wrap" data-th-object="${user}">
+            <div class="col col-4">
+                <label class="label" for="username" data-th-text="${x.c('user.username')}"></label>
+            </div>
+            <div class="col col-8">
+                <span id="username" data-th-text="*{username}"></span>
+            </div>
+            <div class="col-12">
+                <a data-th-href="@{/en/change-password}" data-th-text="${x.c('user.changePassword')}"></a>
+            </div>
+            <div class="col col-4">
+                <label class="label" for="role" data-th-text="${x.c('user.role')}"></label>
+            </div>
+            <div class="col col-8">
+                <span id="role" data-th-text="${x.c('user.role.' + user.role.name().toLowerCase())}"></span>
+            </div>
+            <div class="col col-4">
+                <label class="label" for="email" data-th-text="${x.c('user.email')}"></label>
+            </div>
+            <div class="col col-8">
+                <span id="email" data-th-text="*{email}"></span>
+            </div>
+            <div class="col col-4">
+                <label class="label" for="firstName" data-th-text="${x.c('user.firstName')}"></label>
+            </div>
+            <div class="col col-8">
+                <span id="firstName" data-th-text="*{personalInfo.firstName}"></span>
+            </div>
+            <div class="col col-4">
+                <label class="label" for="middleName" data-th-text="${x.c('user.middleName')}"></label>
+            </div>
+            <div class="col col-8">
+                <span id="middleName" data-th-text="*{personalInfo.middleName}"></span>
+            </div>
+            <div class="col col-4">
+                <label class="label" for="lastName" data-th-text="${x.c('user.lastName')}"></label>
+            </div>
+            <div class="col col-8">
+                <span id="lastName" data-th-text="*{personalInfo.lastName}"></span>
+            </div>
+            <div class="col col-4">
+                <label class="label" for="gender" data-th-text="${x.c('user.gender')}"></label>
+            </div>
+            <div class="col col-8">
+                <span id="gender" data-th-text="${x.c('user.gender.' + user.personalInfo.gender.name().toLowerCase())}"></span>
+            </div>
+            <div class="col col-4">
+                <label class="label" for="bornAt" data-th-text="${x.c('user.bornAt')}"></label>
+            </div>
+            <div class="col col-8">
+                <span id="bornAt" data-th-text="*{personalInfo.bornAt}"></span>
+            </div>
+            <div class="col col-4">
+                <label class="label" for="address" data-th-text="${x.c('user.address')}"></label>
+            </div>
+            <div class="col col-8">
+                <span id="address" data-th-text="*{personalInfo.address}"></span>
+            </div>
         </div>
     </div>
 </body>

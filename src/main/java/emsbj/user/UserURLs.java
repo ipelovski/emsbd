@@ -32,9 +32,7 @@ public class UserURLs {
     }
 
     public String signOut() {
-        return new URLBuilder(UserController.class, UserController.signOut)
-            .namedURIParams(WebMvcConfig.localePathName, LocaleContextHolder.getLocale())
-            .build();
+        return URLBuilder.get(UserController.class, UserController.signOut);
     }
 
     public String profile() {

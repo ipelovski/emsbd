@@ -2,14 +2,14 @@
 <html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
-    <title>Lessons</title>
+    <title data-th-text="${x.c('class.lessons')}"></title>
 </head>
 <body>
     <div data-layout-fragment="content">
         <div>
-            <a data-th-href="${x.u().lessons().lessonsPerWeek(previousWeek)}" data-th-text="'Previous week'"></a>
-            <a data-th-href="${x.u().lessons().lessons()}" data-th-text="'Current week'"></a>
-            <a data-th-href="${x.u().lessons().lessonsPerWeek(nextWeek)}" data-th-text="'Next week'"></a>
+            <a data-th-href="${x.u().lessons().lessonsPerWeek(previousWeek)}" data-th-text="${x.c('class.previousWeek')}"></a>
+            <a data-th-href="${x.u().lessons().lessons()}" data-th-text="${x.c('class.currentWeek')}"></a>
+            <a data-th-href="${x.u().lessons().lessonsPerWeek(nextWeek)}" data-th-text="${x.c('class.nextWeek')}"></a>
         </div>
         <div data-th-replace="~{fragments/teacher-lesson-list::weeklyLessons(${weeklyLessons})}"></div>
     </div>

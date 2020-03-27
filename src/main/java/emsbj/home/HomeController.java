@@ -60,21 +60,6 @@ public class HomeController implements SecuredController, AuthorizedController {
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             if (user.getRole() == User.Role.student) {
-                model.addAttribute("lessons", new Object[]{
-                    new Object() {
-                        public Object weeklySlot = new Object() {
-                            public int ordinal = 1;
-                            public LocalTime begin = LocalTime.of(7, 30);
-                        };
-                        public Object subject = new Object() {
-                            public String name = "Биология";
-                        };
-                        public Object room = new Object() {
-                            public String name = "7";
-                        };
-                        public User teacher = userRepository.findFirstByRole(User.Role.teacher).get();
-                    }
-                });
                 return "student-home";
             } else if (user.getRole() == User.Role.teacher) {
                 LocalDate currentDate = LocalDate.now();

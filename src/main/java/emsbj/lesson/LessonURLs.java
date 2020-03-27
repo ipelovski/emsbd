@@ -43,7 +43,7 @@ public class LessonURLs {
     }
 
     public Breadcrumb lessonsPerWeekBreadcrumb(LocalDate startDate) {
-        String label = util.localize("lessonsPerWeek", startDate.toString(), startDate.plusDays(6).toString());
+        String label = util.localize("class.lessonsPerWeek", startDate.toString(), startDate.plusDays(6).toString());
         return new Breadcrumb(lessonsPerWeek(startDate), label, homeURLs.homeBreadcrumb());
     }
 
@@ -51,7 +51,7 @@ public class LessonURLs {
         LocalDate startOfWeek = util.getStartOfWeek(lesson.getBegin());
         return new Breadcrumb(
             lesson(lesson),
-            "Lesson in " + lesson.getCourse().getSubject().getName().getValue(),
+            util.capitalize("class.lessonIn", lesson.getCourse().getSubject().getName().getValue()),
             lessonsPerWeekBreadcrumb(startOfWeek)
         );
     }

@@ -16,12 +16,12 @@
         <a data-th-if="${!activeUser.isAnonymous()}" data-th-href="@{${x.u().users().profile()}}" data-th-text="${activeUser.username}"></a>
         <span data-th-text="#{greeting.greetingMessageEnd}"></span>
         <span data-th-if="${activeUser.isAnonymous()}">
-            <a data-th-href="@{${x.u().users().signIn()}}" data-th-text="${x.c('signIn.signIn')}">Sign in</a>
-            <span data-th-text="#{common.or}">or</span>
-            <a data-th-href="@{${x.u().users().signUp()}}" data-th-text="${x.c('signIn.signUp')}">Sign up</a>
+            <a data-th-href="@{${x.u().users().signIn()}}" data-th-text="${x.c('user.signIn')}"></a>
+            <span data-th-text="#{common.or}"></span>
+            <a data-th-href="@{${x.u().users().signUp()}}" data-th-text="${x.l('user.signUp')}"></a>
         </span>
         <span data-th-if="${!activeUser.isAnonymous()}">
-            <a data-th-href="${x.u().users().signOut()}" data-th-text="${x.c('signIn.signOut')}">Sign out</a>
+            <a data-th-href="${x.u().users().signOut()}" data-th-text="${x.c('user.signOut')}"></a>
         </span>
     </div>
     <div data-th-fragment="menu(activeUser)">
@@ -32,11 +32,11 @@
             </a>
             <a class="col col-4 menu-item" data-th-href="@{${x.u().courses().schedule()}}">
                 <div class="icon" data-th-insert="~{fragments/icons::octicons-calendar}"></div>
-                <span data-th-text="${x.c('schedule')}"></span>
+                <span data-th-text="${x.c('class.schedule')}"></span>
             </a>
             <a class="col col-4 menu-item" data-th-href="@{${x.u().courses().list()}}">
                 <div class="icon" data-th-insert="~{fragments/icons::octicons-calendar}"></div>
-                <span data-th-text="${x.c('courses')}"></span>
+                <span data-th-text="${x.c('course.courses')}"></span>
             </a>
         </div>
         <div data-th-if="${activeUser.role == T(emsbj.user.User.Role).teacher}" class="flex">
@@ -46,11 +46,11 @@
             </a>
             <a class="col col-3 menu-item" data-th-href="@{${x.u().courses().schedule()}}">
                 <div class="icon" data-th-insert="~{fragments/icons::octicons-calendar}"></div>
-                <span data-th-text="${x.c('schedule')}"></span>
+                <span data-th-text="${x.c('class.schedule')}"></span>
             </a>
             <a class="col col-3 menu-item" data-th-href="@{${x.u().lessons().lessons()}}">
                 <div class="icon" data-th-insert="~{fragments/icons::octicons-book}"></div>
-                <span data-th-text="${x.c('lessons')}"></span>
+                <span data-th-text="${x.c('class.lessons')}"></span>
             </a>
             <a class="col col-3 menu-item" data-th-href="@{${x.u().users().profile()}}">
                 <div class="icon" data-th-insert="~{fragments/icons::material-design-icons-human-male-female}"></div>
@@ -70,7 +70,7 @@
         <div class="top-menu flex">
             <div class="col col-4 left-align" data-th-insert="::languageSelector"></div>
             <div class="col col-4 center">
-                <div class="caps" data-th-text="#{journal}"></div>
+                <div class="caps" data-th-text="#{class.journal}"></div>
             </div>
             <div class="col col-4 right-align" data-th-insert="::greetings(${activeUser})"></div>
         </div>

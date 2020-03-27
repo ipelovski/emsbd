@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en" data-layout-decorate="~{layout.html}">
 <head>
-    <title>Course</title>
+    <title data-th-text="${x.c('course.course')}"></title>
 </head>
 <body>
     <div data-layout-fragment="content">
-        <h3 class="center" data-th-text="|${course.subject.name.value} ${course.schoolClass.getFullName()} #{class}|"></h3>
+        <h3 class="center" data-th-text="|${course.subject.name.value} ${course.schoolClass.getFullName()} #{class.class}|"></h3>
         <ul>
             <li class="flex flex-wrap">
-                <div class="col col-1" data-th-text="'Number'"></div>
-                <div class="col col-3" data-th-text="'Name'"></div>
+                <div class="col col-1" data-th-text="${x.c('student.number')}"></div>
+                <div class="col col-3" data-th-text="${x.c('common.name')}"></div>
                 <div class="col col-2" data-th-text="${x.c('student.marks')}"></div>
-                <div class="col col-2" data-th-text="'Average mark (total marks)'"></div>
+                <div class="col col-2" data-th-text="${x.c('student.averageMarkTotalMarks')}"></div>
                 <div class="col col-2" data-th-text="${x.c('student.notes')}"></div>
-                <div class="col col-2" data-th-text="'Presence'"></div>
+                <div class="col col-2" data-th-text="${x.c('student.presence')}"></div>
             </li>
             <li class="flex flex-wrap" data-th-each="courseStudent:${courseStudents}">
                 <div class="col col-1" data-th-text="${courseStudent.number}"></div>
@@ -40,7 +40,7 @@
                 <div class="col col-2">
                     <a class="addNote" data-th-href="${x.u().notes().addNote(courseStudent.student, course, lesson)}">+</a>
                     <a data-th-href="${x.u().notes().notes(courseStudent.student, courseStudent.course)}"
-                       data-th-text="|View (${courseStudent.notes.size()})|"></a>
+                       data-th-text="${x.c('common.viewSomething', courseStudent.notes.size())}"></a>
                 </div>
                 <div class="col col-2">
                     <form data-th-if="${lesson != null}" data-th-action="${x.u().lessons().setPresence()}" method="post">
@@ -49,11 +49,11 @@
                         <select name="value" onchange="this.form.submit()"
                                 data-th-class="${courseStudent.absence == 0.5 ? 'being-late' : courseStudent.absence == 1 ? 'absent' : ''}">
                             <option data-th-value="0" data-th-selected="${courseStudent.absence == 0}"
-                                    data-th-text="Present"></option>
+                                    data-th-text="${x.c('student.present')}"></option>
                             <option data-th-value="0.5" data-th-selected="${courseStudent.absence == 0.5}"
-                                    data-th-text="'Being late'"></option>
+                                    data-th-text="${x.c('student.beingLate')}"></option>
                             <option data-th-value="1" data-th-selected="${courseStudent.absence == 1}"
-                                    data-th-text="Absent"></option>
+                                    data-th-text="${x.c('student.absent')}"></option>
                         </select>
                     </form>
                     <span data-th-text="|(${courseStudent.absences})|"></span>

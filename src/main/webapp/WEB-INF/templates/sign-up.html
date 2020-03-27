@@ -1,48 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-layout-decorate="layout.html">
 <head>
     <meta charset="UTF-8">
-    <title>Sign up</title>
+    <title data-th-text="${x.c('user.signUp')}"></title>
 </head>
 <body>
-    <form action="#" data-th-action="@{/sign-up}" data-th-object="${signUpForm}" method="post">
-        <p>
-            <label for="role">You are a</label>
-            <select class="select" id="role" data-th-field="*{role}">
-                <option value="student">Student</option>
-                <option value="teacher">Teacher</option>
-            </select>
-        </p>
-        <p>
-            <label for="username">Username</label>
-            <input type="text" id="username" data-th-field="*{username}"/>
-            <span data-th-if="${#fields.hasErrors('username')}" data-th-each="error : ${#fields.detailedErrors('username')}">
-                <span data-th-text="${error.message}"></span>
-            </span>
-        </p>
-        <p>
-            <label for="password">Password</label>
-            <input type="password" id="password" data-th-field="*{password}"/>
-            <span data-th-if="${#fields.hasErrors('password')}" data-th-each="error : ${#fields.detailedErrors('password')}">
-                <span data-th-text="${error.message}"></span>
-            </span>
-        </p>
-        <p>
-            <label for="confirmPassword">Confirm password</label>
-            <input type="password" id="confirmPassword" data-th-field="*{confirmPassword}"/>
-            <span data-th-if="${#fields.hasErrors('confirmPassword')}" data-th-each="error : ${#fields.detailedErrors('confirmPassword')}">
-                <span data-th-text="${error.message}"></span>
-            </span>
-        </p>
-        <p>
-            <label for="email">Email</label>
-            <input type="text" id="email" data-th-field="*{email}"/>
-            <span data-th-if="${#fields.hasErrors('email')}" data-th-each="error : ${#fields.detailedErrors('email')}">
-                <span data-th-text="${error.message}"></span>
-            </span>
-        </p>
-        <p data-th-if="*{error != null}" data-th-text="*{error}"></p>
-        <button type="submit">Sign up</button>
-    </form>
+    <div data-layout-fragment="content">
+        <form data-th-action="${x.u().users().signUp()}" data-th-object="${signUpForm}" method="post">
+            <p>
+                <label class="label" for="role" data-th-text="#{user.signUpSelectRole}"></label>
+                <select class="select" id="role" data-th-field="*{role}">
+                    <option value="student" data-th-text="${x.c('user.role.student')}"></option>
+                    <option value="teacher" data-th-text="${x.c('user.role.teacher')}"></option>
+                </select>
+            </p>
+            <p>
+                <label class="label" for="username" data-th-text="${x.c('user.username')}"></label>
+                <input class="input" type="text" id="username" data-th-field="*{username}"/>
+                <span data-th-if="${#fields.hasErrors('username')}" data-th-each="error : ${#fields.detailedErrors('username')}">
+                    <span data-th-text="${error.message}"></span>
+                </span>
+            </p>
+            <p>
+                <label class="label" for="password" data-th-text="${x.c('user.password')}"></label>
+                <input class="input" type="password" id="password" data-th-field="*{password}"/>
+                <span data-th-if="${#fields.hasErrors('password')}" data-th-each="error : ${#fields.detailedErrors('password')}">
+                    <span data-th-text="${error.message}"></span>
+                </span>
+            </p>
+            <p>
+                <label class="label" for="confirmPassword" data-th-text="${x.c('user.confirmPassword')}"></label>
+                <input class="input" type="password" id="confirmPassword" data-th-field="*{confirmPassword}"/>
+                <span data-th-if="${#fields.hasErrors('confirmPassword')}" data-th-each="error : ${#fields.detailedErrors('confirmPassword')}">
+                    <span data-th-text="${error.message}"></span>
+                </span>
+            </p>
+            <p>
+                <label class="label" for="email" data-th-text="${x.c('user.email')}"></label>
+                <input class="input" type="text" id="email" data-th-field="*{email}"/>
+                <span data-th-if="${#fields.hasErrors('email')}" data-th-each="error : ${#fields.detailedErrors('email')}">
+                    <span data-th-text="${error.message}"></span>
+                </span>
+            </p>
+            <p data-th-if="*{error != null}" data-th-text="*{error}"></p>
+            <input class="btn btn-primary bg-olive" type="submit" data-th-value="${x.c('user.signUpButton')}">
+        </form>
+    </div>
 </body>
 </html>
