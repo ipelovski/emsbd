@@ -1,5 +1,6 @@
 package emsbj.user;
 
+import emsbj.student.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.authentication.AuthenticationTrustResolverImpl;
@@ -8,6 +9,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,6 +42,18 @@ public class UserService {
             throw new IllegalStateException("Unknown principal type "
                 + authentication.getPrincipal().getClass().getCanonicalName());
         }
+    }
+
+    public void sortByPersonalName(List<? extends HasUser> list) {
+        list.sort(
+            Comparator
+                .comparing((HasUser hasUser) ->
+                    hasUser.getUser().getPersonalInfo().getFirstName())
+                .thenComparing((HasUser hasUser) ->
+                    hasUser.getUser().getPersonalInfo().getMiddleName())
+                .thenComparing((HasUser hasUser) ->
+                    hasUser.getUser().getPersonalInfo().getLastName()));
+
     }
 
     private ActiveUser getActiveUser() {

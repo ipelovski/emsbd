@@ -16,6 +16,23 @@ public class StudentURLs {
     @Autowired
     private CourseURLs courseURLs;
 
+    public String teacherStudents() {
+        return URLBuilder.get(StudentController.class, StudentController.teacherStudents);
+    }
+
+    public String teacherCoursesStudents() {
+        return URLBuilder.get(StudentController.class, StudentController.teacherCoursesStudents);
+    }
+
+    public String searchStudent() {
+        return URLBuilder.get(StudentController.class, StudentController.searchStudent);
+    }
+
+    public String student(Student student) {
+        return URLBuilder.get(StudentController.class, WebMvcConfig.detailsName,
+            WebMvcConfig.objectIdParamName, student.getId());
+    }
+
     public String student(Student student, Course course) {
         return new URLBuilder(StudentController.class, WebMvcConfig.detailsName)
             .gatherNamedURIParams()

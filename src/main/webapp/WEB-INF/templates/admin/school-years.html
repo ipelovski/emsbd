@@ -17,7 +17,7 @@
                     <a class="mx2" data-th-href="${x.au().termsBySchoolYear(schoolYear.id)}"
                        data-th-text="${x.c('class.terms')}"></a>
                     <a class="mx2" data-th-each="term : ${schoolYear.terms}"
-                       data-th-href="@{${x.au().term(term)}}"
+                       data-th-href="${x.au().term(term)}"
                        data-th-text="${x.c('class.termLabel', term.name)}"></a>
                 </div>
             </li>

@@ -20,7 +20,7 @@
                 <div class="flex flex-wrap">
                     <div data-th-replace="~{fragments/list-fragments::listBody(mode=${mode},detailsUrl=${x.au().student(student)},objectId=${student.id})}">
                     </div>
-                    <div class="col col-3" data-th-insert="~{fragments/profile-picture::profilePicture(@{${x.u().blobs().profilePicture(student.user)}})}">
+                    <div class="col col-3" data-th-insert="~{fragments/profile-picture::profilePicture(${x.u().blobs().profilePicture(student.user)})}">
                     </div>
                     <div class="col col-3">
                         <span data-th-text="${student.user.personalInfo.getName()}"></span>

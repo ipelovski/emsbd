@@ -1,5 +1,6 @@
 package emsbj.generation;
 
+import emsbj.user.UserService;
 import emsbj.util.Pair;
 import emsbj.util.Util;
 import emsbj.blob.Blob;
@@ -49,7 +50,6 @@ import java.time.LocalTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -110,6 +110,8 @@ public class Generator {
     private BlobRepository blobRepository;
     @Autowired
     private Util util;
+    @Autowired
+    private UserService userService;
     @Autowired
     private ResourceLoader resourceLoader;
 
@@ -591,14 +593,7 @@ public class Generator {
         for (int i = 0; i < studentsInSchoolClass; i++) {
             students.add(createStudent(schoolClass, age));
         }
-        students.sort(
-            Comparator
-                .comparing((Student student) ->
-                    student.getUser().getPersonalInfo().getFirstName())
-                .thenComparing((Student student) ->
-                    student.getUser().getPersonalInfo().getMiddleName())
-                .thenComparing((Student student) ->
-                    student.getUser().getPersonalInfo().getLastName()));
+        userService.sortByPersonalName(students);
         for (int i = 0; i < students.size(); i++) {
             students.get(i).setNumber(i + 1);
         }

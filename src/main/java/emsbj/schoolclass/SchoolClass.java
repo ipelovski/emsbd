@@ -1,5 +1,6 @@
 package emsbj.schoolclass;
 
+import emsbj.course.Course;
 import emsbj.grade.Grade;
 import emsbj.JournalPersistable;
 import emsbj.room.Room;
@@ -37,6 +38,8 @@ public class SchoolClass extends JournalPersistable {
     private Room classRoom;
     @OneToMany(mappedBy = "schoolClass")
     private List<Student> students;
+    @OneToMany(mappedBy = "schoolClass")
+    private List<Course> courses;
     @OneToMany(mappedBy = "schoolClass")
     private List<SchoolClassTermShift> shifts;
     @Transient
@@ -97,6 +100,14 @@ public class SchoolClass extends JournalPersistable {
 
     public void setStudents(List<Student> students) {
         this.students = students;
+    }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
     }
 
     public List<SchoolClassTermShift> getShifts() {

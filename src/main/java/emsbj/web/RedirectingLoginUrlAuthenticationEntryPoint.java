@@ -1,15 +1,14 @@
 package emsbj.web;
 
+import emsbj.util.Util;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
 import java.util.Locale;
 
 public class RedirectingLoginUrlAuthenticationEntryPoint extends LoginUrlAuthenticationEntryPoint {
@@ -38,17 +37,11 @@ public class RedirectingLoginUrlAuthenticationEntryPoint extends LoginUrlAuthent
         uriComponentsBuilder.fragment(uri.getFragment());
         String requestUri = request.getRequestURI();
         if (request.getQueryString() != null) {
-            requestUri += "?" + request.getQueryString();
+            requestUri += "?" + Util.decode(request.getQueryString());
         }
-        uriComponentsBuilder.queryParam("requested", encode(requestUri));
+        uriComponentsBuilder.queryParam("requested", Util.encode(requestUri));
         return uriComponentsBuilder.build().toUriString();
     }
 
-    private String encode(String url) {
-        try {
-            return URLEncoder.encode(url, "UTF-8");
-        } catch (UnsupportedEncodingException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
+
 }

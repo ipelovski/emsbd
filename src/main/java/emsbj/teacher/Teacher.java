@@ -4,6 +4,7 @@ import emsbj.JournalPersistable;
 import emsbj.course.Course;
 import emsbj.schoolclass.SchoolClass;
 import emsbj.subject.Subject;
+import emsbj.user.HasUser;
 import emsbj.user.User;
 
 import javax.persistence.Entity;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Teacher extends JournalPersistable {
+public class Teacher extends JournalPersistable implements HasUser {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -35,6 +36,7 @@ public class Teacher extends JournalPersistable {
         return id;
     }
 
+    @Override
     public User getUser() {
         return user;
     }

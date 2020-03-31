@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.net.URI;
 import java.util.Optional;
 
 @Controller
@@ -78,8 +79,8 @@ public class UserController implements SecuredController, AuthorizedController {
     }
 
     @PostMapping(value = "/sign-in-role", name = signInRole)
-    public String signInRole(HttpServletRequest request, HttpServletResponse response,
-        User.Role role, RedirectAttributes model) {
+    public void signInRole(HttpServletRequest request, HttpServletResponse response,
+        User.Role role, RedirectAttributes model) throws Exception {
         Optional<User> optionalUser = userRepository.findFirstByRole(role);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
@@ -87,11 +88,12 @@ public class UserController implements SecuredController, AuthorizedController {
                 new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String redirectUrl = successHandler.getTargetUrl(request, response);
-            return "redirect:" + redirectUrl;
+            URI uri = new URI(redirectUrl);
+            response.sendRedirect(uri.toASCIIString());
         } else {
             model.addFlashAttribute("error", util.localize("user.noUserFoundWithRole",
                 util.localize("user.role." + role.name().toLowerCase())));
-            return "redirect:" + userURLs.signIn();
+            response.sendRedirect(userURLs.signIn());
         }
     }
 
