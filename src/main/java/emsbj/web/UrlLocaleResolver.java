@@ -11,11 +11,16 @@ public class UrlLocaleResolver implements LocaleResolver {
     @Override
     public Locale resolveLocale(HttpServletRequest httpServletRequest) {
         String requestURI = httpServletRequest.getRequestURI();
-        int nextSlashIndex = requestURI.indexOf("/", 1);
-        int length = nextSlashIndex > -1 ? nextSlashIndex : requestURI.length();
-        String pathFragment = requestURI.substring(1, length);
-        if (WebMvcConfig.supportedLocales.contains(pathFragment)) {
-            return Locale.forLanguageTag(pathFragment);
+        if (requestURI.length() > 1 && requestURI.charAt(0) == '/') {
+            int nextSlashIndex = requestURI.indexOf("/", 1);
+            int length = nextSlashIndex > -1 ? nextSlashIndex : requestURI.length();
+            String pathFragment = requestURI.substring(1, length);
+            if (WebMvcConfig.supportedLocales.contains(pathFragment)) {
+                return Locale.forLanguageTag(pathFragment);
+            }
+            else {
+                return WebMvcConfig.defaultLocale;
+            }
         } else {
             return WebMvcConfig.defaultLocale;
         }

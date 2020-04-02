@@ -14,8 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@NamedEntityGraph(name="SchoolYear.all", includeAllAttributes = true)
+@NamedEntityGraph(name = SchoolYear.schoolYearAllAttributes, includeAllAttributes = true)
 public class SchoolYear extends JournalPersistable {
+    public static final String schoolYearAllAttributes = "SchoolYear.all";
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

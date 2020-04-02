@@ -3,6 +3,7 @@ package emsbj;
 import emsbj.grade.Grade;
 import emsbj.grade.GradeRepository;
 import emsbj.mark.Mark;
+import emsbj.mark.MarkRepository;
 import emsbj.schoolyear.SchoolYear;
 import emsbj.schoolyear.SchoolYearRepository;
 import emsbj.student.Student;
@@ -12,6 +13,7 @@ import emsbj.subject.SubjectRepository;
 import emsbj.subject.SubjectService;
 import emsbj.term.Term;
 import emsbj.term.TermRepository;
+import emsbj.user.User;
 import emsbj.user.UserRepository;
 import org.junit.After;
 import org.junit.Assert;
@@ -20,8 +22,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -42,6 +47,11 @@ public class StudentRepositoryTest {
     private SubjectService subjectService;
     @Autowired
     private StudentRepository studentRepository;
+    @Autowired
+    private MarkRepository markRepository;
+    @Autowired
+    private EntityManager entityManager;
+    private PasswordEncoder passwordEncoder = NoOpPasswordEncoder.getInstance();
     private SchoolYear schoolYear;
     private Term term;
     private Grade grade;
@@ -52,6 +62,7 @@ public class StudentRepositoryTest {
         schoolYear = new SchoolYear(2020, 2021);
         schoolYearRepository.save(schoolYear);
         grade = new Grade(3);
+        grade.setOrdinal(3);
         gradeRepository.save(grade);
         term = new Term(schoolYear, "I");
         termRepository.save(term);
@@ -71,19 +82,16 @@ public class StudentRepositoryTest {
 
     @Test
     public void insertStudent() {
-        studentRepository.save(
-            Utils.createStudent("Гошко", "Иванов", "Петков", grade));
+        createStudent("Гошко", "Иванов", "Петков", grade);
         Assert.assertEquals(1, studentRepository.count());
     }
 
     @Test
-    public void findStudentByLastName() {
+    public void findStudentByName() {
         String lastName = "Петков";
-        studentRepository.save(
-            Utils.createStudent("Гошко", "Иванов", lastName, grade));
-        studentRepository.save(
-            Utils.createStudent("Тошко", "Георгиев", "Караиванов", grade));
-        List<Student> students = studentRepository.findByLastName(lastName);
+        createStudent("Гошко", "Иванов", lastName, grade);
+        createStudent("Тошко", "Георгиев", "Караиванов", grade);
+        List<Student> students = studentRepository.findByName(lastName);
         Assert.assertEquals(1, students.size());
         Assert.assertEquals(lastName, students.get(0).getUser().getPersonalInfo().getLastName());
     }
@@ -91,15 +99,25 @@ public class StudentRepositoryTest {
     @Test
     @Transactional
     public void insertStudentWithMarks() {
-        Student student = Utils.createStudent(
+        Student student = createStudent(
             "Гошко", "Иванов", "Петков", grade);
-        student.getMarks().add(new Mark(student, subject, 599));
-        studentRepository.save(student);
+        markRepository.save(new Mark(student, subject, 599));
         Assert.assertEquals(1, studentRepository.count());
+        entityManager.clear();
         Student persistedStudent = studentRepository.findAll().iterator().next();
         Assert.assertEquals(1, persistedStudent.getMarks().size());
         Assert.assertEquals(599, persistedStudent.getMarks().get(0).getRawScore(), 0);
     }
 
-
+    private Student createStudent(String firstName, String middleName, String lastName, Grade grade) {
+        User user = new User(firstName.toLowerCase() + "_" + lastName.toLowerCase());
+        user.setPassword(passwordEncoder.encode("password"));
+        user.setEmail(user.getUsername() + "@school.edu");
+        user.getPersonalInfo()
+            .setFirstName(firstName)
+            .setMiddleName(middleName)
+            .setLastName(lastName);
+        userRepository.save(user);
+        return studentRepository.save(new Student(user));
+    }
 }

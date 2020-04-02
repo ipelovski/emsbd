@@ -3,6 +3,7 @@ package emsbj;
 import emsbj.user.JournalUserDetailsService;
 import emsbj.user.User;
 import emsbj.user.UserRepository;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,9 +30,15 @@ public class AuthenticationTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @After
+    public void cleanup() {
+        userRepository.deleteAll();
+    }
+
     @Test
     public void authenticate() {
         User admin = new User("admin");
+        admin.setEmail("admin@adminland.com");
         admin.setRole(User.Role.admin);
         admin.setPassword(passwordEncoder.encode("admin_pass"));
         userRepository.save(admin);

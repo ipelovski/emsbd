@@ -39,21 +39,21 @@ public class GradeRepositoryTest {
 
     @Test
     public void insertGrade() {
-        gradeRepository.save(new Grade(3));
+        gradeRepository.save(TestUtils.createGrade(3));
         Assert.assertEquals(1, gradeRepository.count());
     }
 
     @Test
     public void insertGradesWithSameName() {
-        gradeRepository.save(new Grade(3));
-        Utils.assertFails(DataIntegrityViolationException.class,
-            () -> gradeRepository.save(new Grade(3)));
+        gradeRepository.save(TestUtils.createGrade(3));
+        TestUtils.assertFails(DataIntegrityViolationException.class,
+            () -> gradeRepository.save(TestUtils.createGrade(3)));
     }
 
     @Test
     public void findGrade() {
         String name = "3";
-        gradeRepository.save(new Grade(name));
+        gradeRepository.save(TestUtils.createGrade(3));
         Optional<Grade> optionalGrade = gradeRepository
             .findByName(name);
         Assert.assertTrue(optionalGrade.isPresent());

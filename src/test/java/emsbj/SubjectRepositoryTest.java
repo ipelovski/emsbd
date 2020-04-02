@@ -56,7 +56,7 @@ public class SubjectRepositoryTest {
 
     @Test
     public void insertSubject() {
-        Grade grade = new Grade(5);
+        Grade grade = TestUtils.createGrade(5);
         gradeRepository.save(grade);
         SubjectName subjectName = new SubjectName("Биология");
         subjectName = subjectNameRepository.save(subjectName);
@@ -69,9 +69,9 @@ public class SubjectRepositoryTest {
 
     @Test
     public void insertSubjectsSameNameDifferentGrades() {
-        Grade grade1 = new Grade(1);
+        Grade grade1 = TestUtils.createGrade(1);
         gradeRepository.save(grade1);
-        Grade grade2 = new Grade(2);
+        Grade grade2 = TestUtils.createGrade(2);
         gradeRepository.save(grade2);
         SubjectName subjectName = new SubjectName("Биология");
         subjectName = subjectNameRepository.save(subjectName);
@@ -85,20 +85,20 @@ public class SubjectRepositoryTest {
 
     @Test
     public void insertSubjectsSameNameAndSameGrade() {
-        Grade grade = new Grade(5);
+        Grade grade = TestUtils.createGrade(5);
         gradeRepository.save(grade);
         SubjectName subjectName = new SubjectName("Биология");
         subjectName = subjectNameRepository.save(subjectName);
         Subject subject1 = new Subject(subjectName, grade);
         subjectRepository.save(subject1);
         Subject subject2 = new Subject(subjectName, grade);
-        Utils.assertFails(DataIntegrityViolationException.class,
+        TestUtils.assertFails(DataIntegrityViolationException.class,
             () -> subjectRepository.save(subject2));
     }
 
     @Test
     public void findSubjectByNameAndGrade() {
-        Grade grade = new Grade(5);
+        Grade grade = TestUtils.createGrade(5);
         gradeRepository.save(grade);
         SubjectName subjectName = new SubjectName("Биология");
         subjectName = subjectNameRepository.save(subjectName);

@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -46,6 +47,7 @@ public class Application {
     }
 
     @Bean(initMethod = "start", destroyMethod = "stop")
+    @Profile("dev")
     public Server h2WebConsole() throws SQLException {
         return Server.createWebServer(
             "-web", "-webAllowOthers", "-webDaemon", "-webPort", "8082");
