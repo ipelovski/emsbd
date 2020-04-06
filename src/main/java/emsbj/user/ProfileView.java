@@ -1,25 +1,23 @@
 package emsbj.user;
 
 import emsbj.util.Util;
-import htmlflow.DynamicHtml;
+import emsbj.web.J2HtmlView;
 import j2html.attributes.Attr;
+import j2html.tags.ContainerTag;
 import j2html.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.view.AbstractView;
-import org.springframework.web.util.HtmlUtils;
-import org.xmlet.htmlapifaster.GlobalAttributes;
-import org.xmlet.htmlapifaster.TextGroup;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import static j2html.TagCreator.*;
 
-public class ProfileView extends AbstractView {
+public class ProfileView extends J2HtmlView {
     private Util util;
     private User user;
 
@@ -38,55 +36,75 @@ public class ProfileView extends AbstractView {
         return tag -> tag.withClass("col col-" + col);
     }
 
-    private <T extends GlobalAttributes<?,?>> Consumer<T> colb(int col) {
-        return a -> a.attrClass("col col-" + col);
-    }
-
-    private <T extends TextGroup<?, ?>> Consumer<T> text(String text) {
-        return a -> a.text(HtmlUtils.htmlEscape(text));
-    }
-
     @Override
     protected void renderMergedOutputModel(Map<String, Object> map, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception {
-//        renderHtmlFlow(httpServletResponse);
+        super.renderMergedOutputModel(map, httpServletRequest, httpServletResponse);
         renderJ2Html(httpServletResponse);
     }
 
-    private void renderHtmlFlow(HttpServletResponse httpServletResponse) throws Exception {
-        DynamicHtml<User> view = DynamicHtml.view((v, user) ->
-            v
-                .html()
-                .head()
-                .meta().attrCharset(StandardCharsets.UTF_8.name()).__()
-                .__()
-                .body()
-                .div().of(colb(8)).text(user.getUsername()).__()
-                .div().text(HtmlUtils.htmlEscape("<a href=google.com>google</a>")).__()
-                .div().of(text("<script>alert('hi!')</script>")).__()
-                .__() //body
-                .__());
-        httpServletResponse.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        httpServletResponse.setHeader("Content-Type", "text/html; charset=utf-8");
-        PrintStream printStream = new PrintStream(
-            httpServletResponse.getOutputStream(), false, StandardCharsets.UTF_8.name());
-        view.setPrintStream(printStream).write(user);
+    @FunctionalInterface
+    interface Label {
+        ContainerTag of(String text, String forElement);
     }
 
     private void renderJ2Html(HttpServletResponse httpServletResponse) throws Exception {
         Consumer<Tag<?>> col4 = col(4);
-        httpServletResponse.setHeader("Content-Type", "text/html; charset=utf-8");
+        Consumer<Tag<?>> col8 = col(8);
+        Consumer<Tag<?>> col12 = col(12);
+        Supplier<ContainerTag> divCol4 = () -> of(div(), col4);
+        Supplier<ContainerTag> divCol8 = () -> of(div(), col8);
+        Supplier<ContainerTag> divCol12 = () -> of(div(), col12);
+
+        Label label = (text, forElement) -> label(text).attr(Attr.FOR, forElement).withClass("label");
         html(
             head(
                 meta().withCharset(StandardCharsets.UTF_8.name()),
-                title(util.capitalize("user.profile"))
-            ),
+                title(util.c("user.profile"))),
             body(
+                div(attrs(".pt4")).with(),
                 div(attrs(".flex.flex-wrap")).with(
-                    of(input(), col4),
-                    of(div(), col4).with(
-                        label().withClass("label").attr(Attr.FOR, "username").withText(util.capitalize("user.username"))),
-                    of(div(), col4).with(
-                        span(attrs("#username")).withText(user.getUsername()))
+                    divCol4.get().with(
+                        label.of(util.c("user.username"), "username")),
+                    divCol8.get().with(
+                        span(attrs("#username")).withText(user.getUsername())),
+                    divCol12.get().with(
+                        a().withHref("").withText(util.c("user.changePassword"))),
+                    divCol4.get().with(
+                        label.of(util.c("user.role"), "role")),
+                    divCol8.get().with(
+                        span(attrs("#role")).withText(util.c("user.role." +
+                            user.getRole().name().toLowerCase()))),
+                    divCol4.get().with(
+                        label.of(util.c("user.email"), "email")),
+                    divCol8.get().with(
+                        span(attrs("#email")).withText(user.getEmail())),
+                    divCol4.get().with(
+                        label.of(util.c("user.firstName"), "firstName")),
+                    divCol8.get().with(
+                        span(attrs("#firstName")).withText(user.getPersonalInfo().getFirstName())),
+                    divCol4.get().with(
+                        label.of(util.c("user.middleName"), "middleName")),
+                    divCol8.get().with(
+                        span(attrs("#middleName")).withText(user.getPersonalInfo().getMiddleName())),
+                    divCol4.get().with(
+                        label.of(util.c("user.lastName"), "lastName")),
+                    divCol8.get().with(
+                        span(attrs("#lastName")).withText(user.getPersonalInfo().getLastName())),
+                    divCol4.get().with(
+                        label.of(util.c("user.gender"), "gender")),
+                    divCol8.get().with(
+                        span(attrs("#gender")).withText(util.c("user.gender." +
+                            user.getPersonalInfo().getGender()))),
+                    divCol4.get().with(
+                        label.of(util.c("user.bornAt"), "bornAt")),
+                    divCol8.get().with(
+                        span(attrs("#bornAt")).withText(user.getPersonalInfo().getBornAt() != null ?
+                            user.getPersonalInfo().getBornAt().toString() : "")),
+                    divCol4.get().with(
+                        label.of(util.c("user.address"), "address")),
+                    divCol8.get().with(
+                        span(attrs("#address")).withText(user.getPersonalInfo().getAddress() != null ?
+                            user.getPersonalInfo().getAddress() : ""))
                 )
             )
         )

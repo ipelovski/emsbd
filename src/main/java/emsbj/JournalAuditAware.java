@@ -5,6 +5,7 @@ import org.springframework.data.domain.AuditorAware;
 
 import java.util.Optional;
 
+// TODO make it work
 public class JournalAuditAware implements AuditorAware<User> {
     private static User currentUser;
 
