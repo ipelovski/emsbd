@@ -10,6 +10,7 @@ import javax.persistence.Lob;
 import javax.validation.constraints.NotNull;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 @Entity
@@ -46,7 +47,7 @@ public class Blob extends JournalPersistable {
 
     public String getEncodedData() {
         try {
-            return URLEncoder.encode(Base64.getEncoder().encodeToString(getData()), "UTF-8");
+            return URLEncoder.encode(Base64.getEncoder().encodeToString(getData()), StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }

@@ -20,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -145,12 +146,20 @@ public class UserController implements SecuredController, AuthorizedController {
     }
 
     @GetMapping(value = "/profile", name = profile)
-    public String profile(Model model) {
+//    public String profile(Model model) {
+//        User currentUser = userService.getCurrentUser()
+//            .orElseThrow(() -> new IllegalStateException("no current user."));
+//        User user = userRepository.findById(currentUser.getId()).get();
+//        model.addAttribute("user", user);
+//        return "profile";
+//    }
+    public ModelAndView profile() {
         User currentUser = userService.getCurrentUser()
             .orElseThrow(() -> new IllegalStateException("no current user."));
         User user = userRepository.findById(currentUser.getId()).get();
-        model.addAttribute("user", user);
-        return "profile";
+        ModelAndView modelAndView = new ModelAndView(new ProfileView(util, user));
+        modelAndView.addObject("user", user);
+        return modelAndView;
     }
 
     @GetMapping("/change-password")

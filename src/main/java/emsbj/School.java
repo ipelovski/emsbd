@@ -20,7 +20,7 @@ import java.util.stream.StreamSupport;
 
 @Component
 public class School implements ApplicationContextAware {
-    private static ApplicationContext applicationContext;
+    private ApplicationContext applicationContext;
     private static School instance = null;
 
     @Autowired
@@ -34,8 +34,8 @@ public class School implements ApplicationContextAware {
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        School.applicationContext = applicationContext;
-        setInstance();
+        this.applicationContext = applicationContext;
+        setInstance(this);
     }
 
     public static School getInstance() {
@@ -45,8 +45,8 @@ public class School implements ApplicationContextAware {
         return instance;
     }
 
-    private static void setInstance() {
-        instance = applicationContext.getBean(School.class);
+    private static void setInstance(School school) {
+        instance = school;
         instance.initialize();
     }
 
