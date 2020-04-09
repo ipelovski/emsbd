@@ -1,6 +1,7 @@
 package emsbj.config;
 
 import emsbj.Extensions;
+import emsbj.controller.WebController;
 import emsbj.web.RedirectingAuthenticationSuccessHandler;
 import emsbj.web.RedirectingLoginUrlAuthenticationEntryPoint;
 import emsbj.controller.SecuredController;
@@ -23,18 +24,20 @@ import org.springframework.security.config.annotation.web.configurers.Expression
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.ForwardLogoutSuccessHandler;
+import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter  {
     private Map<String, SecuredController> securedControllerMap;
+    private Map<String, WebController> webControllerMap;
 
     @Autowired
     private JournalUserDetailsService userDetailsService;
@@ -124,5 +127,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void findSecuredControllers(ApplicationContext applicationContext) {
         securedControllerMap =
             applicationContext.getBeansOfType(SecuredController.class);
+    }
+
+    @Autowired
+    public void findSecuredUrlControllers(ApplicationContext applicationContext) {
+        webControllerMap = applicationContext.getBeansOfType(WebController.class);
+        System.out.println(webControllerMap);
+    }
+
+    @Bean
+    public SimpleUrlHandlerMapping simpleUrlHandlerMapping(ApplicationContext applicationContext) {
+        SimpleUrlHandlerMapping simpleUrlHandlerMapping = new SimpleUrlHandlerMapping();
+        for (WebController<?> controller : webControllerMap.values()) {
+            String urlPattern = controller.getUrlPattern().getAntMatcherPattern();
+            simpleUrlHandlerMapping.setUrlMap(
+                Collections.singletonMap(urlPattern, controller)
+            );
+        }
+        return simpleUrlHandlerMapping;
     }
 }

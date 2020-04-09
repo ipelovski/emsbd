@@ -6,25 +6,21 @@ import j2html.attributes.Attr;
 import j2html.tags.ContainerTag;
 import j2html.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.servlet.view.AbstractView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static j2html.TagCreator.*;
 
-public class ProfileView extends J2HtmlView {
+public class ProfileView extends J2HtmlView<User> {
+    @Autowired
     private Util util;
     private User user;
 
     @Autowired
-    public ProfileView(Util util, User user) {
-        this.util = util;
-        this.user = user;
+    public ProfileView(User user) {
+        super(user);
     }
 
     private <T> T of(T tag, Consumer<? super T> consumer) {
@@ -36,18 +32,13 @@ public class ProfileView extends J2HtmlView {
         return tag -> tag.withClass("col col-" + col);
     }
 
-    @Override
-    protected void renderMergedOutputModel(Map<String, Object> map, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception {
-        super.renderMergedOutputModel(map, httpServletRequest, httpServletResponse);
-        renderJ2Html(httpServletResponse);
-    }
-
     @FunctionalInterface
     interface Label {
         ContainerTag of(String text, String forElement);
     }
 
-    private void renderJ2Html(HttpServletResponse httpServletResponse) throws Exception {
+    @Override
+    protected Tag<?> buildView() throws Exception {
         Consumer<Tag<?>> col4 = col(4);
         Consumer<Tag<?>> col8 = col(8);
         Consumer<Tag<?>> col12 = col(12);
@@ -56,7 +47,7 @@ public class ProfileView extends J2HtmlView {
         Supplier<ContainerTag> divCol12 = () -> of(div(), col12);
 
         Label label = (text, forElement) -> label(text).attr(Attr.FOR, forElement).withClass("label");
-        html(
+        return html(
             head(
                 meta().withCharset(StandardCharsets.UTF_8.name()),
                 title(util.c("user.profile"))),
@@ -107,7 +98,6 @@ public class ProfileView extends J2HtmlView {
                             user.getPersonalInfo().getAddress() : ""))
                 )
             )
-        )
-            .render(httpServletResponse.getWriter());
+        );
     }
 }
