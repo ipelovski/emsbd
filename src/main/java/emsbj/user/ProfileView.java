@@ -1,7 +1,7 @@
 package emsbj.user;
 
 import emsbj.util.Util;
-import emsbj.web.J2HtmlView;
+import emsbj.abconj2html.J2HtmlView;
 import j2html.attributes.Attr;
 import j2html.tags.ContainerTag;
 import j2html.tags.Tag;

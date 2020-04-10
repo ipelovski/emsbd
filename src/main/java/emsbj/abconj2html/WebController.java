@@ -1,6 +1,5 @@
-package emsbj.controller;
+package emsbj.abconj2html;
 
-import emsbj.web.J2HtmlView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.util.AntPathMatcher;
@@ -20,6 +19,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+// maybe it is better to extend ParameterizableViewController
 public abstract class WebController<T extends WebController.Input> extends AbstractController implements SecuredUrlController, Controller {
     @Autowired
     protected DefaultFormattingConversionService conversionService;
@@ -105,8 +105,7 @@ public abstract class WebController<T extends WebController.Input> extends Abstr
         Set<Attribute> attributes = new HashSet<>();
         Field[] fields = clazz.getFields();
         for (Field field : fields) {
-            int modifiers = field.getModifiers();
-            if (Modifier.isPublic(modifiers) && !Modifier.isStatic(modifiers)) {
+            if (!Modifier.isStatic(field.getModifiers())) {
                 attributes.add(new FieldAttribute(field));
             }
         }

@@ -1,4 +1,4 @@
-package emsbj.util;
+package emsbj.abconj2html;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;

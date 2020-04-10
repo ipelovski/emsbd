@@ -4,9 +4,7 @@ import emsbj.Extensions;
 import emsbj.School;
 import emsbj.config.WebMvcConfig;
 import emsbj.controller.AuthorizedController;
-import emsbj.controller.ControllerBag;
 import emsbj.controller.SecuredController;
-import emsbj.controller.WebController;
 import emsbj.lesson.Lesson;
 import emsbj.lesson.LessonRepository;
 import emsbj.teacher.Teacher;
@@ -14,12 +12,10 @@ import emsbj.teacher.TeacherRepository;
 import emsbj.user.User;
 import emsbj.user.UserRepository;
 import emsbj.user.UserService;
-import emsbj.util.UrlPattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,7 +30,7 @@ import java.util.stream.StreamSupport;
 
 @Controller
 @RequestMapping
-public class HomeController implements SecuredController, AuthorizedController, ControllerBag {
+public class HomeController implements SecuredController, AuthorizedController {
     @Autowired
     private Extensions extensions;
     @Autowired
@@ -102,41 +97,6 @@ public class HomeController implements SecuredController, AuthorizedController, 
             }
         } else {
             return "home";
-        }
-    }
-
-    public static class IndexInput extends WebController.Input {
-        public String name;
-        public int times;
-        public String self;
-    }
-
-    @Component
-    public class Index extends WebController<IndexInput> {
-        {
-            setSupportedMethods(METHOD_GET);
-        }
-
-        @Override
-        public UrlPattern getUrlPattern() {
-            return new UrlPattern()
-                .addPath("home2")
-                .addPathVariable("name")
-                .addQueryParameter("times");
-        }
-
-        @Override
-        public void configure(ExpressionUrlAuthorizationConfigurer<?>.AuthorizedUrl authorizedUrl) {
-            authorizedUrl.permitAll();
-        }
-
-        @Override
-        protected HomeView buildView(IndexInput input) {
-            HashMap<String, Object> data = new HashMap<>();
-            data.put("name", input.name);
-            data.put("times", input.times);
-            input.self = getUrlPattern().buildURI(data).toString();
-            return new HomeView(input);
         }
     }
 }

@@ -1,7 +1,7 @@
 package emsbj.config;
 
 import emsbj.Extensions;
-import emsbj.controller.WebController;
+import emsbj.abconj2html.WebController;
 import emsbj.web.RedirectingAuthenticationSuccessHandler;
 import emsbj.web.RedirectingLoginUrlAuthenticationEntryPoint;
 import emsbj.controller.SecuredController;
@@ -129,7 +129,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter  {
             applicationContext.getBeansOfType(SecuredController.class);
     }
 
-    @Autowired
+//    @Autowired // a switch for controllers based on AbstractController
     public void findSecuredUrlControllers(ApplicationContext applicationContext) {
         webControllerMap = applicationContext.getBeansOfType(WebController.class);
         System.out.println(webControllerMap);

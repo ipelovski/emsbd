@@ -1,4 +1,4 @@
-package emsbj.util;
+package emsbj.abconj2html;
 
 import java.net.URI;
 import java.net.URISyntaxException;

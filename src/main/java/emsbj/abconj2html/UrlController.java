@@ -1,6 +1,4 @@
-package emsbj.controller;
-
-import emsbj.util.UrlPattern;
+package emsbj.abconj2html;
 
 public interface UrlController {
     UrlPattern getUrlPattern();

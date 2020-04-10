@@ -1,6 +1,5 @@
-package emsbj.home;
+package emsbj.abconj2html;
 
-import emsbj.web.J2HtmlView;
 import j2html.tags.ContainerTag;
 import j2html.tags.Tag;
 

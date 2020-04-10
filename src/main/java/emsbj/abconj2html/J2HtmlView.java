@@ -1,6 +1,5 @@
-package emsbj.web;
+package emsbj.abconj2html;
 
-import emsbj.util.ApplicationContextHolder;
 import j2html.tags.Tag;
 import org.springframework.web.servlet.view.AbstractView;
 
