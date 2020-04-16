@@ -93,7 +93,7 @@ window.onProfilePictureUpdated = function (newSrc) {
                 </div>
                 <div class="col col-8">
                     <select class="select" id="gender" data-th-field="*{personalInfo.gender}">
-                        <option data-th-each="gender : ${T(emsbj.user.PersonalInfo.Gender).values()}"
+                        <option data-th-each="gender : ${T(sasj.user.PersonalInfo.Gender).values()}"
                                 data-th-value="${gender}" data-th-text="${x.c('user.gender.' + gender.name().toLowerCase())}"></option>
                     </select>
                 </div>

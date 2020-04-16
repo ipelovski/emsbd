@@ -25,7 +25,7 @@
         </span>
     </div>
     <div data-th-fragment="menu(activeUser)">
-        <div data-th-if="${activeUser.role == T(emsbj.user.User.Role).student}" class="flex">
+        <div data-th-if="${activeUser.role == T(sasj.user.User.Role).student}" class="flex">
             <a class="col col-4 menu-item" data-th-href="${x.u().home()}">
                 <img class="icon" data-th-src="@{/img/icons/octicons/home.svg}">
                 <span data-th-text="${x.c('home.home')}"></span>
@@ -39,7 +39,7 @@
                 <span data-th-text="${x.c('course.courses')}"></span>
             </a>
         </div>
-        <div data-th-if="${activeUser.role == T(emsbj.user.User.Role).teacher}" class="flex">
+        <div data-th-if="${activeUser.role == T(sasj.user.User.Role).teacher}" class="flex">
             <a class="col col-3 menu-item" data-th-href="${x.u().home()}">
                 <img class="icon" data-th-src="@{/img/icons/octicons/home.svg}">
                 <span data-th-text="${x.c('home.home')}"></span>
