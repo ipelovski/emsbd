@@ -20,6 +20,10 @@ public class AdminController implements SecuredController, AuthorizedController 
             .hasRole(User.Role.admin.name().toUpperCase());
     }
 
+    /**
+     * An index page for the principal containing links to the rest of principal views.
+     * @return The name of the template for this view.
+     */
     @GetMapping
     public String index() {
         return "admin/index";

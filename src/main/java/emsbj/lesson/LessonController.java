@@ -56,7 +56,7 @@ public class LessonController implements AuthorizedController, SecuredController
     @Autowired
     private HomeController homeController;
     @Autowired
-    private LessonURLs lessonURLs;
+    private LessonUrls lessonURLs;
 
     @Override
     public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {
@@ -152,7 +152,7 @@ public class LessonController implements AuthorizedController, SecuredController
     }
 
     @PostMapping(value = "/set-presence", name = setPresence)
-    public String setPresence(Long lessonId, Long studentId, double value) {
+    public String setPresence(Long lessonId, Long studentId, Absence.Type type) {
         Optional<Lesson> optionalLesson = lessonRepository.findById(lessonId);
         if (optionalLesson.isPresent()) {
             Lesson lesson = optionalLesson.get();
@@ -167,7 +167,7 @@ public class LessonController implements AuthorizedController, SecuredController
                 absence.setLesson(lesson);
                 absence.setStudent(student);
             }
-            absence.setValue(value);
+            absence.setType(type);
             absenceRepository.save(absence);
             return "redirect:" + extensions.getURLs().lessons().lesson(lesson);
         } else {

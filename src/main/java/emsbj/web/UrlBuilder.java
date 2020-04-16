@@ -26,7 +26,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class URLBuilder {
+public class UrlBuilder {
     private static final Map<String, Method> methods = new HashMap<>();
     private final Class<?> controllerType;
     private final String requestMappingName;
@@ -35,7 +35,7 @@ public class URLBuilder {
     private Map<String, List<String>> queryParams;
     private HttpServletRequest request;
 
-    public URLBuilder(Class<?> controllerType, String requestMappingName) {
+    public UrlBuilder(Class<?> controllerType, String requestMappingName) {
         Objects.requireNonNull(controllerType);
         Objects.requireNonNull(requestMappingName);
         this.controllerType = controllerType;
@@ -46,14 +46,14 @@ public class URLBuilder {
     }
 
     public static String get(Class<?> controllerType, String requestMappingName, Object... uriVariableValues) {
-        return new URLBuilder(controllerType, requestMappingName)
+        return new UrlBuilder(controllerType, requestMappingName)
             .gatherNamedURIParams()
             .namedURIParams(valuesToMap(uriVariableValues))
 //            .uriParams(uriVariableValues)
             .build();
     }
 
-    public URLBuilder queryParam(String name, Object... values) {
+    public UrlBuilder queryParam(String name, Object... values) {
         List<String> paramValues = Arrays.stream(values)
             .map(value -> value != null ? value.toString() : null)
             .collect(Collectors.toList());
@@ -61,7 +61,7 @@ public class URLBuilder {
         return this;
     }
 
-    public <T> URLBuilder queryParam(
+    public <T> UrlBuilder queryParam(
         String name, T object, Function<T, ?> mapper,
         Predicate<T> predicate
     ) {
@@ -74,27 +74,27 @@ public class URLBuilder {
         return this;
     }
 
-    public URLBuilder uriParams(Object... values) {
+    public UrlBuilder uriParams(Object... values) {
         Collections.addAll(uriParams, values);
         return this;
     }
 
-    public URLBuilder namedURIParams(Map<String, Object> values) {
+    public UrlBuilder namedURIParams(Map<String, Object> values) {
         namedURIParams.putAll(values);
         return this;
     }
 
-    public URLBuilder namedURIParams(String key, Object value, Object... rest) {
+    public UrlBuilder namedURIParams(String key, Object value, Object... rest) {
         namedURIParams.put(key, value);
         return namedURIParams(valuesToMap(rest));
     }
 
-    public URLBuilder gatherNamedURIParams() {
+    public UrlBuilder gatherNamedURIParams() {
         buildUriVariableValues(controllerType);
         return this;
     }
 
-    public URLBuilder setRequest(HttpServletRequest request) {
+    public UrlBuilder setRequest(HttpServletRequest request) {
         this.request = request;
         return this;
     }

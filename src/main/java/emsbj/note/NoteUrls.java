@@ -3,11 +3,11 @@ package emsbj.note;
 import emsbj.Breadcrumb;
 import emsbj.util.Util;
 import emsbj.course.Course;
-import emsbj.course.CourseURLs;
+import emsbj.course.CourseUrls;
 import emsbj.lesson.Lesson;
-import emsbj.lesson.LessonURLs;
+import emsbj.lesson.LessonUrls;
 import emsbj.student.Student;
-import emsbj.web.URLBuilder;
+import emsbj.web.UrlBuilder;
 import emsbj.config.WebMvcConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,11 +15,11 @@ import org.springframework.stereotype.Service;
 import java.util.Objects;
 
 @Service
-public class NoteURLs {
+public class NoteUrls {
     @Autowired
-    private CourseURLs courseURLs;
+    private CourseUrls courseURLs;
     @Autowired
-    private LessonURLs lessonURLs;
+    private LessonUrls lessonURLs;
     @Autowired
     private Util util;
 
@@ -28,7 +28,7 @@ public class NoteURLs {
     }
 
     public String notes(Student student, Course course, Lesson lesson) {
-        return new URLBuilder(NoteController.class, WebMvcConfig.listName)
+        return new UrlBuilder(NoteController.class, WebMvcConfig.listName)
             .gatherNamedURIParams()
             .queryParam(NoteController.studentQueryParam, student.getId())
             .queryParam(NoteController.courseQueryParam, course.getId())
@@ -38,7 +38,7 @@ public class NoteURLs {
     }
 
     public String addNote() {
-        return URLBuilder.get(NoteController.class, WebMvcConfig.addName);
+        return UrlBuilder.get(NoteController.class, WebMvcConfig.addName);
     }
 
     public String addNote(Student student, Course course) {
@@ -46,7 +46,7 @@ public class NoteURLs {
     }
 
     public String addNote(Student student, Course course, Lesson lesson) {
-        return new URLBuilder(NoteController.class, WebMvcConfig.addName)
+        return new UrlBuilder(NoteController.class, WebMvcConfig.addName)
             .gatherNamedURIParams()
             .queryParam(NoteController.studentQueryParam, student.getId())
             .queryParam(NoteController.courseQueryParam, course.getId())
@@ -56,12 +56,12 @@ public class NoteURLs {
     }
 
     public String editNote(Note note) {
-        return URLBuilder.get(NoteController.class, WebMvcConfig.editName,
+        return UrlBuilder.get(NoteController.class, WebMvcConfig.editName,
             WebMvcConfig.objectIdParamName, note.getId());
     }
 
     public String removeNote(Note note) {
-        return URLBuilder.get(NoteController.class, WebMvcConfig.removeName,
+        return UrlBuilder.get(NoteController.class, WebMvcConfig.removeName,
             WebMvcConfig.objectIdParamName, note.getId());
     }
 

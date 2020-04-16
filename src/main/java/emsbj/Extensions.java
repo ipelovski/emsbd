@@ -12,42 +12,42 @@ import emsbj.admin.AdminSubjectController;
 import emsbj.admin.AdminTeacherController;
 import emsbj.admin.AdminTermController;
 import emsbj.admin.AdminUserController;
-import emsbj.blob.BlobURLs;
+import emsbj.blob.BlobUrls;
 import emsbj.config.WebMvcConfig;
 import emsbj.course.CourseController;
-import emsbj.course.CourseURLs;
-import emsbj.home.HomeURLs;
-import emsbj.lesson.LessonURLs;
-import emsbj.note.NoteURLs;
+import emsbj.course.CourseUrls;
+import emsbj.home.HomeUrls;
+import emsbj.lesson.LessonUrls;
+import emsbj.note.NoteUrls;
 import emsbj.schoolclass.SchoolClass;
 import emsbj.schoolyear.SchoolYear;
 import emsbj.student.Student;
-import emsbj.student.StudentURLs;
+import emsbj.student.StudentUrls;
 import emsbj.teacher.Teacher;
 import emsbj.term.Term;
 import emsbj.user.User;
-import emsbj.user.UserURLs;
+import emsbj.user.UserUrls;
 import emsbj.util.Util;
-import emsbj.web.URLBuilder;
+import emsbj.web.UrlBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class Extensions {
     @Autowired
-    private HomeURLs homeURLs;
+    private HomeUrls homeURLs;
     @Autowired
-    private UserURLs userURLs;
+    private UserUrls userURLs;
     @Autowired
-    private BlobURLs blobURLs;
+    private BlobUrls blobURLs;
     @Autowired
-    private CourseURLs courseURLs;
+    private CourseUrls courseURLs;
     @Autowired
-    private LessonURLs lessonURLs;
+    private LessonUrls lessonURLs;
     @Autowired
-    private NoteURLs noteURLs;
+    private NoteUrls noteURLs;
     @Autowired
-    private StudentURLs studentURLs;
+    private StudentUrls studentURLs;
     @Autowired
     private Util util;
     private Urls urls;
@@ -95,31 +95,31 @@ public class Extensions {
         private Urls() {
         }
 
-        public HomeURLs home() {
+        public HomeUrls home() {
             return homeURLs;
         }
 
-        public UserURLs users() {
+        public UserUrls users() {
             return userURLs;
         }
 
-        public BlobURLs blobs() {
+        public BlobUrls blobs() {
             return blobURLs;
         }
 
-        public CourseURLs courses() {
+        public CourseUrls courses() {
             return courseURLs;
         }
 
-        public LessonURLs lessons() {
+        public LessonUrls lessons() {
             return lessonURLs;
         }
 
-        public NoteURLs notes() {
+        public NoteUrls notes() {
             return noteURLs;
         }
 
-        public StudentURLs students() {
+        public StudentUrls students() {
             return studentURLs;
         }
     }
@@ -127,120 +127,120 @@ public class Extensions {
     public class AdminUrls {
 
         public String adminIndex() {
-            return URLBuilder.get(AdminController.class, WebMvcConfig.indexName);
+            return UrlBuilder.get(AdminController.class, WebMvcConfig.indexName);
         }
 
         public String schoolYears() {
-            return URLBuilder.get(AdminSchoolYearController.class, WebMvcConfig.listName);
+            return UrlBuilder.get(AdminSchoolYearController.class, WebMvcConfig.listName);
         }
 
         public String terms() {
-            return URLBuilder.get(AdminTermController.class, WebMvcConfig.listName);
+            return UrlBuilder.get(AdminTermController.class, WebMvcConfig.listName);
         }
 
         public String termsBySchoolYear(SchoolYear schoolYear) {
-            return new URLBuilder(AdminTermController.class, WebMvcConfig.listName)
+            return new UrlBuilder(AdminTermController.class, WebMvcConfig.listName)
                 .gatherNamedURIParams()
                 .queryParam(AdminTermController.schoolYearQueryParam, schoolYear.getId())
                 .build();
         }
 
         public String term(Term term) {
-            return URLBuilder.get(AdminTermController.class, WebMvcConfig.detailsName,
+            return UrlBuilder.get(AdminTermController.class, WebMvcConfig.detailsName,
                 WebMvcConfig.objectIdParamName, term.getId());
         }
 
         public String subjects() {
-            return URLBuilder.get(AdminSubjectController.class, WebMvcConfig.listName);
+            return UrlBuilder.get(AdminSubjectController.class, WebMvcConfig.listName);
         }
 
         public String addSubject() {
-            return URLBuilder.get(AdminSubjectController.class, WebMvcConfig.addName);
+            return UrlBuilder.get(AdminSubjectController.class, WebMvcConfig.addName);
         }
 
         public String users() {
-            return URLBuilder.get(AdminUserController.class, WebMvcConfig.listName);
+            return UrlBuilder.get(AdminUserController.class, WebMvcConfig.listName);
         }
 
         public String addUser() {
-            return URLBuilder.get(AdminUserController.class, WebMvcConfig.addName);
+            return UrlBuilder.get(AdminUserController.class, WebMvcConfig.addName);
         }
 
         public String user(User user) {
-            return URLBuilder.get(AdminUserController.class, WebMvcConfig.detailsName,
+            return UrlBuilder.get(AdminUserController.class, WebMvcConfig.detailsName,
                 WebMvcConfig.objectIdParamName, user.getId());
         }
 
         public String grades() {
-            return URLBuilder.get(AdminGradeController.class, WebMvcConfig.listName);
+            return UrlBuilder.get(AdminGradeController.class, WebMvcConfig.listName);
         }
 
         public String addGrade() {
-            return URLBuilder.get(AdminGradeController.class, WebMvcConfig.addName);
+            return UrlBuilder.get(AdminGradeController.class, WebMvcConfig.addName);
         }
 
         public String schoolClasses() {
-            return URLBuilder.get(AdminSchoolClassController.class, WebMvcConfig.listName);
+            return UrlBuilder.get(AdminSchoolClassController.class, WebMvcConfig.listName);
         }
 
         public String addSchoolClass() {
-            return URLBuilder.get(AdminSchoolClassController.class, WebMvcConfig.addName);
+            return UrlBuilder.get(AdminSchoolClassController.class, WebMvcConfig.addName);
         }
 
         public String schoolClass(SchoolClass schoolClass) {
-            return URLBuilder.get(AdminSchoolClassController.class, WebMvcConfig.detailsName,
+            return UrlBuilder.get(AdminSchoolClassController.class, WebMvcConfig.detailsName,
                 WebMvcConfig.objectIdParamName, schoolClass.getId());
         }
 
         public String schoolClassSchedule(SchoolClass schoolClass) {
-            return URLBuilder.get(AdminSchoolClassController.class, CourseController.schedule,
+            return UrlBuilder.get(AdminSchoolClassController.class, CourseController.schedule,
                 WebMvcConfig.objectIdParamName, schoolClass.getId());
         }
 
         public String teachers() {
-            return URLBuilder.get(AdminTeacherController.class, WebMvcConfig.listName);
+            return UrlBuilder.get(AdminTeacherController.class, WebMvcConfig.listName);
         }
 
         public String teacher(Teacher teacher) {
-            return URLBuilder.get(AdminTeacherController.class, WebMvcConfig.detailsName,
+            return UrlBuilder.get(AdminTeacherController.class, WebMvcConfig.detailsName,
                 WebMvcConfig.objectIdParamName, teacher.getId());
         }
 
         public String selectFormMasterFragment() {
-            return URLBuilder.get(AdminTeacherController.class, AdminTeacherController.selectFormMasterFragment);
+            return UrlBuilder.get(AdminTeacherController.class, AdminTeacherController.selectFormMasterFragment);
         }
 
         public String teacherList() {
-            return URLBuilder.get(AdminTeacherController.class, AdminTeacherController.teacherList);
+            return UrlBuilder.get(AdminTeacherController.class, AdminTeacherController.teacherList);
         }
 
         public String students() {
-            return URLBuilder.get(AdminStudentController.class, WebMvcConfig.listName);
+            return UrlBuilder.get(AdminStudentController.class, WebMvcConfig.listName);
         }
 
         public String student(Student student) {
-            return URLBuilder.get(AdminStudentController.class, WebMvcConfig.detailsName,
+            return UrlBuilder.get(AdminStudentController.class, WebMvcConfig.detailsName,
                 WebMvcConfig.objectIdParamName, student.getId());
         }
 
         public String studentList() {
-            return URLBuilder.get(AdminStudentController.class, AdminStudentController.studentList);
+            return UrlBuilder.get(AdminStudentController.class, AdminStudentController.studentList);
         }
 
         public String weeklySlots() {
-            return URLBuilder.get(AdminScheduleController.class, AdminScheduleController.weeklySlotsList);
+            return UrlBuilder.get(AdminScheduleController.class, AdminScheduleController.weeklySlotsList);
         }
 
         public String rooms() {
-            return URLBuilder.get(AdminRoomController.class, WebMvcConfig.listName);
+            return UrlBuilder.get(AdminRoomController.class, WebMvcConfig.listName);
         }
 
         public String addRoom() {
-            return URLBuilder.get(AdminRoomController.class, WebMvcConfig.addName);
+            return UrlBuilder.get(AdminRoomController.class, WebMvcConfig.addName);
         }
 
         public String courses() {
-            return URLBuilder.get(AdminCourseController.class, WebMvcConfig.listName);
+            return UrlBuilder.get(AdminCourseController.class, WebMvcConfig.listName);
         }
     }
 }

@@ -37,7 +37,7 @@ import java.util.Map;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter  {
     private Map<String, SecuredController> securedControllerMap;
-    private Map<String, WebController> webControllerMap;
+    private Map<String, WebController> webControllerMap = Collections.emptyMap();
 
     @Autowired
     private JournalUserDetailsService userDetailsService;

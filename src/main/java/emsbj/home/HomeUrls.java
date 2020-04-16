@@ -3,17 +3,17 @@ package emsbj.home;
 import emsbj.Breadcrumb;
 import emsbj.util.Util;
 import emsbj.config.WebMvcConfig;
-import emsbj.web.URLBuilder;
+import emsbj.web.UrlBuilder;
 import emsbj.web.ViewInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class HomeURLs extends ViewInfo {
+public class HomeUrls extends ViewInfo {
     @Autowired
     private Util util;
 
-    public HomeURLs() {
+    public HomeUrls() {
         breadcrumbSupplier = this::homeBreadcrumb;
     }
 
@@ -23,7 +23,7 @@ public class HomeURLs extends ViewInfo {
     }
 
     public String home() {
-        return URLBuilder.get(HomeController.class, WebMvcConfig.indexName);
+        return UrlBuilder.get(HomeController.class, WebMvcConfig.indexName);
     }
 
     public Breadcrumb homeBreadcrumb() {

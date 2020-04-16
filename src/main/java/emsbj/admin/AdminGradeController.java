@@ -23,6 +23,14 @@ public class AdminGradeController implements AuthorizedController {
     @Autowired
     private Extensions extensions;
 
+    public static final String modelDescription = "The object where the view model is kept.";
+
+    /**
+     * Lists all grades that are being taught in the school.
+     * This implies there are school classes for each listed grade.
+     * @param model {@value modelDescription}
+     * @return The name of the template for this view.
+     */
     @GetMapping
     public String list(Model model) {
         Iterable<Grade> grades = gradeRepository.findByOrderByOrdinalAsc();

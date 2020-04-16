@@ -45,7 +45,7 @@ public class StudentController implements AuthorizedController, SecuredControlle
     @Autowired
     private School school;
     @Autowired
-    private StudentURLs studentURLs;
+    private StudentUrls studentURLs;
 
     @Override
     public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {

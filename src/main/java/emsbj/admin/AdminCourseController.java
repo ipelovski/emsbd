@@ -18,6 +18,14 @@ public class AdminCourseController implements AuthorizedController {
     @Autowired
     private Extensions extensions;
 
+    // TODO this lists all courses regardless of school year.
+    /**
+     * Lists all courses entered in the system.
+     * These are the courses for all school years, all school classes,
+     * and all subjects.
+     * @param model The object where the view model is kept.
+     * @return The name of the template for this view.
+     */
     @GetMapping
     public String list(Model model) {
         Iterable<Course> courses = courseRepository.findAll();

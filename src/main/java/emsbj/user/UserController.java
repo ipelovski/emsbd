@@ -1,7 +1,7 @@
 package emsbj.user;
 
 import emsbj.controller.AuthorizedController;
-import emsbj.home.HomeURLs;
+import emsbj.home.HomeUrls;
 import emsbj.util.Util;
 import emsbj.web.RedirectingAuthenticationSuccessHandler;
 import emsbj.config.WebMvcConfig;
@@ -20,7 +20,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,9 +50,9 @@ public class UserController implements SecuredController, AuthorizedController {
     @Autowired
     private Util util;
     @Autowired
-    private UserURLs userURLs;
+    private UserUrls userURLs;
     @Autowired
-    private HomeURLs homeURLs;
+    private HomeUrls homeURLs;
 
     @Override
     public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {

@@ -41,7 +41,7 @@ public class CourseStudent {
             .map(Note::getText)
             .collect(Collectors.toList());
         this.absences = student.getAbsences().stream()
-            .map(Absence::getValue)
+            .map(absence -> absence.getType().getValue())
             .reduce(0.0, Double::sum);
         this.course = course;
         this.student = student;

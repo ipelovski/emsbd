@@ -3,38 +3,38 @@ package emsbj.student;
 import emsbj.Breadcrumb;
 import emsbj.config.WebMvcConfig;
 import emsbj.course.Course;
-import emsbj.course.CourseURLs;
-import emsbj.home.HomeURLs;
-import emsbj.web.URLBuilder;
+import emsbj.course.CourseUrls;
+import emsbj.home.HomeUrls;
+import emsbj.web.UrlBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StudentURLs {
+public class StudentUrls {
     @Autowired
-    private HomeURLs homeURLs;
+    private HomeUrls homeURLs;
     @Autowired
-    private CourseURLs courseURLs;
+    private CourseUrls courseURLs;
 
     public String teacherStudents() {
-        return URLBuilder.get(StudentController.class, StudentController.teacherStudents);
+        return UrlBuilder.get(StudentController.class, StudentController.teacherStudents);
     }
 
     public String teacherCoursesStudents() {
-        return URLBuilder.get(StudentController.class, StudentController.teacherCoursesStudents);
+        return UrlBuilder.get(StudentController.class, StudentController.teacherCoursesStudents);
     }
 
     public String searchStudent() {
-        return URLBuilder.get(StudentController.class, StudentController.searchStudent);
+        return UrlBuilder.get(StudentController.class, StudentController.searchStudent);
     }
 
     public String student(Student student) {
-        return URLBuilder.get(StudentController.class, WebMvcConfig.detailsName,
+        return UrlBuilder.get(StudentController.class, WebMvcConfig.detailsName,
             WebMvcConfig.objectIdParamName, student.getId());
     }
 
     public String student(Student student, Course course) {
-        return new URLBuilder(StudentController.class, WebMvcConfig.detailsName)
+        return new UrlBuilder(StudentController.class, WebMvcConfig.detailsName)
             .gatherNamedURIParams()
             .namedURIParams(WebMvcConfig.objectIdParamName, student.getId())
             .queryParam(StudentController.course, course.getId())

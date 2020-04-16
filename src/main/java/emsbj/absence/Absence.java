@@ -10,6 +10,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+/**
+ * When a student is late for a lesson or is not present then the teacher may
+ * mark him as being late or absent. This is stored as an absence with information
+ * about the {@link Student student} and in which {@link Lesson lesson} it happened.
+ * The {@link #getType() type} property keeps information whether the student is late
+ * or absent.
+ */
 @Entity
 public class Absence extends JournalPersistable {
     @Id
@@ -19,7 +26,7 @@ public class Absence extends JournalPersistable {
     private Lesson lesson;
     @ManyToOne
     private Student student;
-    private double value;
+    private Type type;
 
     @Override
     public Long getId() {
@@ -46,11 +53,23 @@ public class Absence extends JournalPersistable {
         this.student = student;
     }
 
-    public double getValue() {
-        return value;
+    public Type getType() {
+        return type;
     }
 
-    public void setValue(double value) {
-        this.value = value;
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public enum Type {
+        beingLate(0.5), absent(1.0);
+        private final double value;
+        Type(double value) {
+            this.value = value;
+        }
+
+        public double getValue() {
+            return value;
+        }
     }
 }

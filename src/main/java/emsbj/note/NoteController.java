@@ -46,7 +46,7 @@ public class NoteController implements SecuredController, AuthorizedController {
     @Autowired
     private Extensions extensions;
     @Autowired
-    private NoteURLs noteURLs;
+    private NoteUrls noteURLs;
 
     @Override
     public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {
