@@ -7,6 +7,8 @@ import sasj.controller.AuthorizedController;
 import sasj.controller.SecuredController;
 import sasj.lesson.Lesson;
 import sasj.lesson.LessonRepository;
+import sasj.student.Student;
+import sasj.student.StudentRepository;
 import sasj.teacher.Teacher;
 import sasj.teacher.TeacherRepository;
 import sasj.user.User;
@@ -42,6 +44,8 @@ public class HomeController implements SecuredController, AuthorizedController {
     @Autowired
     private TeacherRepository teacherRepository;
     @Autowired
+    private StudentRepository studentRepository;
+    @Autowired
     private UserService userService;
     @Autowired
     private School school;
@@ -58,39 +62,21 @@ public class HomeController implements SecuredController, AuthorizedController {
     public String index(Model model) {
         Optional<User> optionalUser = userService.getCurrentUser();
         if (optionalUser.isPresent()) {
+            LocalDate currentDate = LocalDate.now();
             User user = optionalUser.get();
             if (user.getRole() == User.Role.student) {
+                Student student = studentRepository.findByUserId(user.getId()).get();
+                Iterable<Lesson> lessonsToday = lessonRepository
+                    .findAllBySchoolClassAndDay(student.getSchoolClass(), currentDate.getDayOfWeek(), school.getTerm());
+                populateHomeModel(model, lessonsToday, currentDate);
                 return "student-home";
             } else if (user.getRole() == User.Role.teacher) {
-                LocalDate currentDate = LocalDate.now();
                 Teacher teacher = teacherRepository.findByUserId(user.getId()).get();
                 Iterable<Lesson> lessonsToday = lessonRepository
                     .findAllByTeacherAndDay(teacher, currentDate.getDayOfWeek(), school.getTerm());
-                LocalTime currentTime = LocalTime.now();
-                List<Lesson> previousLessons = StreamSupport
-                    .stream(lessonsToday.spliterator(), false)
-                    .filter(lesson -> lesson.getWeeklySlot().getEnd().isBefore(currentTime))
-                    .collect(Collectors.toList());
-                List<Lesson> nextLessons = StreamSupport
-                    .stream(lessonsToday.spliterator(), false)
-                    .filter(lesson -> lesson.getWeeklySlot().getBegin().isAfter(currentTime))
-                    .collect(Collectors.toList());
-                List<Lesson> currentLessons = StreamSupport
-                    .stream(lessonsToday.spliterator(), false)
-                    .filter(lesson ->
-                        lesson.getWeeklySlot().getBegin().isBefore(currentTime)
-                        && lesson.getWeeklySlot().getEnd().isAfter(currentTime))
-                    .collect(Collectors.toList());
-                model.addAttribute("currentDate", currentDate);
-                model.addAttribute("previousLessons", previousLessons);
-                model.addAttribute("nextLessons", nextLessons);
-                model.addAttribute("currentLessons", currentLessons);
-                if (currentLessons.size() > 0) {
-                    // TODO here too
-                    model.addAttribute("currentLesson", currentLessons.get(0));
-                }
+                populateHomeModel(model, lessonsToday, currentDate);
                 return "teacher-home";
-            } else if (user.getRole() == User.Role.admin) {
+            } else if (user.getRole() == User.Role.admin || user.getRole() == User.Role.principal) {
                 return "redirect:" + extensions.getAdminUrls().adminIndex();
             } else {
                 return "home";
@@ -98,5 +84,27 @@ public class HomeController implements SecuredController, AuthorizedController {
         } else {
             return "home";
         }
+    }
+
+    private void populateHomeModel(Model model, Iterable<Lesson> lessonsToday, LocalDate currentDate) {
+        LocalTime currentTime = LocalTime.now();
+        List<Lesson> previousLessons = StreamSupport
+            .stream(lessonsToday.spliterator(), false)
+            .filter(lesson -> lesson.getWeeklySlot().getEnd().isBefore(currentTime))
+            .collect(Collectors.toList());
+        List<Lesson> nextLessons = StreamSupport
+            .stream(lessonsToday.spliterator(), false)
+            .filter(lesson -> lesson.getWeeklySlot().getBegin().isAfter(currentTime))
+            .collect(Collectors.toList());
+        List<Lesson> currentLessons = StreamSupport
+            .stream(lessonsToday.spliterator(), false)
+            .filter(lesson ->
+                lesson.getWeeklySlot().getBegin().isBefore(currentTime)
+                    && lesson.getWeeklySlot().getEnd().isAfter(currentTime))
+            .collect(Collectors.toList());
+        model.addAttribute("currentDate", currentDate);
+        model.addAttribute("previousLessons", previousLessons);
+        model.addAttribute("nextLessons", nextLessons);
+        model.addAttribute("currentLessons", currentLessons);
     }
 }
