@@ -66,7 +66,7 @@ public class PrincipalTeacherController implements AuthorizedController {
         model.addAttribute("id", id);
         model.addAttribute("teachers", teachers);
         model.addAttribute("mode", mode);
-        return "fragments/teacher-list::teacherList";
+        return "principal/fragments/teacher-list::teacherList";
     }
 
     @GetMapping(value = "/teacher-list", name = teacherList)
@@ -85,6 +85,6 @@ public class PrincipalTeacherController implements AuthorizedController {
         model.addAttribute("teachers", teachers);
         model.addAttribute("id", id);
         model.addAttribute("mode", mode);
-        return "fragments/teacher-list::teacherList";
+        return "principal/fragments/teacher-list::teacherList";
     }
 }

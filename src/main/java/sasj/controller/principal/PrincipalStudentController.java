@@ -58,6 +58,6 @@ public class PrincipalStudentController implements AuthorizedController {
         model.addAttribute("students", students);
         model.addAttribute("id", id);
         model.addAttribute("mode", mode);
-        return "fragments/student-list";
+        return "principal/fragments/student-list";
     }
 }
