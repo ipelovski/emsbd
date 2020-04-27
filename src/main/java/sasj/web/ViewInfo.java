@@ -1,6 +1,6 @@
 package sasj.web;
 
-import sasj.Breadcrumb;
+import sasj.controller.Breadcrumb;
 
 import java.util.function.Supplier;
 

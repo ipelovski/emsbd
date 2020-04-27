@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="layout.html">
+<head>
+    <meta charset="UTF-8">
+    <title data-th-text="${x.c('course.addSubject')}"></title>
+</head>
+<body>
+    <div data-layout-fragment="content">
+        <form data-th-action="${x.pu().addSubject()}" method="post">
+            <fieldset data-th-object="${subject}">
+                <legend data-th-text="${x.c('common.add')}"></legend>
+                <label class="label" for="name" data-th-text="${x.c('common.name')}"></label>
+                <input class="input" type="text" id="name" data-th-field="*{name}">
+                <label class="label" for="gradeId" data-th-text="${x.c('class.grade')}"></label>
+                <select class="select" id="gradeId" data-th-field="*{gradeId}">
+                    <option data-th-each="grade : ${grades}"
+                            data-th-value="${grade.id}" data-th-text="${grade.name}"></option>
+                </select>
+                <input class="btn btn-primary bg-olive" type="submit" data-th-value="${x.c('common.save')}">
+            </fieldset>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="layout.html">
+<head>
+    <meta charset="UTF-8">
+    <title data-th-text="${schoolClass.isNew() ? x.c('class.addClass') : x.c('class.editClass')}"></title>
+</head>
+<body>
+    <div data-layout-fragment="content">
+        <form data-th-action="${schoolClass.isNew() ? x.pu().addSchoolClass() : x.pu().schoolClass(schoolClass)}" method="post">
+            <fieldset data-th-object="${schoolClass}">
+                <legend data-th-text="${schoolClass.isNew() ? x.c('class.addClass') : x.c('class.editClass')}"></legend>
+                <label for="name" class="label" data-th-text="${x.c('common.name')}"></label>
+                <input type="text" id="name" class="input" data-th-field="*{name}">
+                <label for="beginningSchoolYear" class="label" data-th-text="${x.c('class.beginningSchoolYear')}"></label>
+                <select id="beginningSchoolYear" class="select" data-th-field="*{beginningSchoolYear}">
+                    <option data-th-each="schoolYear : ${schoolYears}"
+                            data-th-value="${schoolYear.id}" data-th-text="${schoolYear.name()}"></option>
+                </select>
+                <label for="beginningGrade" class="label" data-th-text="${x.c('class.beginningGrade')}"></label>
+                <select id="beginningGrade" class="select" data-th-field="*{beginningGrade}">
+                    <option data-th-each="grade : ${grades}"
+                            data-th-value="${grade.id}" data-th-text="${grade.name}"></option>
+                </select>
+                <label for="formMaster" class="label" data-th-text="${x.c('class.formMaster')}"></label>
+                <input type="text" id="formMaster" class="display-none" data-th-field="*{formMaster}">
+                <div id="formMasterContainer"></div>
+                <input type="button" id="changeFormMaster" class="btn btn-primary bg-olive" data-th-value="${x.c('common.select')}">
+                <label for="classRoom" class="label" data-th-text="${x.c('class.classRoom')}"></label>
+                <select id="classRoom" class="select" data-th-field="*{classRoom}">
+                    <option data-th-value="null" data-th-text="${x.c('class.noRoom')}"></option>
+                    <option data-th-each="room : ${rooms}"
+                            data-th-value="${room.id}" data-th-text="${room.floor + ' ' + room.name}"></option>
+                </select>
+                <label class="label" data-th-text="${x.c('student.students')}"></label>
+                <input type="button" id="selectStudents" class="btn btn-primary bg-olive" data-th-value="${x.c('student.selectStudents')}">
+                <div id="studentsContainer"></div>
+                <input type="text" id="students" class="display-none" data-th-field="*{students}">
+            </fieldset>
+            <input type="submit" class="btn btn-primary bg-olive" data-th-value="${x.c('common.save')}">
+        </form>
+        <div data-th-replace="~{fragments/modal-dialog::dialog('modalDialog')}"></div>
+        <script type="module" data-th-inline="javascript">
+import { Fragment, ListFragment } from [[@{/js/fragment.js}]];
+import Dialog from [[@{/js/modal-dialog.js}]];
+
+let dialog = new Dialog('modalDialog');
+let formMaster = new Fragment({
+    elementId: 'formMasterContainer',
+    controllerURL: [[${x.pu().teacherList()}]],
+    search: {
+        id: 'formMaster',
+        mode: 'details',
+        teacherIds() {
+            return [document.getElementById('formMaster').value];
+        }
+    }
+});
+formMaster.load();
+let selectFormMaster = new ListFragment({
+    mode: 'singleSelect',
+    onSelect: function(teacherId) {
+        dialog.close();
+        document.getElementById('formMaster').value = teacherId;
+        formMaster.load();
+    },
+    elementId: dialog.contentElementId,
+    controllerURL: [[${x.pu().selectFormMasterFragment()}]],
+    search: {
+        id: 'teacherList',
+        mode: 'singleSelect'
+    }
+});
+let changeFormMasterButton = document.getElementById('changeFormMaster');
+changeFormMasterButton.addEventListener('click', function (e) {
+    selectFormMaster.load();
+    dialog.show();
+    e.preventDefault();
+}, false);
+
+let students = new Fragment({
+    elementId: 'studentsContainer',
+    controllerURL: [[${x.pu().studentList()}]],
+    search: {
+        id: 'studentDetails',
+        mode: 'details',
+        studentIds() {
+            return document.getElementById('students').value.split(',');
+        }
+    }
+});
+students.load();
+let selectStudents = new ListFragment({
+    mode: 'multiSelect',
+    onSelect: function(studentIds) {
+        dialog.close();
+        document.getElementById('students').value = studentIds.join(',');
+        students.load();
+    },
+    elementId: dialog.contentElementId,
+    controllerURL: [[${x.pu().studentList()}]],
+    search: {
+        id: 'studentList',
+        mode: 'multiSelect'
+    }
+});
+let selectStudentsButton = document.getElementById('selectStudents');
+selectStudentsButton.addEventListener('click', function (e) {
+    selectStudents.load();
+    dialog.show();
+    e.preventDefault();
+}, false);
+        </script>
+    </div>
+</body>
+</html>

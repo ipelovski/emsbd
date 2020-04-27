@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="layout.html">
+<head>
+    <meta charset="UTF-8">
+    <title data-th-text="${x.c('student.teachers')}"></title>
+</head>
+<body>
+    <div data-layout-fragment="content">
+        <ul class="list">
+            <li class="flex flex-wrap">
+                <div class="col col-2" data-th-text="${x.c('user.firstName')}"></div>
+                <div class="col col-2" data-th-text="${x.c('user.middleName')}"></div>
+                <div class="col col-2" data-th-text="${x.c('user.lastName')}"></div>
+                <div class="col col-4" data-th-text="${x.c('student.skills')}"></div>
+                <div class="col col-1" data-th-text="${x.c('class.formMaster')}"></div>
+                <div class="col col-1" data-th-text="${x.c('common.details')}"></div>
+            </li>
+            <li class="flex flex-wrap" data-th-each="teacher : ${teachers}">
+                <div class="col col-2" data-th-text="${teacher.user.personalInfo.firstName}"></div>
+                <div class="col col-2" data-th-text="${teacher.user.personalInfo.middleName}"></div>
+                <div class="col col-2" data-th-text="${teacher.user.personalInfo.lastName}"></div>
+                <div class="col col-4">
+                    <ul class="sequence">
+                        <li data-th-each="skill: ${teacher.skills}"
+                            data-th-text="|${skill.name.value} ${skill.grade.name}|">
+                        </li>
+                    </ul>
+                </div>
+                <div class="col col-1">
+                    <span data-th-each="schoolClass: ${teacher.formMasterOf}"
+                          data-th-text="${schoolClass.getFullName()}"></span>
+                </div>
+                <div class="col col-1">
+                    <a data-th-href="${x.pu().teacher(teacher)}"
+                       data-th-text="${x.c('common.details')}"></a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

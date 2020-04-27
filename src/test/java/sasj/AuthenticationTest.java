@@ -1,8 +1,8 @@
 package sasj;
 
-import sasj.user.JournalUserDetailsService;
-import sasj.user.User;
-import sasj.user.UserRepository;
+import sasj.data.user.JournalUserDetailsService;
+import sasj.data.user.User;
+import sasj.data.user.UserRepository;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;

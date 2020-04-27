@@ -1,6 +1,6 @@
 package sasj;
 
-import sasj.grade.Grade;
+import sasj.data.grade.Grade;
 import org.junit.Assert;
 
 public class TestUtils {

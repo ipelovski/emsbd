@@ -10,6 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import sasj.controller.Extensions;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -26,7 +27,7 @@ public class UrlBuildingTest {
         mockMvc.perform(
             MockMvcRequestBuilders.get("")
             .with(mockHttpServletRequest -> {
-                String url = extensions.au().users();
+                String url = extensions.pu().users();
                 Assert.assertTrue(url != null && url.length() > 0);
                 return mockHttpServletRequest;
             })

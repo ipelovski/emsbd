@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="layout.html">
+<head>
+    <meta charset="UTF-8">
+    <title data-th-text="${x.c('class.rooms')}"></title>
+</head>
+<body>
+    <div data-layout-fragment="content">
+        <p>
+            <a data-th-href="${x.pu().addRoom()}"
+               data-th-text="${x.c('class.addRoom')}"></a>
+        </p>
+        <ul class="list">
+            <li class="flex">
+                <div class="col col-6" data-th-text="${x.c('common.name')}"></div>
+                <div class="col col-6" data-th-text="${x.c('class.floor')}"></div>
+            </li>
+            <li class="flex" data-th-each="room : ${rooms}">
+                <div class="col col-6" data-th-text="${room.name}"></div>
+                <div class="col col-6" data-th-text="${room.floor}"></div>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

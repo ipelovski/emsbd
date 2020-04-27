@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="layout.html">
+<head>
+    <meta charset="UTF-8">
+    <title data-th-text="${x.c('student.students')}"></title>
+</head>
+<body>
+    <div data-layout-fragment="content">
+        <ul class="list">
+            <li class="flex">
+                <div class="col col-3" data-th-text="${x.c('user.firstName')}"></div>
+                <div class="col col-3" data-th-text="${x.c('user.middleName')}"></div>
+                <div class="col col-3" data-th-text="${x.c('user.lastName')}"></div>
+                <div class="col col-1" data-th-text="${x.c('user.age')}"></div>
+                <div class="col col-1" data-th-text="${x.c('class.class')}"></div>
+                <div class="col col-1" data-th-text="${x.c('common.details')}"></div>
+            </li>
+            <li class="flex" data-th-each="student : ${students}">
+                <div class="col col-3" data-th-text="${student.user.personalInfo.firstName}"></div>
+                <div class="col col-3" data-th-text="${student.user.personalInfo.middleName}"></div>
+                <div class="col col-3" data-th-text="${student.user.personalInfo.lastName}"></div>
+                <div class="col col-1">
+                    <span data-th-if="${student.user.personalInfo.getAge().isPresent()}"
+                          data-th-text="${student.user.personalInfo.getAge().get()}"></span>
+                </div>
+                <div class="col col-1">
+                    <span data-th-if="${student.schoolClass != null}"
+                          data-th-text="${student.schoolClass.getFullName()}"></span>
+                </div>
+                <div class="col col-1">
+                    <a data-th-href="${x.pu().student(student)}"
+                       data-th-text="${x.c('common.details')}"></a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

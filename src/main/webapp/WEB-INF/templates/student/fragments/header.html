@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Header</title>
+</head>
+<body>
+    <div data-th-fragment="menu" class="flex">
+        <a class="col col-4 menu-item" data-th-href="${x.su().home()}">
+            <img class="icon" data-th-src="@{/img/icons/octicons/home.svg}">
+            <span data-th-text="${x.c('home.home')}"></span>
+        </a>
+        <a class="col col-4 menu-item" data-th-href="${x.su().courses().schedule()}">
+            <div class="icon" data-th-insert="~{fragments/icons::octicons-calendar}"></div>
+            <span data-th-text="${x.c('class.schedule')}"></span>
+        </a>
+        <a class="col col-4 menu-item" data-th-href="${x.su().courses().list()}">
+            <div class="icon" data-th-insert="~{fragments/icons::octicons-calendar}"></div>
+            <span data-th-text="${x.c('course.courses')}"></span>
+        </a>
+    </div>
+</body>
+</html>

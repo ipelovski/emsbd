@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Header</title>
+</head>
+<body>
+    <div data-th-fragment="menu" class="flex">
+        <a class="col col-3 menu-item" data-th-href="${x.tu().home()}">
+            <img class="icon" data-th-src="@{/img/icons/octicons/home.svg}">
+            <span data-th-text="${x.c('home.home')}"></span>
+        </a>
+        <a class="col col-3 menu-item" data-th-href="${x.tu().courses().schedule()}">
+            <div class="icon" data-th-insert="~{fragments/icons::octicons-calendar}"></div>
+            <span data-th-text="${x.c('class.schedule')}"></span>
+        </a>
+        <a class="col col-3 menu-item" data-th-href="${x.tu().lessons().lessons()}">
+            <div class="icon" data-th-insert="~{fragments/icons::octicons-book}"></div>
+            <span data-th-text="${x.c('class.lessons')}"></span>
+        </a>
+        <a class="col col-3 menu-item" data-th-href="${x.tu().students().teacherStudents()}">
+            <div class="icon" data-th-insert="~{fragments/icons::material-design-icons-human-male-female}"></div>
+            <span data-th-text="${x.c('student.students')}"></span>
+        </a>
+    </div>
+</body>
+</html>

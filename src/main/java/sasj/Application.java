@@ -1,6 +1,6 @@
 package sasj;
 
-import sasj.user.JournalUserDetailsService;
+import sasj.data.user.JournalUserDetailsService;
 import sasj.web.UrlLocaleResolver;
 import org.h2.tools.Server;
 import org.springframework.boot.SpringApplication;

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Teacher Lesson List</title>
+</head>
+<body>
+    <div data-th-fragment="lessonList(lessons)"
+         data-th-with="noLessonsMessage = ${noLessonsMessage} ?: #{class.noLessons}">
+        <ul data-th-if="${lessons.size() > 0}" class="list">
+            <li class="flex flex-wrap">
+                <div class="col col-2" data-th-text="${x.c('class.lessonHour')}"></div>
+                <div class="col col-2" data-th-text="${x.c('common.day')}"></div>
+                <div class="col col-3" data-th-text="${x.c('course.subject')}"></div>
+                <div class="col col-3" data-th-text="${x.c('class.class')}"></div>
+                <div class="col col-2" data-th-text="${x.c('class.room')}"></div>
+            </li>
+            <li data-th-each="lesson : ${lessons}" class="flex flex-wrap">
+                <div class="col col-2" data-th-text="|${lesson.weeklySlot.ordinal} (${lesson.weeklySlot.begin})|"></div>
+                <div class="col col-2" data-th-text="#{${'weekday.' + lesson.weeklySlot.day.name().toLowerCase()}}"></div>
+                <div class="col col-3" data-th-text="${lesson.course != null ? lesson.course.subject.name.value : x.l('common.noValueSymbol')}"></div>
+                <div class="col col-3">
+                    <span>
+                        <a data-th-if="${lesson.course != null}" data-th-href="${x.tu().courses().course(lesson.course)}"
+                           data-th-text="${lesson.course.schoolClass.name}"></a>
+                    </span>
+                    <span data-th-if="${lesson.course == null}"
+                          data-th-text="#{common.noValueSymbol}"></span>
+                </div>
+                <div class="col col-2" data-th-text="${lesson.course != null ? lesson.course.room.name : x.l('common.noValueSymbol')}"></div>
+            </li>
+        </ul>
+        <div data-th-if="${lessons.size() == 0}" data-th-text="${noLessonsMessage}"></div>
+    </div>
+    <div data-th-fragment="weeklyLessons(weeklyLessons)"
+         data-th-with="noLessonsMessage = ${noLessonsMessage} ?: ${x.c('class.noLessons')}">
+        <ul data-th-each="shift : ${weeklyLessons.getShifts()}" class="listwh">
+            <li>
+                <h4 data-th-text="|${x.c('class.shift')} ${shift}|"></h4>
+            </li>
+            <li class="flex flex-wrap list-header">
+                <div class="col" data-th-style="${'width:' + 100.0 / weeklyLessons.getTotalDays() + '%'}"
+                     data-th-each="day : ${weeklyLessons.getDays()}"
+                     data-th-text="#{${'weekday.' + day.name().toLowerCase()}}"></div>
+            </li>
+            <li data-th-each="ordinal : ${weeklyLessons.getOrdinals()}" class="flex flex-wrap">
+                <div class="col" data-th-style="${'width:' + 100.0 / weeklyLessons.getTotalDays() + '%'}"
+                     data-th-each="day : ${weeklyLessons.getDays()}"
+                     data-th-with="lesson = ${weeklyLessons.getLesson(day, shift, ordinal)}">
+                    <span data-th-if="${lesson != null}">
+                        <span data-th-text="|${lesson.weeklySlot.ordinal} (${lesson.weeklySlot.begin})|"></span>
+                        <span data-th-if="${lesson.isNew() && lesson.course != null}">
+                            <a data-th-href="${x.tu().courses().course(lesson.course)}" data-th-text="${lesson.course.subject.name.value}"></a>
+                        </span>
+                        <span data-th-if="${!lesson.isNew() && lesson.course != null}">
+                            <a data-th-href="${x.tu().lessons().lesson(lesson)}" data-th-text="${lesson.course.subject.name.value}"></a>
+                        </span>
+                        <span data-th-if="${lesson.course == null}"
+                             data-th-text="#{common.noValueSymbol}"></span>
+                    </span>
+                    <span data-th-if="${lesson == null}">
+                        <span data-th-text="#{common.noValueSymbol}"></span>
+                    </span>
+                </div>
+            </li>
+        </ul>
+        <div data-th-unless="${weeklyLessons.hasLessons()}" data-th-text="${noLessonsMessage}"></div>
+    </div>
+</body>
+</html>

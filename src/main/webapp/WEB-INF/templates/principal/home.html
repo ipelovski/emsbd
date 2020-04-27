@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="layout.html">
+<head>
+    <meta charset="UTF-8">
+    <title data-th-text="#{home.administrationHome}"></title>
+</head>
+<body>
+    <div data-layout-fragment="content">
+        <div class="flex flex-wrap">
+        <p class="col col-2">
+            <a data-th-href="${x.pu().users()}" data-th-text="#{home.viewUsers}"></a>
+        </p>
+        <p class="col col-2">
+            <a data-th-href="${x.pu().schoolYears()}" data-th-text="#{home.viewSchoolYears}"></a>
+        </p>
+        <p class="col col-2">
+            <a data-th-href="${x.pu().subjects()}" data-th-text="#{home.viewSubjects}"></a>
+        </p>
+        <p class="col col-2">
+            <a data-th-href="${x.pu().grades()}" data-th-text="#{home.viewGrades}"></a>
+        </p>
+        <p class="col col-2">
+            <a data-th-href="${x.pu().schoolClasses()}" data-th-text="#{home.viewSchoolClasses}"></a>
+        </p>
+        <p class="col col-2">
+            <a data-th-href="${x.pu().teachers()}" data-th-text="#{home.viewTeachers}"></a>
+        </p>
+        <p class="col col-2">
+            <a data-th-href="${x.pu().students()}" data-th-text="#{home.viewStudents}"></a>
+        </p>
+        <p class="col col-2">
+            <a data-th-href="${x.pu().weeklySlots()}" data-th-text="#{home.viewWeeklySlots}"></a>
+        </p>
+        <p class="col col-2">
+            <a data-th-href="${x.pu().rooms()}" data-th-text="#{home.viewRooms}"></a>
+        </p>
+        <p class="col col-2">
+            <a data-th-href="${x.pu().courses()}" data-th-text="#{home.viewCourses}"></a>
+        </p>
+        </div>
+    </div>
+</body>
+</html>

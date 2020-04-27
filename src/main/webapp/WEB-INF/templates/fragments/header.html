@@ -25,37 +25,11 @@
         </span>
     </div>
     <div data-th-fragment="menu(activeUser)">
-        <div data-th-if="${activeUser.role == T(sasj.user.User.Role).student}" class="flex">
-            <a class="col col-4 menu-item" data-th-href="${x.u().home()}">
-                <img class="icon" data-th-src="@{/img/icons/octicons/home.svg}">
-                <span data-th-text="${x.c('home.home')}"></span>
-            </a>
-            <a class="col col-4 menu-item" data-th-href="${x.u().courses().schedule()}">
-                <div class="icon" data-th-insert="~{fragments/icons::octicons-calendar}"></div>
-                <span data-th-text="${x.c('class.schedule')}"></span>
-            </a>
-            <a class="col col-4 menu-item" data-th-href="${x.u().courses().list()}">
-                <div class="icon" data-th-insert="~{fragments/icons::octicons-calendar}"></div>
-                <span data-th-text="${x.c('course.courses')}"></span>
-            </a>
+        <div data-th-if="${activeUser.role == T(sasj.data.user.User.Role).student}">
+            <div data-th-replace="~{student/fragments/header::menu}"></div>
         </div>
-        <div data-th-if="${activeUser.role == T(sasj.user.User.Role).teacher}" class="flex">
-            <a class="col col-3 menu-item" data-th-href="${x.u().home()}">
-                <img class="icon" data-th-src="@{/img/icons/octicons/home.svg}">
-                <span data-th-text="${x.c('home.home')}"></span>
-            </a>
-            <a class="col col-3 menu-item" data-th-href="${x.u().courses().schedule()}">
-                <div class="icon" data-th-insert="~{fragments/icons::octicons-calendar}"></div>
-                <span data-th-text="${x.c('class.schedule')}"></span>
-            </a>
-            <a class="col col-3 menu-item" data-th-href="${x.u().lessons().lessons()}">
-                <div class="icon" data-th-insert="~{fragments/icons::octicons-book}"></div>
-                <span data-th-text="${x.c('class.lessons')}"></span>
-            </a>
-            <a class="col col-3 menu-item" data-th-href="${x.u().students().teacherStudents()}">
-                <div class="icon" data-th-insert="~{fragments/icons::material-design-icons-human-male-female}"></div>
-                <span data-th-text="${x.c('student.students')}"></span>
-            </a>
+        <div data-th-if="${activeUser.role == T(sasj.data.user.User.Role).teacher}">
+            <div data-th-replace="~{teacher/fragments/header::menu}"></div>
         </div>
     </div>
     <div data-th-fragment="languageSelector">

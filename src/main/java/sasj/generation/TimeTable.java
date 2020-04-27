@@ -1,6 +1,6 @@
 package sasj.generation;
 
-import sasj.weeklyslot.WeeklySlot;
+import sasj.data.weeklyslot.WeeklySlot;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;

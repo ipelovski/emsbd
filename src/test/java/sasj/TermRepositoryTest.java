@@ -1,9 +1,9 @@
 package sasj;
 
-import sasj.schoolyear.SchoolYear;
-import sasj.schoolyear.SchoolYearRepository;
-import sasj.term.Term;
-import sasj.term.TermRepository;
+import sasj.data.schoolyear.SchoolYear;
+import sasj.data.schoolyear.SchoolYearRepository;
+import sasj.data.term.Term;
+import sasj.data.term.TermRepository;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

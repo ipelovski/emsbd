@@ -1,6 +1,6 @@
 package sasj.controller;
 
-import sasj.user.UserService;
+import sasj.data.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;

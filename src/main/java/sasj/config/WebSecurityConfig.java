@@ -1,12 +1,12 @@
 package sasj.config;
 
-import sasj.Extensions;
+import sasj.controller.Extensions;
 import sasj.abconj2html.WebController;
 import sasj.web.RedirectingAuthenticationSuccessHandler;
 import sasj.web.RedirectingLoginUrlAuthenticationEntryPoint;
 import sasj.controller.SecuredController;
-import sasj.user.JournalUserDetailsService;
-import sasj.user.User;
+import sasj.data.user.JournalUserDetailsService;
+import sasj.data.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;

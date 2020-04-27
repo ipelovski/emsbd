@@ -1,8 +1,8 @@
 package sasj.generation;
 
-import sasj.user.PersonalInfo;
-import sasj.user.User;
-import sasj.user.UserRepository;
+import sasj.data.user.PersonalInfo;
+import sasj.data.user.User;
+import sasj.data.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;

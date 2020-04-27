@@ -1,15 +1,15 @@
 package sasj;
 
-import sasj.grade.Grade;
-import sasj.grade.GradeRepository;
-import sasj.schoolyear.SchoolYear;
-import sasj.schoolyear.SchoolYearRepository;
-import sasj.subject.Subject;
-import sasj.subject.SubjectName;
-import sasj.subject.SubjectNameRepository;
-import sasj.subject.SubjectRepository;
-import sasj.term.Term;
-import sasj.term.TermRepository;
+import sasj.data.grade.Grade;
+import sasj.data.grade.GradeRepository;
+import sasj.data.schoolyear.SchoolYear;
+import sasj.data.schoolyear.SchoolYearRepository;
+import sasj.data.subject.Subject;
+import sasj.data.subject.SubjectName;
+import sasj.data.subject.SubjectNameRepository;
+import sasj.data.subject.SubjectRepository;
+import sasj.data.term.Term;
+import sasj.data.term.TermRepository;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

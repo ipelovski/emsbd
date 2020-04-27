@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="layout.html">
+<head>
+    <meta charset="UTF-8">
+    <title data-th-text="${x.c('class.schedule')}"></title>
+</head>
+<body>
+    <div data-layout-fragment="content">
+        <div data-th-replace="~{student/fragments/lesson-list::weeklyLessons(${weeklyLessons})}"></div>
+    </div>
+</body>
+</html>

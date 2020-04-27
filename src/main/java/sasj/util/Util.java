@@ -55,6 +55,10 @@ public class Util {
         return messageSource.getMessage(label, args, locale);
     }
 
+    public String redirectTo(Object url) {
+        return "redirect:" + url.toString();
+    }
+
     public LocalDate getStartOfWeek(LocalDateTime dateTime) {
         return dateTime.toLocalDate().minusDays(dateTime.getDayOfWeek().ordinal());
     }

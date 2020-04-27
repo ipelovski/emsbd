@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="layout.html">
+<head>
+    <meta charset="UTF-8">
+    <title data-th-text="#{student.searchStudent}"></title>
+</head>
+<body>
+    <div data-layout-fragment="content">
+        <form data-th-action="${x.tu().students().searchStudent()}" method="get">
+            <label class="label" data-th-text="${x.c('common.name')}"></label>
+            <input class="input" type="text" name="name">
+            <input class="btn btn-primary bg-olive" type="submit" data-th-value="${x.c('common.search')}">
+        </form>
+    </div>
+</body>
+</html>

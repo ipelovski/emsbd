@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="layout.html">
+<head>
+    <meta charset="UTF-8">
+    <title data-th-text="${x.c('student.notes')}"></title>
+</head>
+<body>
+    <div data-layout-fragment="content">
+        <h4 class="center">
+            <span data-th-text="${x.c('student.notesOfFor', student.user.personalInfo.getName(), course.subject.name.value)}"></span>
+            <span data-th-if="${lesson != null}">
+                &nbsp;<span data-th-text="${x.l('class.inLessonFrom', lesson.begin)}"></span>
+            </span>
+        </h4>
+        <a data-th-href="${x.tu().notes().addNote(student, course, lesson)}"
+           data-th-text="${x.c('common.add')}"></a>
+        <ul class="list">
+            <li class="flex flex-wrap">
+                <div class="col col-2" data-th-text="${x.c('student.noteAddedOn')}"></div>
+                <div class="col col-8" data-th-text="${x.c('common.content')}"></div>
+                <div class="col col-1" data-th-text="${x.c('common.edit')}"></div>
+                <div class="col col-1" data-th-text="${x.c('common.delete')}"></div>
+            </li>
+            <li class="flex flex-wrap" data-th-each="note : ${notes}">
+                <div class="col col-2" data-th-text="${#dates.format(note.createdOn, 'dd.MM.yyyy HH:mm')}"></div>
+                <div class="col col-8" data-th-text="${note.text}"></div>
+                <div class="col col-1">
+                    <a data-th-href="${x.tu().notes().editNote(note)}"
+                       data-th-text="${x.c('common.edit')}"></a>
+                </div>
+                <div class="col col-1">
+                    <form data-th-action="${x.tu().notes().removeNote(note)}" method="post">
+                        <input type="submit" data-th-value="${x.c('common.delete')}">
+                    </form>
+                </div>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

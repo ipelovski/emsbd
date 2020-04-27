@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student List</title>
+</head>
+<body>
+    <div data-th-fragment="studentList(students, mode, onSelect)" data-th-remove="tag">
+        <ul id="student-list" class="list">
+            <li>
+                <div class="flex flex-wrap">
+                    <div data-th-replace="~{fragments/list-fragments::listHeader(${mode})}"></div>
+                    <div class="col col-3" data-th-text="${x.c('user.picture')}"></div>
+                    <div class="col col-3" data-th-text="${x.c('common.name')}"></div>
+                    <div class="col col-3" data-th-text="${x.c('student.number')}"></div>
+                    <div class="col col-2" data-th-text="${x.c('class.class')}"></div>
+                </div>
+            </li>
+            <li data-th-each="student : ${students}">
+                <div class="flex flex-wrap">
+                    <div data-th-replace="~{fragments/list-fragments::listBody(mode=${mode},detailsUrl=${x.pu().student(student)},objectId=${student.id})}">
+                    </div>
+                    <div class="col col-3" data-th-insert="~{fragments/profile-picture::profilePicture(${x.u().blobs().profilePicture(student.user)})}">
+                    </div>
+                    <div class="col col-3">
+                        <span data-th-text="${student.user.personalInfo.getName()}"></span>
+                    </div>
+                    <div class="col col-3">
+                        <span data-th-text="${student.number}"></span>
+                    </div>
+                    <div class="col col-2">
+                        <span data-th-if="${student.schoolClass != null}"
+                              data-th-text="${student.schoolClass.getFullName()}"></span>
+                        <span data-th-if="${student.schoolClass == null}"
+                              data-th-text="#{common.noValueSymbol}"></span>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

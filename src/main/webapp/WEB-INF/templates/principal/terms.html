@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="layout.html">
+<head>
+    <meta charset="UTF-8">
+    <title data-th-text="${x.c('class.terms')}"></title>
+</head>
+<body>
+    <div data-layout-fragment="content">
+        <ul class="list">
+            <li class="flex">
+                <div class="col col-4" data-th-text="${x.c('class.schoolYear')}"></div>
+                <div class="col col-4" data-th-text="${x.c('common.name')}"></div>
+                <div class="col col-4" data-th-text="${x.c('common.details')}"></div>
+            </li>
+            <li class="flex" data-th-each="term : ${terms}">
+                <div class="col col-4" data-th-text="${term.schoolYear.name()}"></div>
+                <div class="col col-4" data-th-text="${term.name}"></div>
+                <div class="col col-4">
+                    <a data-th-href="${x.pu().term(term)}"
+                       data-th-text="${x.c('common.details')}"></a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

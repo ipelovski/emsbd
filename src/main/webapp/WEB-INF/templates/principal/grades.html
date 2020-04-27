@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="layout.html">
+<head>
+    <meta charset="UTF-8">
+    <title data-th-text="${x.c('class.grades')}"></title>
+</head>
+<body>
+    <div data-layout-fragment="content">
+        <form data-th-action="${x.pu().addGrade()}" data-th-object="${emptyGrade}" method="post">
+            <fieldset class="center">
+                <legend data-th-text="${x.c('class.newGrade')}"></legend>
+                <label class="label" for="name" data-th-text="${x.c('common.name')}"></label>
+                <input class="input" type="text" id="name" data-th-field="*{name}">
+                <label class="label" for="ordinal" data-th-text="${x.c('class.ordinal')}"></label>
+                <input class="input" type="number" id="ordinal" data-th-field="*{ordinal}">
+                <input class="btn btn-primary bg-olive" type="submit" data-th-value="${x.c('common.add')}">
+            </fieldset>
+        </form>
+        <ul class="list">
+            <li class="flex">
+                <div class="col col-6" data-th-text="${x.c('common.name')}"></div>
+                <div class="col col-6" data-th-text="${x.c('class.ordinal')}"></div>
+            </li>
+            <li class="flex" data-th-each="grade : ${grades}">
+                <div class="col col-6" data-th-text="${grade.name}"></div>
+                <div class="col col-6" data-th-text="${grade.ordinal}"></div>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

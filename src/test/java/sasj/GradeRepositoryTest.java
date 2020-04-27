@@ -1,9 +1,9 @@
 package sasj;
 
-import sasj.grade.Grade;
-import sasj.grade.GradeRepository;
-import sasj.schoolyear.SchoolYear;
-import sasj.schoolyear.SchoolYearRepository;
+import sasj.data.grade.Grade;
+import sasj.data.grade.GradeRepository;
+import sasj.data.schoolyear.SchoolYear;
+import sasj.data.schoolyear.SchoolYearRepository;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

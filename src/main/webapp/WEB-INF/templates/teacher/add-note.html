@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="layout.html">
+<head>
+    <meta charset="UTF-8">
+    <title data-th-text="${x.c('student.addNote')}"></title>
+</head>
+<body>
+    <div data-layout-fragment="content">
+        <form data-th-object="${note}" data-th-action="${x.tu().notes().addNote()}" method="post">
+            <input type="hidden" data-th-field="*{student}">
+            <input type="hidden" data-th-field="*{lesson}">
+            <input type="hidden" data-th-field="*{course}">
+            <textarea data-th-field="*{text}"></textarea>
+            <input type="submit" data-th-value="${x.c('common.add')}">
+        </form>
+    </div>
+</body>
+</html>
