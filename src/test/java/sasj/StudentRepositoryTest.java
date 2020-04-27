@@ -22,7 +22,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -51,7 +50,8 @@ public class StudentRepositoryTest {
     private MarkRepository markRepository;
     @Autowired
     private EntityManager entityManager;
-    private PasswordEncoder passwordEncoder = NoOpPasswordEncoder.getInstance();
+    @SuppressWarnings("deprecation")
+    private PasswordEncoder passwordEncoder = org.springframework.security.crypto.password.NoOpPasswordEncoder.getInstance();
     private SchoolYear schoolYear;
     private Term term;
     private Grade grade;

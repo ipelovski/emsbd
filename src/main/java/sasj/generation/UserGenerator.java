@@ -4,7 +4,6 @@ import sasj.data.user.PersonalInfo;
 import sasj.data.user.User;
 import sasj.data.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -153,8 +152,8 @@ class UserGenerator {
         .map(maleSecondName -> maleSecondName + "а")
         .toArray(String[]::new);
 
-//    @Autowired
-    private PasswordEncoder passwordEncoder = NoOpPasswordEncoder.getInstance();
+    @SuppressWarnings("deprecation")
+    private PasswordEncoder passwordEncoder = org.springframework.security.crypto.password.NoOpPasswordEncoder.getInstance();
     @Autowired
     private UserRepository userRepository;
 

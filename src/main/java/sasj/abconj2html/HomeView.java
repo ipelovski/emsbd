@@ -22,7 +22,7 @@ public class HomeView extends J2HtmlView<HomeController.IndexInput> {
             ),
             body(
                 div(a("self").withHref(model.self)),
-                join(tags)
+                join((Object[]) tags)
             )
         );
     }

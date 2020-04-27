@@ -49,6 +49,7 @@ public abstract class WebController<T extends WebController.Input> extends Abstr
     }
 
     private T createInput() {
+        @SuppressWarnings("unchecked")
         Class<T> inputClass = (Class<T>)
             ((ParameterizedType) getClass().getGenericSuperclass())
             .getActualTypeArguments()[0];
