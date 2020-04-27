@@ -31,7 +31,8 @@ public class HomeController implements SecuredController, AuthorizedController {
     @Override
     public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {
         registry
-            .antMatchers( WebMvcConfig.localePathParam, WebMvcConfig.localePathParam + "/",
+            .antMatchers( WebMvcConfig.localePathParam,
+                WebMvcConfig.localePathParam + "/",
                 WebMvcConfig.localePathParam + "/home/**")
             .permitAll();
     }

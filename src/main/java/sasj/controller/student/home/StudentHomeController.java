@@ -39,9 +39,8 @@ public class StudentHomeController implements SecuredController, AuthorizedContr
     @Override
     public void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {
         registry
-            .antMatchers( WebMvcConfig.localePathParam, WebMvcConfig.localePathParam + "/",
-                WebMvcConfig.localePathParam + "/home/**")
-            .permitAll();
+            .antMatchers(WebMvcConfig.localePathParam + "/student/**")
+            .hasRole(User.Role.student.name().toUpperCase());
     }
 
     @GetMapping
